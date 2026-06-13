@@ -2,7 +2,7 @@ artifacts:
   - id: hydrograph_summary
     type: figure
     manuscript_path: figures/hydrograph_summary.pdf
-    source_repo: R:/Code/my_project
+    source_repo: ./research-project
     source_path: outputs/final_figures/hydrograph_summary.pdf
     generated_by: scripts/make_publication_figures.py
     input_data: outputs/summary_metrics.csv
@@ -12,7 +12,7 @@ artifacts:
   - id: model_comparison_table
     type: table
     manuscript_path: tables/model_comparison.tex
-    source_repo: R:/Code/my_project
+    source_repo: ./research-project
     source_path: outputs/final_tables/model_comparison.tex
     generated_by: scripts/make_publication_tables.py
     input_data: outputs/summary_metrics.csv
@@ -22,7 +22,7 @@ artifacts:
   - id: supplement_diagnostic_grid
     type: supplement_figure
     manuscript_path: supplement/figures/diagnostic_grid.pdf
-    source_repo: R:/Code/my_project
+    source_repo: ./research-project
     source_path: outputs/final_figures/diagnostic_grid.pdf
     generated_by: scripts/make_diagnostics.py
     input_data: outputs/diagnostic_summary.csv

@@ -23,7 +23,7 @@ artifacts:
   - id: workflow_schematic
     type: figure
     manuscript_path: figures/workflow_schematic.pdf
-    source_repo: R:/Code/project/research-repo
+    source_repo: ./research-project
     source_path: experiments/figures/workflow_schematic.pdf
     generated_by: scripts/make_workflow.py
     input_data: experiments/results/summary.csv

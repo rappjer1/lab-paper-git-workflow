@@ -16,14 +16,15 @@ class DoctorCheck:
     status: str
     detail: str
     next_action: str = ""
+    code: str = ""
 
 
-def _tool_check(name: str, executable: str, optional: bool = True) -> DoctorCheck:
+def _tool_check(name: str, executable: str, optional: bool = True, missing_code: str = "") -> DoctorCheck:
     found = shutil.which(executable)
     if found:
         return DoctorCheck(name, "OK", found)
     status = "optional" if optional else "missing"
-    return DoctorCheck(name, status, f"{executable} not found on PATH", f"Install {executable} if you need this feature.")
+    return DoctorCheck(name, status, f"{executable} not found on PATH", f"Install {executable} if you need this feature.", missing_code)
 
 
 def _path_check(path: Path, label: str) -> DoctorCheck:
@@ -42,16 +43,28 @@ def looks_like_manuscript_repo(path: Path) -> bool:
     return sum(1 for marker in markers if marker.exists()) >= 2
 
 
+def looks_like_tool_repo(path: Path) -> bool:
+    markers = [
+        path / "src" / "paper_scaffold" / "cli.py",
+        path / "templates" / "manuscript_repo",
+        path / "pyproject.toml",
+        path / "docs",
+    ]
+    return sum(1 for marker in markers if marker.exists()) >= 3
+
+
 def run_doctor(cwd: str | Path = ".") -> list[DoctorCheck]:
     root = Path(cwd).resolve()
+    is_tool_repo = looks_like_tool_repo(root)
+    is_manuscript_repo = looks_like_manuscript_repo(root)
     checks: list[DoctorCheck] = [
         DoctorCheck("Python", "OK", sys.version.replace("\n", " ")),
         DoctorCheck("Current directory", "OK", str(root)),
         _tool_check("Git", "git", optional=False),
-        _tool_check("Pandoc", "pandoc", optional=True),
-        _tool_check("latexmk", "latexmk", optional=True),
-        _tool_check("pdflatex", "pdflatex", optional=True),
-        _tool_check("GitHub CLI", "gh", optional=True),
+        _tool_check("Pandoc", "pandoc", optional=True, missing_code="W001"),
+        _tool_check("latexmk", "latexmk", optional=True, missing_code="W002"),
+        _tool_check("pdflatex", "pdflatex", optional=True, missing_code="W002"),
+        _tool_check("GitHub CLI", "gh", optional=True, missing_code="W003"),
     ]
 
     summary = git_summary(root)
@@ -60,24 +73,34 @@ def run_doctor(cwd: str | Path = ".") -> list[DoctorCheck]:
         checks.append(DoctorCheck("Git repository", "OK", f"branch: {branch}"))
         remotes = summary.get("remotes") or {}
         if isinstance(remotes, dict) and remotes.get("origin"):
-            checks.append(DoctorCheck("Git remote origin", "OK", ", ".join(remotes["origin"])))
+            checks.append(DoctorCheck("Git remote origin", "OK", ", ".join(remotes["origin"]), code="I004"))
         else:
-            checks.append(DoctorCheck("Git remote origin", "missing", "origin not configured", "Add a private GitHub manuscript repo as origin."))
+            checks.append(DoctorCheck("Git remote origin", "missing", "origin not configured", "Add a GitHub manuscript repo as origin when you are ready to sync.", "E007"))
     else:
         checks.append(DoctorCheck("Git repository", "missing", "not inside a Git repo", "Run this inside the manuscript repo or initialize Git."))
 
-    if looks_like_manuscript_repo(root):
-        checks.append(DoctorCheck("Manuscript repo shape", "OK", "main manuscript files/folders detected"))
+    if is_tool_repo:
+        checks.append(
+            DoctorCheck(
+                "Repository context",
+                "OK",
+                "This is the Paper Scaffold tool repo, not a manuscript repo. Missing main.tex is expected here.",
+                code="I001",
+            )
+        )
+    elif is_manuscript_repo:
+        checks.append(DoctorCheck("Repository context", "OK", "This looks like a manuscript repo.", code="I003"))
     else:
-        checks.append(DoctorCheck("Manuscript repo shape", "missing", "not enough manuscript markers found", "Run paper-scaffold init or move into the manuscript repo."))
+        checks.append(DoctorCheck("Repository context", "missing", "not enough manuscript markers found", "Run paper-scaffold init or move into a manuscript repo."))
 
-    checks.extend(
-        [
-            _path_check(root / "main.tex", "main.tex"),
-            _path_check(root / "references.bib", "references.bib"),
-            _path_check(root / "figures", "figures/"),
-        ]
-    )
+    if not is_tool_repo:
+        checks.extend(
+            [
+                _path_check(root / "main.tex", "main.tex"),
+                _path_check(root / "references.bib", "references.bib"),
+                _path_check(root / "figures", "figures/"),
+            ]
+        )
     return checks
 
 
@@ -85,7 +108,8 @@ def format_doctor_checks(checks: list[DoctorCheck]) -> str:
     lines = ["paper-scaffold doctor"]
     for check in checks:
         label = check.status.upper()
-        lines.append(f"[{label}] {check.name}: {check.detail}")
+        code = f"{check.code} " if check.code else ""
+        lines.append(f"[{label}] {code}{check.name}: {check.detail}")
         if check.next_action:
             lines.append(f"  next: {check.next_action}")
     lines.append("")

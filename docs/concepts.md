@@ -12,7 +12,7 @@ Manuscript repo
   LaTeX, figures, tables, references, supplement
         |
         v
-GitHub private repo <-> Overleaf project
+GitHub repository <-> Overleaf project
 ```
 
 ## Research Repo Vs Manuscript Repo
@@ -70,7 +70,7 @@ Code names are implementation labels. They are useful in scripts, configs, logs,
 
 Publication names are scientific labels. They belong in the title, abstract, methods, results, and discussion.
 
-Use `metadata/terminology_map.yaml` to make this explicit. For example, a run label like `internal_model_v1` might map to `probabilistic runoff model`.
+Use `metadata/terminology_map.yaml` to make this explicit. For example, a run label like `experiment_model_v1` might map to `probabilistic model`.
 
 ## Why Repeated ZIP Files Are A Bad Long-Term Workflow
 

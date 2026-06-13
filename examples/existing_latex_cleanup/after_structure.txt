@@ -1,0 +1,15 @@
+paper/
+  README.md
+  .gitignore
+  main.tex
+  references.bib
+  sections/
+  figures/
+    example_metric_plot.pdf
+  tables/
+    example_table.tex
+  supplement/
+  metadata/
+    artifact_manifest.yaml
+    terminology_map.yaml
+    manuscript_config.yaml

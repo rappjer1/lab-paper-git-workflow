@@ -9,7 +9,7 @@ import shutil
 from typing import Iterable
 
 from .artifact_manifest import load_artifact_manifest
-from .config import write_yaml
+from .config import dumps_yaml, write_yaml
 
 DISCOVER_EXTENSIONS = {".pdf", ".png", ".jpg", ".jpeg", ".csv", ".tex", ".bib"}
 IGNORED_EXTENSIONS = {".npz", ".pt", ".pth", ".pkl", ".pickle", ".nc", ".zarr", ".zip", ".parquet"}
@@ -60,6 +60,7 @@ def classify_artifact(path: Path, supplement: bool = False) -> tuple[str, str]:
 def discover_artifacts(source: str | Path, supplement: bool = False) -> list[ArtifactCandidate]:
     source = Path(source)
     candidates: list[ArtifactCandidate] = []
+    seen_ids: dict[str, int] = {}
     if not source.exists():
         return candidates
     for path in source.rglob("*"):
@@ -67,7 +68,10 @@ def discover_artifacts(source: str | Path, supplement: bool = False) -> list[Art
             continue
         if path.suffix.lower() not in DISCOVER_EXTENSIONS:
             continue
-        artifact_id = snake_case(path.stem)
+        base_id = snake_case(path.stem)
+        count = seen_ids.get(base_id, 0) + 1
+        seen_ids[base_id] = count
+        artifact_id = base_id if count == 1 else f"{base_id}_{count}"
         artifact_type, destination_root = classify_artifact(path, supplement=supplement)
         candidates.append(
             ArtifactCandidate(
@@ -98,7 +102,7 @@ def append_candidates_to_manifest(manifest_path: str | Path, candidates: Iterabl
                 "type": candidate.artifact_type,
                 "manuscript_path": candidate.manuscript_path,
                 "source_repo": "",
-                "source_path": str(candidate.source_path),
+                "source_path": candidate.source_path.as_posix(),
                 "generated_by": "",
                 "input_data": "",
                 "last_updated": "",
@@ -107,6 +111,26 @@ def append_candidates_to_manifest(manifest_path: str | Path, candidates: Iterabl
             }
         )
     write_yaml(manifest_path, manifest)
+
+
+def candidate_manifest_entries(candidates: Iterable[ArtifactCandidate]) -> list[dict[str, str]]:
+    entries: list[dict[str, str]] = []
+    for candidate in candidates:
+        entries.append(
+            {
+                "id": candidate.artifact_id,
+                "type": candidate.artifact_type,
+                "manuscript_path": candidate.manuscript_path,
+                "source_repo": "",
+                "source_path": candidate.source_path.as_posix(),
+                "generated_by": "",
+                "input_data": "",
+                "last_updated": "",
+                "caption_hint": "",
+                "status": "candidate",
+            }
+        )
+    return entries
 
 
 def copy_candidates(manuscript_repo: str | Path, candidates: Iterable[ArtifactCandidate]) -> list[tuple[ArtifactCandidate, Path]]:
@@ -122,10 +146,13 @@ def copy_candidates(manuscript_repo: str | Path, candidates: Iterable[ArtifactCa
 
 def format_candidates(candidates: list[ArtifactCandidate]) -> str:
     if not candidates:
-        return "No candidate manuscript artifacts found."
-    lines = ["Candidate manuscript artifacts:"]
+        return "No candidate manuscript artifacts found. Raw data/model/cache outputs are skipped."
+    lines = ["Candidate manuscript artifacts:", "Raw data/model/cache outputs are skipped."]
     for candidate in candidates:
         lines.append(f"- {candidate.artifact_id} [{candidate.artifact_type}]")
-        lines.append(f"  source: {candidate.source_path}")
+        lines.append(f"  source: {candidate.source_path.as_posix()}")
         lines.append(f"  suggested destination: {candidate.manuscript_path}")
+    lines.append("")
+    lines.append("Manifest entry preview:")
+    lines.append(dumps_yaml({"artifacts": candidate_manifest_entries(candidates)}))
     return "\n".join(lines)

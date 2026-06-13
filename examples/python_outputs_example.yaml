@@ -2,7 +2,7 @@ artifacts:
   - id: model_comparison_pdf
     type: figure
     manuscript_path: figures/model_comparison.pdf
-    source_repo: R:/Code/my_project
+    source_repo: ./research-project
     source_path: outputs/final_figures/model_comparison.pdf
     generated_by: scripts/make_figures.py
     input_data: outputs/summary_metrics.csv
@@ -12,7 +12,7 @@ artifacts:
   - id: study_area_png
     type: figure
     manuscript_path: figures/study_area.png
-    source_repo: R:/Code/my_project
+    source_repo: ./research-project
     source_path: outputs/final_figures/study_area.png
     generated_by: scripts/make_maps.py
     input_data: data/processed/site_summary.csv
@@ -22,7 +22,7 @@ artifacts:
   - id: summary_metrics_csv
     type: data_summary
     manuscript_path: tables/summary_metrics.csv
-    source_repo: R:/Code/my_project
+    source_repo: ./research-project
     source_path: outputs/final_tables/summary_metrics.csv
     generated_by: scripts/make_tables.py
     input_data: outputs/summary_metrics_raw.csv
@@ -32,7 +32,7 @@ artifacts:
   - id: summary_metrics_tex
     type: table
     manuscript_path: tables/summary_metrics.tex
-    source_repo: R:/Code/my_project
+    source_repo: ./research-project
     source_path: outputs/final_tables/summary_metrics.tex
     generated_by: scripts/make_tables.py
     input_data: outputs/final_tables/summary_metrics.csv

@@ -1,367 +1,270 @@
-# lab-paper-git-workflow
+# Paper Scaffold
 
-Internal lab guide and lightweight tooling for creating clean manuscript Git repositories from research/code repositories, then connecting those manuscript repositories to GitHub and Overleaf.
+[![Tests](https://github.com/rappjer1/lab-paper-git-workflow/actions/workflows/tests.yml/badge.svg)](https://github.com/rappjer1/lab-paper-git-workflow/actions/workflows/tests.yml)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-This repo is not a manuscript repo. It is not a research/modeling repo. It is a reusable workflow guide plus a small Python CLI that helps lab members keep those two jobs separate.
+Paper Scaffold is a lightweight workflow and CLI for turning research outputs into clean GitHub/Overleaf manuscript repositories.
 
-## Start Here: Choose Your Path
+## What This Is
 
-This tool does not write the science for you. It does not replace version control. It helps separate research code, manuscript source, publication figures, and provenance. The goal is a clean manuscript GitHub repo that Overleaf can import.
+Paper Scaffold helps researchers create a separate manuscript repository from a research/code repository. It gives you docs, templates, and a small Python CLI for moving Word drafts, Python-generated figures/tables, and existing LaTeX projects into a clean manuscript repo that can be pushed to GitHub and imported into Overleaf.
 
-### Path 1: I Have A Word Draft And Want Overleaf
+Core message:
 
-1. Clean the Word file: accept/reject tracked changes, remove comments, and use heading styles.
-2. Run `python scripts/paper-scaffold.py doctor`.
-3. Initialize a clean manuscript repo with `python scripts/paper-scaffold.py init`.
-4. If Pandoc is available, run `python scripts/paper-scaffold.py import-word --input draft.docx --output converted.tex`.
-5. Split converted text into `sections/*.tex` and manually check equations, references, figures, tables, and captions.
-6. Commit and push the manuscript repo to private GitHub.
-7. In Overleaf, create a new project from GitHub and set `main.tex` as the main document.
+> Keep research code and manuscript source separate. Copy only paper-ready artifacts into a clean manuscript repository, track provenance in a manifest, validate before syncing to Overleaf.
 
-Read: [docs/word_to_overleaf.md](docs/word_to_overleaf.md).
+## Who This Is For
 
-### Path 2: I Have Python Figures/Tables And Want Them In A Paper
+Use this if you are a researcher, graduate student, analyst, or research software engineer who has:
 
-1. Save final figures/tables with stable filenames in the research repo.
-2. Run `python scripts/paper-scaffold.py doctor`.
-3. Initialize or enter the clean manuscript repo.
-4. Run `python scripts/paper-scaffold.py discover-artifacts --source <final-output-folder> --manifest metadata/artifact_manifest.yaml`.
-5. Review candidates, then rerun with `--write` and optionally `--copy`.
-6. Update captions and provenance fields in `metadata/artifact_manifest.yaml`.
-7. Run `python scripts/paper-scaffold.py validate --manuscript-repo <manuscript-repo>`.
+- A Word draft that needs to become an Overleaf-ready project.
+- Python-generated figures or tables that need to move into a paper.
+- An existing LaTeX folder that needs cleanup before GitHub/Overleaf sync.
+- A research/code repository that should feed selected artifacts into a separate manuscript repository.
 
-Read: [docs/python_outputs_to_overleaf.md](docs/python_outputs_to_overleaf.md).
+You do not need Overleaf, Pandoc, LaTeX, GitHub CLI, or GitHub Actions to read the workflow docs or use the basic scaffold.
 
-### Path 3: I Already Have A LaTeX Project And Want Clean GitHub/Overleaf Sync
+## The Problem It Solves
 
-1. Create a separate manuscript Git repo, not a copy of the full analysis repo.
-2. Copy only LaTeX source, references, publication figures/tables, supplement files, and metadata.
-3. Run `python scripts/paper-scaffold.py doctor`.
-4. Add or update `metadata/artifact_manifest.yaml`.
-5. Run `python scripts/paper-scaffold.py validate --manuscript-repo <manuscript-repo>`.
-6. Commit and push to private GitHub.
-7. In Overleaf, use New Project -> Import from GitHub.
+Research repositories often collect scripts, notebooks, model outputs, generated figures, result caches, manuscript drafts, and copied submission folders. That is convenient during analysis but risky for manuscript writing.
 
-Read: [docs/overleaf_from_github.md](docs/overleaf_from_github.md).
+Paper Scaffold helps prevent:
 
-## Tonight's Minimal Workflow
+- Connecting Overleaf to an entire analysis repo.
+- Accidentally committing raw data, model outputs, or large result folders.
+- Losing track of which figure came from which script.
+- Using implementation labels in the main manuscript text.
+- Replacing Git branches/tags with repeated ZIP files.
 
-1. Put final or draft paper text in Word/Markdown/LaTeX.
-2. Put final figures in one output folder.
-3. Run doctor.
-4. Initialize manuscript repo.
-5. Import Word or copy LaTeX template.
-6. Add artifacts.
-7. Validate.
-8. Commit and push.
-9. Import GitHub repo into Overleaf.
+## The 5-Minute Demo
+
+From a source checkout:
 
 ```bash
 python scripts/paper-scaffold.py doctor
-python scripts/paper-scaffold.py init
-python scripts/paper-scaffold.py import-word --input draft.docx --output converted.tex
-python scripts/paper-scaffold.py discover-artifacts --source <final-output-folder> --manifest metadata/artifact_manifest.yaml
-python scripts/paper-scaffold.py validate --manuscript-repo <manuscript-repo>
+python scripts/paper-scaffold.py quickstart
+python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwrite
+python scripts/paper-scaffold.py validate --manuscript-repo scratch/demo_manuscript
 ```
 
-## What This Repo Is
-
-`lab-paper-git-workflow` gives the lab a standard way to move from "the analysis is done in a research repo" to "the paper source is clean, reviewable, and synced with Overleaf."
-
-It includes:
-
-- A manual workflow that works even if you never install the Python package.
-- A template manuscript repository with LaTeX, figures, tables, supplement, and metadata folders.
-- A CLI named `paper-scaffold` for initializing, validating, and updating manuscript repos.
-- Provenance manifests for copied figures and tables.
-- Terminology maps that separate code labels from publication-facing labels.
-- v0.2 guides for Word/docx drafts, Python-generated artifacts, and GitHub-to-Overleaf import.
-
-## What Problem It Solves
-
-Research repos tend to collect everything: scripts, model outputs, generated figures, result caches, copied manuscript folders, Overleaf ZIPs, and temporary drafts. That is normal during analysis, but it is a bad place to edit the final paper.
-
-The failure modes are predictable:
-
-- Overleaf gets connected to a full analysis repo.
-- Large generated files get staged by accident.
-- Implementation labels leak into the manuscript.
-- Figures are copied without a record of where they came from.
-- Repeated ZIP files replace branches, tags, and commits.
-- Nobody can tell which folder is the current manuscript.
-
-This repo prevents that by making the manuscript repo small, explicit, and boring.
-
-## Use This When...
-
-- You have a research repo that produced figures, tables, or diagnostics for a paper.
-- You want a separate private GitHub repo for the manuscript.
-- You want Overleaf to compile and edit the paper, but GitHub to remain the canonical source.
-- You need to track where publication figures and tables came from.
-- You need to clean implementation-specific model or cache names out of manuscript text.
-
-## Do Not Use This When...
-
-- You are trying to version raw data, model checkpoints, or full evaluation outputs.
-- You want Overleaf connected directly to the full analysis repo.
-- You need a data archive or release package. Use the lab data archive workflow for that.
-- You are trying to reproduce model training. That belongs in the research repo.
-
-## The 5-Minute Version
-
-1. Keep the research repo as the source of computations.
-2. Create a separate manuscript repo.
-3. Copy only selected publication figures, tables, references, manuscript source, and supplement files.
-4. Record copied artifacts in `metadata/artifact_manifest.yaml`.
-5. Keep implementation labels in metadata, not in main paper text.
-6. Push the manuscript repo to private GitHub.
-7. Create a new Overleaf project from that GitHub repo.
-8. Use Git branches and tags instead of repeated ZIP folders.
-
-## Recommended Workflow
-
-```text
-Research repo
-  scripts, models, data, generated outputs
-        |
-        | selected artifacts + manifest
-        v
-Manuscript repo
-  LaTeX, figures, tables, references, supplement
-        |
-        v
-GitHub private repo <-> Overleaf project
-```
-
-The research repo remains the source of truth for computation. The manuscript repo becomes the source of truth for paper source files.
-
-## The Full Clean Workflow
-
-1. Finish or freeze the analysis outputs needed for the next manuscript update.
-2. Create or update a separate manuscript repo.
-3. Copy publication-ready figures and tables into `figures/`, `tables/`, `supplement/figures/`, or `supplement/tables/`.
-4. Update `metadata/artifact_manifest.yaml` with source paths, scripts, inputs, dates, and status.
-5. Update `metadata/terminology_map.yaml` with implementation labels that should not appear in the main text.
-6. Run `paper-scaffold validate`.
-7. Commit and push to GitHub.
-8. Sync Overleaf from GitHub.
-9. For revisions, use branches such as `revision-1` and tags such as `submission-v1`.
-
-## Quick Start
-
-From a checkout of this repo:
+After installation, use `paper-scaffold` directly:
 
 ```bash
-python scripts/paper-scaffold.py init
-python scripts/paper-scaffold.py add-artifact
-python scripts/paper-scaffold.py validate --manuscript-repo <manuscript-repo>
+paper-scaffold doctor
+paper-scaffold quickstart
+paper-scaffold demo --output scratch/demo_manuscript --overwrite
 ```
 
-After package installation, the same commands are available as:
+The first command to run is usually:
 
 ```bash
-paper-scaffold init
-paper-scaffold add-artifact
-paper-scaffold validate --manuscript-repo <manuscript-repo>
+paper-scaffold doctor
 ```
 
-See [QUICKSTART.md](QUICKSTART.md) for Git Bash, PowerShell, and manual fallback steps.
-
-## Folder Structure
-
-This repository:
-
-```text
-docs/                       workflow guides
-templates/manuscript_repo/  starter manuscript repo
-src/paper_scaffold/         Python CLI implementation
-scripts/paper-scaffold.py   run-from-checkout wrapper
-examples/                   generic example YAML files
-tests/                      lightweight tests
-```
-
-A scaffolded manuscript repo:
-
-```text
-main.tex
-references.bib
-sections/
-figures/
-tables/
-supplement/
-metadata/
-  artifact_manifest.yaml
-  terminology_map.yaml
-  manuscript_config.yaml
-```
-
-## What Belongs In The Research Repo Vs Manuscript Repo
-
-Research repo:
-
-- Code, notebooks, scripts, and model definitions.
-- Raw or processed data, where permitted by the project.
-- Full generated output trees.
-- Model checkpoints and prediction caches.
-- External API caches.
-- Reproducibility instructions for computation.
-
-Manuscript repo:
-
-- `main.tex`, section files, and supplement source.
-- `references.bib`.
-- Publication figures and tables selected from the research repo.
-- Small summary files only when they are part of the submitted supplement.
-- Metadata that records artifact provenance.
-- Terminology map for publication labels.
-
-## What Never Belongs In The Manuscript Repo
-
-Do not commit:
-
-- `.npz`, `.pt`, `.pth`, `.pkl`, `.nc`, or large binary outputs.
-- `full_eval/`, `prediction_cache/`, `raw_api_cache/`, `raw_results/`, or `raw_outputs/`.
-- Raw external data dumps.
-- Full model run directories.
-- Repeated Overleaf ZIP snapshots.
-- A second copy of the research repo.
-
-## How To Connect GitHub To Overleaf
-
-Preferred path:
-
-1. Create a private GitHub repo for the manuscript.
-2. Push the manuscript source to GitHub.
-3. In Overleaf, create a new project from GitHub.
-4. Set `main.tex` as the main document.
-5. Pull/sync in Overleaf after local commits.
-6. Push from Overleaf only when edits were made there.
-
-Do not connect Overleaf to the full analysis repo. Existing Overleaf projects are usually best kept as archives; create a new Overleaf project from GitHub when possible.
-
-## How To Update Figures/Tables
-
-1. Regenerate outputs in the research repo.
-2. Copy only the selected publication figure or table into the manuscript repo.
-3. Update `metadata/artifact_manifest.yaml`.
-4. Run `paper-scaffold copy-artifacts` if the manifest should drive copying.
-5. Run `paper-scaffold validate`.
-6. Commit the figure/table update with a clear message.
-
-The manifest is the record of provenance. It is not a raw data archive.
-
-## How To Use Codex Safely
-
-Tell Codex:
-
-- The repo path and current branch.
-- Whether it may edit code, manuscript text, metadata, or results.
-- Which repos are off limits.
-- Whether expensive jobs are forbidden.
-- That it should not create ZIP snapshots unless requested.
-- That it should report changed files and run validation.
-
-Use separate chats or branches for manuscript text, data/API audits, and model training.
-
-## Common Mistakes
-
-- Connecting Overleaf to the research repo.
-- Copying whole `results/` folders because one figure is needed.
-- Keeping old manuscript folders named `paper_final`, `paper_final2`, and `paper_final_really`.
-- Using code labels in the abstract or results section.
-- Forgetting to commit the artifact manifest after copying figures.
-- Editing the same paragraph locally and in Overleaf at the same time.
-- Typing `orign` instead of `origin` when adding a remote.
-
-## Common Failure Modes
-
-- `paper-scaffold validate` reports missing `origin`: add the GitHub remote.
-- Overleaf does not show the latest figure: sync from GitHub and recompile.
-- A large file warning appears: remove the file and keep it in the research repo.
-- A banned term appears: update the text with the publication label or adjust the terminology map if the term is allowed in that context.
-- Git shows LaTeX build files staged: unstage them and rely on `.gitignore`.
-
-## Minimal Example
+or, from a checkout:
 
 ```bash
-git clone <research-repo>
-git clone <manuscript-repo>
-cd <path-to-lab-paper-git-workflow>
-python scripts/paper-scaffold.py init --manuscript-repo <manuscript-repo>
-python scripts/paper-scaffold.py add-artifact --manuscript-repo <manuscript-repo>
-python scripts/paper-scaffold.py validate --manuscript-repo <manuscript-repo>
-cd <manuscript-repo>
+python scripts/paper-scaffold.py doctor
+```
+
+## Three Common Workflows
+
+### Word Draft To Overleaf-Ready Repo
+
+```bash
+paper-scaffold doctor
+paper-scaffold init --manuscript-repo ./paper
+paper-scaffold import-word --input draft.docx --output ./paper/converted.tex
+paper-scaffold validate --manuscript-repo ./paper
+```
+
+Word conversion is a starting point. You must manually check equations, references, figures, tables, captions, and cross-references.
+
+Guide: [docs/word_to_overleaf.md](docs/word_to_overleaf.md)
+
+### Python Figures/Tables To Manuscript Repo
+
+```bash
+paper-scaffold doctor
+paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml
+paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml --write --copy --manuscript-repo ./paper
+paper-scaffold validate --manuscript-repo ./paper
+```
+
+Guide: [docs/python_outputs_to_overleaf.md](docs/python_outputs_to_overleaf.md)
+
+### Existing LaTeX Project To GitHub/Overleaf
+
+```bash
+paper-scaffold doctor --manuscript-repo ./paper
+paper-scaffold validate --manuscript-repo ./paper --write-report ./paper/validation_report.md
 git add .
-git commit -m "Initialize manuscript repo"
+git commit -m "Clean manuscript repository"
 git push
 ```
 
-## Advanced Example With Supplement
+Guide: [docs/existing_latex_project.md](docs/existing_latex_project.md)
+
+## Install
+
+No install is required if you run from a checkout:
 
 ```bash
-python scripts/paper-scaffold.py init \
-  --research-repo R:/Code/my_project \
-  --manuscript-repo R:/Code/manuscripts/my_project_paper \
-  --title "Example Rainfall-Runoff Manuscript" \
-  --slug example_rainfall_runoff \
-  --has-supplement \
-  --use-template \
-  --non-interactive
+git clone https://github.com/rappjer1/lab-paper-git-workflow.git
+cd lab-paper-git-workflow
+python scripts/paper-scaffold.py --help
 ```
 
-Then add main and supplement artifacts to `metadata/artifact_manifest.yaml`:
+Editable install:
 
-```yaml
-artifacts:
-  - id: hydrograph_summary
-    type: figure
-    manuscript_path: figures/hydrograph_summary.pdf
-    source_repo: R:/Code/my_project
-    source_path: outputs/final_figures/hydrograph_summary.pdf
-    generated_by: scripts/make_publication_figures.py
-    input_data: outputs/summary_metrics.csv
-    last_updated: 2026-06-10
-    caption_hint: Example hydrograph summary.
-    status: final
-  - id: supplement_diagnostic_grid
-    type: supplement_figure
-    manuscript_path: supplement/figures/diagnostic_grid.pdf
-    source_repo: R:/Code/my_project
-    source_path: outputs/final_figures/diagnostic_grid.pdf
-    generated_by: scripts/make_diagnostics.py
-    input_data: outputs/diagnostic_summary.csv
-    last_updated: 2026-06-10
-    caption_hint: Supplementary diagnostic grid.
-    status: final
+```bash
+python -m pip install -e .
+paper-scaffold --help
 ```
 
-## FAQ
+Development install:
 
-**Should I ever connect Overleaf to the research repo?**
+```bash
+python -m pip install -e ".[dev]"
+pytest tests
+```
 
-No. Create a separate manuscript repo.
+## Quick Start
 
-**Can the manuscript repo contain code?**
+```bash
+paper-scaffold doctor
+paper-scaffold init --manuscript-repo ./paper
+paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml
+paper-scaffold validate --manuscript-repo ./paper
+```
 
-Only tiny helper scripts that are part of the manuscript build. Analysis, modeling, and data processing code belong in the research repo.
+Then push `./paper` to GitHub and import that GitHub repo into Overleaf if you use Overleaf.
 
-**Do I need the CLI?**
+More detail: [docs/getting_started.md](docs/getting_started.md)
 
-No. The docs describe the manual workflow. The CLI just makes the checks and scaffold faster.
+## Core Commands
 
-**Where do figure captions live?**
+- `paper-scaffold doctor`: check Python, Git, optional tools, and repo shape.
+- `paper-scaffold quickstart`: print the three common workflows.
+- `paper-scaffold demo`: create a small demo manuscript repo.
+- `paper-scaffold init`: create a clean manuscript repo scaffold.
+- `paper-scaffold import-word`: convert `.docx` with Pandoc when available.
+- `paper-scaffold discover-artifacts`: find likely manuscript figures/tables.
+- `paper-scaffold add-artifact`: add one manifest entry interactively or by flags.
+- `paper-scaffold copy-artifacts`: copy files listed in the manifest.
+- `paper-scaffold terminology-check`: find banned implementation labels.
+- `paper-scaffold git-check`: summarize Git state.
+- `paper-scaffold validate`: check manuscript repo shape, artifacts, terminology, and Git state.
+- `paper-scaffold overleaf-instructions`: print GitHub/Overleaf sync guidance.
+- `paper-scaffold explain`: explain a diagnostic code such as `E003`.
+- `paper-scaffold overleaf-check`: check paths, figures, large files, and Overleaf sync risks.
+- `paper-scaffold github-check`: check GitHub-readiness, remotes, status, repository docs, and privacy warnings.
+- `paper-scaffold privacy-check`: scan text files for local paths, emails, token-like strings, and private markers.
+- `paper-scaffold check-figures`: check `\includegraphics` paths and figure files.
+- `paper-scaffold check-citations`: compare TeX citation keys against `references.bib`.
+- `paper-scaffold check-labels`: check duplicate and missing LaTeX label targets.
+- `paper-scaffold audit-word-conversion`: flag common Pandoc/Word conversion cleanup issues.
 
-Final captions live in LaTeX. `caption_hint` in the manifest is a reminder, not the submitted caption.
+## Diagnostics And Error Codes
 
-**What should I tag?**
+When a check finds a problem, it prints a stable diagnostic code:
 
-Tag important paper states, such as `submission-v1`, `revision-1-response`, or `accepted-version`.
+```bash
+paper-scaffold explain E003
+paper-scaffold explain --list
+```
 
-## Maintainer Checklist
+Use focused checks before GitHub/Overleaf sync:
 
-- Keep templates small and generic.
-- Keep examples generic and non-project-specific.
-- Add validation checks only when they prevent real mistakes.
-- Avoid hard-coding one manuscript, dataset, or modeling framework.
-- Keep docs useful for a new graduate student working manually.
-- Test the wrapper script from a source checkout.
+```bash
+paper-scaffold validate --manuscript-repo ./paper --write-report ./paper/validation_report.md
+paper-scaffold overleaf-check --manuscript-repo ./paper
+paper-scaffold github-check --repo ./paper
+paper-scaffold privacy-check --path ./paper
+paper-scaffold check-figures --manuscript-repo ./paper
+paper-scaffold check-citations --manuscript-repo ./paper
+paper-scaffold check-labels --manuscript-repo ./paper
+```
+
+Reference: [docs/error_codes.md](docs/error_codes.md)
+
+## Recommended Manuscript Repo Structure
+
+```text
+paper/
+  README.md
+  .gitignore
+  main.tex
+  references.bib
+  sections/
+  figures/
+  tables/
+  supplement/
+    supplement.tex
+    figures/
+    tables/
+  metadata/
+    artifact_manifest.yaml
+    terminology_map.yaml
+    manuscript_config.yaml
+```
+
+## What Not To Commit
+
+Keep these out of manuscript repositories:
+
+- Raw data and external data dumps.
+- Model checkpoints and prediction caches.
+- `.npz`, `.pt`, `.pth`, `.pkl`, `.pickle`, `.nc`, `.zarr`, `.zip`, and large binary outputs.
+- `full_eval/`, `prediction_cache/`, `raw_api_cache/`, and `data/external/`.
+- Full generated output trees when only one figure is needed.
+- LaTeX build artifacts such as `.aux`, `.log`, `.bbl`, and `.synctex.gz`.
+
+## Overleaf/GitHub Workflow
+
+Paper Scaffold does not require Overleaf. If you use Overleaf, the recommended pattern is:
+
+1. Keep the manuscript source in a clean GitHub repo.
+2. In Overleaf, create a new project from GitHub.
+3. Treat GitHub as the source of truth.
+4. If editing locally, push to GitHub and then sync in Overleaf.
+5. If editing in Overleaf, push from Overleaf and then pull locally.
+
+Guide: [docs/github_overleaf_sync.md](docs/github_overleaf_sync.md)
+
+## Examples
+
+- [examples/minimal_word_workflow](examples/minimal_word_workflow)
+- [examples/minimal_python_artifacts](examples/minimal_python_artifacts)
+- [examples/existing_latex_cleanup](examples/existing_latex_cleanup)
+
+Generate the Python example artifacts:
+
+```bash
+python examples/minimal_python_artifacts/make_example_figure.py
+```
+
+## Limitations
+
+- Paper Scaffold does not write the science for you.
+- It does not automatically create GitHub repositories.
+- It does not upload anything to Overleaf.
+- It does not require LaTeX and does not compile LaTeX unless you install separate tools.
+- Word conversion requires Pandoc and still needs manual review.
+- Artifact discovery suggests candidates; humans still review provenance, captions, and filenames.
+- It does not manage Git LFS.
+
+## Contributing
+
+Contributions are welcome. Please open an issue before large changes, keep examples generic, avoid large binary files, update docs, and add tests for CLI changes.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Citation / Acknowledgement
+
+If Paper Scaffold helps your project, cite or acknowledge it using [CITATION.cff](CITATION.cff) or link to this repository.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

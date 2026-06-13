@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If Paper Scaffold helps your research workflow, please cite it."
+title: "Paper Scaffold"
+version: "0.3.0"
+authors:
+  - name: "Paper Scaffold contributors"
+repository-code: "https://github.com/rappjer1/lab-paper-git-workflow"
+license: "MIT"

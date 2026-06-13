@@ -1,9 +1,9 @@
 project:
-  title: Example Rainfall-Runoff Manuscript
-  slug: example_rainfall_runoff
-  research_repo: R:/Code/my_project
-  manuscript_repo: R:/Code/manuscripts/my_project_paper
-  github_repo: https://github.com/my-lab/my-project-paper
+  title: Example Research Manuscript
+  slug: example_research_paper
+  research_repo: ./research-project
+  manuscript_repo: ./paper
+  github_repo: https://github.com/example-owner/example-paper
   overleaf_url: ""
   main_tex: main.tex
   supplement_tex: supplement/supplement.tex

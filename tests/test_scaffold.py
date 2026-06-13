@@ -11,7 +11,7 @@ from paper_scaffold.validation import forbidden_file_matches
 def test_init_manuscript_creates_expected_files(tmp_path):
     manuscript_repo = tmp_path / "paper"
     options = InitOptions(
-        research_repo="R:/Code/my_project",
+        research_repo="./research-project",
         manuscript_repo=str(manuscript_repo),
         title="Example Paper",
         slug="example_paper",

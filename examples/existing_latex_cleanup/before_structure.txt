@@ -1,0 +1,9 @@
+paper_export/
+  main.tex
+  main.aux
+  main.log
+  final_figure_revised_REALLY.pdf
+  old_figures/
+  results/
+  cache/
+  manuscript_final.zip
