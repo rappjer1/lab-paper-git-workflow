@@ -1,0 +1,31 @@
+artifacts:
+  - id: hydrograph_summary
+    type: figure
+    manuscript_path: figures/hydrograph_summary.pdf
+    source_repo: R:/Code/my_project
+    source_path: outputs/final_figures/hydrograph_summary.pdf
+    generated_by: scripts/make_publication_figures.py
+    input_data: outputs/summary_metrics.csv
+    last_updated: 2026-06-10
+    caption_hint: Example hydrograph summary across evaluation basins.
+    status: final
+  - id: model_comparison_table
+    type: table
+    manuscript_path: tables/model_comparison.tex
+    source_repo: R:/Code/my_project
+    source_path: outputs/final_tables/model_comparison.tex
+    generated_by: scripts/make_publication_tables.py
+    input_data: outputs/summary_metrics.csv
+    last_updated: 2026-06-10
+    caption_hint: Publication table comparing model families.
+    status: draft
+  - id: supplement_diagnostic_grid
+    type: supplement_figure
+    manuscript_path: supplement/figures/diagnostic_grid.pdf
+    source_repo: R:/Code/my_project
+    source_path: outputs/final_figures/diagnostic_grid.pdf
+    generated_by: scripts/make_diagnostics.py
+    input_data: outputs/diagnostic_summary.csv
+    last_updated: 2026-06-10
+    caption_hint: Supplementary diagnostic figure.
+    status: final

@@ -1,0 +1,24 @@
+project:
+  title: Example Rainfall-Runoff Manuscript
+  slug: example_rainfall_runoff
+  research_repo: R:/Code/my_project
+  manuscript_repo: R:/Code/manuscripts/my_project_paper
+  github_repo: https://github.com/my-lab/my-project-paper
+  overleaf_url: ""
+  main_tex: main.tex
+  supplement_tex: supplement/supplement.tex
+  has_supplement: true
+
+validation:
+  max_file_size_mb: 25
+  forbidden_patterns:
+    - "*.npz"
+    - "*.pt"
+    - "*.pth"
+    - "*.pkl"
+    - "*.nc"
+    - "*.zip"
+    - "data/external"
+    - "full_eval"
+    - "prediction_cache"
+    - "raw_api_cache"

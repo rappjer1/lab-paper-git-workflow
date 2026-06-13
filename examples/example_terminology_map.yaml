@@ -1,0 +1,19 @@
+terms:
+  internal_baseline_v4:
+    publication_label: baseline process model
+    allowed_contexts:
+      - supplement provenance table
+      - artifact manifest
+    banned_in:
+      - abstract
+      - introduction
+      - main results
+  runoff_quantile_head:
+    publication_label: probabilistic runoff model
+    banned_in:
+      - abstract
+      - introduction
+      - main results
+  package_name_used_in_code:
+    publication_label: rainfall-runoff modeling workflow
+    note: Use package names only for software provenance.

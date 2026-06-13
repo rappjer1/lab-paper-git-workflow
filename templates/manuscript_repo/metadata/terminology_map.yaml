@@ -1,0 +1,15 @@
+terms:
+  standard_cudalstm_ensemble:
+    publication_label: deterministic LSTM ensemble
+    allowed_contexts:
+      - supplement provenance table
+      - code manifest
+    banned_in:
+      - abstract
+      - introduction
+      - main results
+  classicallstm_ensemble:
+    publication_label: quantile LSTM ensemble
+  NeuralHydrology:
+    publication_label: LSTM rainfall-runoff workflow
+    note: Use NeuralHydrology only for software provenance, not as the scientific model label.

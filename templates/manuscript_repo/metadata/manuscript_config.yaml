@@ -1,0 +1,23 @@
+project:
+  title: ""
+  slug: ""
+  research_repo: ""
+  manuscript_repo: ""
+  github_repo: ""
+  overleaf_url: ""
+  main_tex: main.tex
+  supplement_tex: supplement/supplement.tex
+  has_supplement: true
+
+validation:
+  max_file_size_mb: 25
+  forbidden_patterns:
+    - "*.npz"
+    - "*.pt"
+    - "*.pth"
+    - "*.pkl"
+    - "*.zip"
+    - "data/external"
+    - "full_eval"
+    - "prediction_cache"
+    - "raw_api_cache"
