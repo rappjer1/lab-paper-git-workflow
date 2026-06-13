@@ -17,9 +17,25 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install package
         run: python -m pip install -e ".[dev]"
+      - name: Ruff
+        run: ruff check .
       - name: Run tests
         run: pytest tests
       - name: CLI help
         run: paper-scaffold --help
       - name: CLI demo
         run: paper-scaffold demo --output scratch/demo_manuscript --overwrite
+      - name: Validate demo
+        run: paper-scaffold validate --manuscript-repo scratch/demo_manuscript --write-report scratch/demo_manuscript/validation_report.md --write-json scratch/demo_manuscript/validation_report.json
+      - name: Artifact checks
+        run: |
+          paper-scaffold stale-artifacts --manuscript-repo scratch/demo_manuscript
+          paper-scaffold unused-artifacts --manuscript-repo scratch/demo_manuscript
+      - name: Upload validation report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: validation-report-${{ matrix.python-version }}
+          path: |
+            scratch/demo_manuscript/validation_report.md
+            scratch/demo_manuscript/validation_report.json

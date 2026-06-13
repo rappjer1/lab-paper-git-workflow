@@ -2,7 +2,7 @@
 
 ## Summary
 
-Paper Scaffold has been updated through v0.4.0 as a public-facing workflow and CLI for creating clean manuscript repositories from Word drafts, Python outputs, and existing LaTeX projects.
+Paper Scaffold has been updated through v0.5.0 as a public-facing workflow and CLI for creating clean manuscript repositories from Word drafts, Python outputs, and existing LaTeX projects.
 
 ## v0.1.0
 
@@ -109,3 +109,35 @@ The v0.4 release keeps `validate` usable before GitHub setup. Missing `origin` i
 ### Public Release Notes
 
 Before changing repository visibility, review `PUBLIC_RELEASE_CHECKLIST.md`, confirm CI passes on GitHub, run the v0.4 diagnostics commands, and ensure no private manuscript content or raw research data has been added.
+
+## v0.5.0
+
+### Files Added
+
+- Architecture decision records under `docs/adr/`.
+- Schema validation module: `src/paper_scaffold/schemas.py`.
+- Roadmap: `ROADMAP.md`.
+- Release report: `V0_5_RELEASE_REPORT.md`.
+- Development hygiene config: `.pre-commit-config.yaml` and Ruff settings in `pyproject.toml`.
+- Tests: `tests/test_v05_architecture.py`.
+
+### Commands Added Or Improved
+
+- Added `paper-scaffold validate --write-json`.
+- Added `paper-scaffold stale-artifacts`.
+- Added `paper-scaffold unused-artifacts`.
+- Improved artifact discovery warnings for skipped raw/cache/output paths.
+- Improved Markdown validation reports with error-code documentation references.
+
+### Architecture Decisions
+
+- Kept the project scope bounded to clean manuscript repository scaffolding and validation.
+- Kept the current scaffold engine for v0.5; deferred Copier evaluation to v0.6.
+- Chose dependency-free schema validation instead of Pydantic for v0.5.
+- Kept `argparse`; deferred Typer/Rich migration.
+- Stayed GitHub-source-installable; deferred PyPI publishing and Trusted Publishing workflow.
+- Deferred MkDocs Material until docs growth justifies it.
+
+### Validation Notes
+
+v0.5 validation remains offline and does not require Pandoc, LaTeX, GitHub CLI, Overleaf, or network access.

@@ -2,7 +2,7 @@
 
 ## Scope
 
-Audit performed for the v0.3 public-facing Paper Scaffold release and refreshed for the v0.4 diagnostics release.
+Audit performed for the v0.3 public-facing Paper Scaffold release and refreshed for the v0.4 diagnostics and v0.5 architecture-hardening releases.
 
 ## Search Terms
 
@@ -72,6 +72,8 @@ Key inspected areas:
 - Added v0.4 diagnostics without project-specific manuscript examples.
 - Added `docs/error_codes.md` and expanded troubleshooting with generic GitHub/Overleaf fixes.
 - Confirmed diagnostic output redacts local paths, emails, and secret-like values in privacy previews.
+- Added v0.5 ADRs, schema docs, roadmap, and artifact stale/unused checks with generic examples only.
+- Chose dependency-free schema validation; no external service, publishing, or upload workflow was added.
 
 ## Remaining Terms And Why Retained
 

@@ -32,6 +32,22 @@ artifacts:
     status: final
 ```
 
+## Schema
+
+The manifest schema is intentionally small:
+
+- top-level `artifacts` is required and must be a list;
+- each artifact must be a mapping;
+- each artifact requires `id`, `type`, `manuscript_path`, and `source_path`;
+- unknown fields are warnings, not fatal errors;
+- duplicate IDs and unsupported types are errors.
+
+Schema validation is dependency-free and runs as part of:
+
+```bash
+paper-scaffold validate --manuscript-repo <manuscript-repo>
+```
+
 ## Field Meanings
 
 `id` is a stable short identifier. Use lowercase words separated by underscores.
@@ -54,6 +70,38 @@ artifacts:
 
 `status` is usually `draft`, `final`, or `needs_update`.
 
+## Valid Example
+
+```yaml
+artifacts:
+  - id: main_result
+    type: figure
+    manuscript_path: figures/main_result.pdf
+    source_repo: ./research-project
+    source_path: outputs/main_result.pdf
+    generated_by: scripts/make_figures.py
+    input_data: outputs/summary.csv
+    last_updated: 2026-06-13
+    caption_hint: Main result figure.
+    status: final
+```
+
+## Invalid Example
+
+```yaml
+artifacts:
+  - id: main_result
+    type: plot
+    manuscript_path: figures/main_result.pdf
+```
+
+This produces diagnostics similar to:
+
+```text
+E004 [ERROR] Manifest artifact missing (metadata/artifact_manifest.yaml): artifact[1] missing required field: source_path
+E004 [ERROR] Manifest artifact missing (metadata/artifact_manifest.yaml): artifact[1] unsupported type: plot
+```
+
 ## Copying Artifacts
 
 Use:
@@ -63,6 +111,20 @@ paper-scaffold copy-artifacts --manuscript-repo <manuscript-repo>
 ```
 
 The tool copies files listed in the manifest. It does not copy directories unless `--allow-directories` is used. Directory copying should be rare.
+
+## Stale And Unused Artifacts
+
+Check whether source outputs changed after copying:
+
+```bash
+paper-scaffold stale-artifacts --manuscript-repo <manuscript-repo>
+```
+
+Check whether copied manuscript artifacts are not referenced by TeX:
+
+```bash
+paper-scaffold unused-artifacts --manuscript-repo <manuscript-repo>
+```
 
 ## What The Manifest Is Not
 
