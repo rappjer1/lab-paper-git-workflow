@@ -8,6 +8,43 @@ This is the short path for a lab member who already has:
 - A private GitHub repo for the manuscript.
 - Optional Overleaf access.
 
+## Word + Python To Overleaf In 20 Minutes
+
+This is the launch-night path when you have a Word draft and Python-generated outputs.
+
+1. Clone or create the manuscript repo.
+2. Run doctor.
+3. Convert the Word draft or start from the LaTeX template.
+4. Discover Python artifacts.
+5. Copy selected artifacts.
+6. Validate.
+7. Commit and push.
+8. Import from GitHub into Overleaf.
+
+```powershell
+Set-Location R:\Code\lab_tools\lab-paper-git-workflow
+R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py doctor
+R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py init --manuscript-repo R:\Code\manuscripts\my_project_paper
+R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py import-word --input draft.docx --output R:\Code\manuscripts\my_project_paper\converted.tex
+R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py discover-artifacts --source R:\Code\my_project\outputs\final --manifest R:\Code\manuscripts\my_project_paper\metadata\artifact_manifest.yaml
+R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py discover-artifacts --source R:\Code\my_project\outputs\final --manifest R:\Code\manuscripts\my_project_paper\metadata\artifact_manifest.yaml --write --copy --manuscript-repo R:\Code\manuscripts\my_project_paper
+R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py validate --manuscript-repo R:\Code\manuscripts\my_project_paper
+```
+
+Git Bash equivalent:
+
+```bash
+cd /r/Code/lab_tools/lab-paper-git-workflow
+python scripts/paper-scaffold.py doctor
+python scripts/paper-scaffold.py init --manuscript-repo /r/Code/manuscripts/my_project_paper
+python scripts/paper-scaffold.py import-word --input draft.docx --output /r/Code/manuscripts/my_project_paper/converted.tex
+python scripts/paper-scaffold.py discover-artifacts --source /r/Code/my_project/outputs/final --manifest /r/Code/manuscripts/my_project_paper/metadata/artifact_manifest.yaml
+python scripts/paper-scaffold.py discover-artifacts --source /r/Code/my_project/outputs/final --manifest /r/Code/manuscripts/my_project_paper/metadata/artifact_manifest.yaml --write --copy --manuscript-repo /r/Code/manuscripts/my_project_paper
+python scripts/paper-scaffold.py validate --manuscript-repo /r/Code/manuscripts/my_project_paper
+```
+
+If Pandoc is not installed, skip `import-word` and paste/split text manually using `docs/word_to_overleaf.md`.
+
 ## Git Bash
 
 ```bash

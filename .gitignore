@@ -12,3 +12,4 @@ dist/
 # Local scratch output from manual validation
 .tmp/
 .tmp_*/
+scratch/

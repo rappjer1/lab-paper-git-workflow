@@ -9,10 +9,13 @@ from typing import Any
 
 from .artifact_manifest import SUPPORTED_ARTIFACT_TYPES, append_artifact, copy_artifacts
 from .config import ManuscriptConfig
+from .discovery import append_candidates_to_manifest, copy_candidates, discover_artifacts, format_candidates
+from .doctor import format_doctor_checks, run_doctor
 from .git_helpers import git_summary
 from .scaffold import InitOptions, init_manuscript
 from .terminology import find_banned_terms, format_terminology_hits
 from .validation import forbidden_file_matches, large_files, validate_manuscript_repo
+from .word import WORD_REVIEW_MESSAGE, import_word
 
 
 def prompt_text(label: str, default: str = "") -> str:
@@ -187,6 +190,68 @@ def command_overleaf_instructions(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_doctor(args: argparse.Namespace) -> int:
+    repo = Path(args.manuscript_repo or Path.cwd())
+    print(format_doctor_checks(run_doctor(repo)))
+    return 0
+
+
+def command_import_word(args: argparse.Namespace) -> int:
+    result = import_word(
+        input_path=args.input,
+        output_path=args.output,
+        output_format=args.to,
+        dry_run=args.dry_run,
+        overwrite=args.overwrite,
+    )
+    print("Pandoc command:")
+    print("  " + " ".join(result.command))
+    print(result.message)
+    if args.split_sections:
+        print("Section splitting is intentionally minimal in v0.2. Split the converted file at section headings into sections/*.tex and compare against the Word original.")
+    print(WORD_REVIEW_MESSAGE)
+    return 0 if result.ok else 2
+
+
+def command_discover_artifacts(args: argparse.Namespace) -> int:
+    candidates = discover_artifacts(args.source, supplement=args.supplement)
+    print(format_candidates(candidates))
+    if not candidates:
+        return 0
+
+    if args.write:
+        append_candidates_to_manifest(args.manifest, candidates)
+        print(f"Appended {len(candidates)} candidate entries to {args.manifest}.")
+    else:
+        print("Dry run only. Pass --write to append these suggestions to the manifest.")
+
+    if args.copy:
+        manifest_path = Path(args.manifest)
+        manuscript_repo = Path(args.manuscript_repo) if args.manuscript_repo else manifest_path.parent.parent
+        copied = copy_candidates(manuscript_repo, candidates)
+        print(f"Copied {len(copied)} artifacts into {manuscript_repo}.")
+    else:
+        print("No files copied. Pass --copy to copy candidates into the manuscript repo.")
+    return 0
+
+
+def command_make_slack_summary(args: argparse.Namespace) -> int:
+    repo = Path(args.manuscript_repo or Path.cwd())
+    config = ManuscriptConfig.load(repo)
+    repo_url = config.project.get("github_repo") or "<GITHUB_REPO_URL>"
+    docs_path = Path(__file__).resolve().parents[2] / "docs" / "slack_launch.md"
+    if docs_path.exists():
+        message = docs_path.read_text(encoding="utf-8").replace("<GITHUB_REPO_URL>", str(repo_url))
+    else:
+        message = (
+            "New lab workflow repo: <GITHUB_REPO_URL>\n\n"
+            "Use it to create clean manuscript GitHub repos from Word drafts, Python outputs, and LaTeX projects.\n"
+            "Start with `paper-scaffold doctor`, then `paper-scaffold validate`. Do not commit raw data or model outputs."
+        ).replace("<GITHUB_REPO_URL>", str(repo_url))
+    print(message)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="paper-scaffold", description="Create and validate clean manuscript Git repositories.")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -248,6 +313,32 @@ def build_parser() -> argparse.ArgumentParser:
     overleaf = subparsers.add_parser("overleaf-instructions", help="Print project-specific Overleaf sync instructions")
     overleaf.add_argument("--manuscript-repo")
     overleaf.set_defaults(func=command_overleaf_instructions)
+
+    doctor = subparsers.add_parser("doctor", help="Check local tools and manuscript repo shape")
+    doctor.add_argument("--manuscript-repo")
+    doctor.set_defaults(func=command_doctor)
+
+    import_word_parser = subparsers.add_parser("import-word", help="Convert a Word docx draft with Pandoc when available")
+    import_word_parser.add_argument("--input", required=True, help="Input .docx file")
+    import_word_parser.add_argument("--output", required=True, help="Output .tex or .md file")
+    import_word_parser.add_argument("--to", choices=["latex", "markdown"], default="latex")
+    import_word_parser.add_argument("--split-sections", action="store_true", help="Print section splitting guidance after conversion")
+    import_word_parser.add_argument("--dry-run", action="store_true")
+    import_word_parser.add_argument("--overwrite", action="store_true")
+    import_word_parser.set_defaults(func=command_import_word)
+
+    discover = subparsers.add_parser("discover-artifacts", help="Find likely manuscript artifacts in an output folder")
+    discover.add_argument("--source", required=True)
+    discover.add_argument("--manifest", required=True)
+    discover.add_argument("--manuscript-repo", help="Manuscript repo root used with --copy")
+    discover.add_argument("--write", action="store_true", help="Append candidates to the manifest")
+    discover.add_argument("--copy", action="store_true", help="Copy candidates into figures/tables folders")
+    discover.add_argument("--supplement", action="store_true", help="Suggest supplement figure/table destinations")
+    discover.set_defaults(func=command_discover_artifacts)
+
+    slack = subparsers.add_parser("make-slack-summary", help="Print a Slack-ready launch message")
+    slack.add_argument("--manuscript-repo")
+    slack.set_defaults(func=command_make_slack_summary)
 
     return parser
 

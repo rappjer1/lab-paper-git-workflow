@@ -154,3 +154,124 @@ Pytest note: the default pytest temp root was permission-blocked, so `--basetemp
 - Add optional LaTeX compile checks when `latexmk` is installed.
 - Add context-aware terminology rules for supplement-only allowed terms.
 - Add a release checklist command that verifies tags and remotes.
+
+## v0.2 Word/Python/Overleaf Launch Layer
+
+### Files Added
+
+- `docs/word_to_overleaf.md`
+- `docs/python_outputs_to_overleaf.md`
+- `docs/overleaf_from_github.md`
+- `docs/slack_launch.md`
+- `templates/manuscript_repo/metadata/word_conversion_notes.md`
+- `templates/manuscript_repo/metadata/python_artifact_notes.md`
+- `examples/word_to_overleaf_example.md`
+- `examples/python_outputs_example.yaml`
+- `src/paper_scaffold/doctor.py`
+- `src/paper_scaffold/word.py`
+- `src/paper_scaffold/discovery.py`
+- `tests/test_v02_cli.py`
+
+### Files Updated
+
+- `README.md`
+- `QUICKSTART.md`
+- `.gitignore`
+- `src/paper_scaffold/cli.py`
+- `IMPLEMENTATION_REPORT.md`
+
+### Commands Added
+
+- `paper-scaffold doctor`
+- `paper-scaffold import-word`
+- `paper-scaffold discover-artifacts`
+- `paper-scaffold make-slack-summary`
+
+All commands are also available through:
+
+```bash
+python scripts/paper-scaffold.py ...
+```
+
+### Validation Results
+
+Environment note: validation used:
+
+```text
+R:\Code\Envs\nh_quantum\python.exe
+```
+
+Syntax check:
+
+```text
+R:\Code\Envs\nh_quantum\python.exe -m py_compile src\paper_scaffold\__init__.py src\paper_scaffold\artifact_manifest.py src\paper_scaffold\cli.py src\paper_scaffold\config.py src\paper_scaffold\discovery.py src\paper_scaffold\doctor.py src\paper_scaffold\git_helpers.py src\paper_scaffold\scaffold.py src\paper_scaffold\terminology.py src\paper_scaffold\validation.py src\paper_scaffold\word.py scripts\paper-scaffold.py
+```
+
+Result: passed.
+
+CLI help:
+
+```text
+R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py --help
+```
+
+Result: passed and listed the v0.2 commands.
+
+Doctor:
+
+```text
+R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py doctor
+```
+
+Result: passed. It reported Git and Python available, Pandoc/LaTeX/GitHub CLI as optional missing tools, and correctly noted that this workflow repo is not itself a manuscript repo.
+
+Artifact discovery dry run:
+
+```text
+R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py discover-artifacts --source examples --manifest examples\example_artifact_manifest.yaml
+```
+
+Result: passed. No candidates were found in `examples/`, which is expected because the example folder intentionally contains docs/YAML rather than publication PDFs/PNGs/CSVs/TEX tables.
+
+Scratch manuscript validation:
+
+```text
+R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py init --manuscript-repo scratch\manuscript_test --research-repo R:/Code/my_project --title "Scratch Manuscript Test" --slug scratch_manuscript_test --has-supplement --use-template --non-interactive
+R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py validate --manuscript-repo scratch\manuscript_test
+```
+
+Result: passed.
+
+Pytest:
+
+```text
+R:\Code\Envs\nh_quantum\python.exe -m pytest tests --basetemp C:\Users\Jeremy\AppData\Local\Temp\paper_scaffold_pytest_v02_codex_20260613_001
+```
+
+Result: `12 passed in 0.25s`.
+
+### Limitations
+
+- Word conversion requires Pandoc. If Pandoc is missing, `import-word` prints instructions and exits cleanly.
+- Word conversion is only a starting point; equations, references, figures, tables, captions, and cross-references need manual review.
+- The tool does not require LaTeX and does not compile LaTeX unless the user separately has build tools.
+- The tool does not create GitHub or Overleaf projects automatically.
+- The tool does not upload anything to Overleaf.
+- Artifact discovery suggests candidate entries. Users still need to review IDs, captions, status, and provenance fields.
+- Artifact copying remains intentionally conservative and does not copy raw/model/cache outputs.
+
+### Launch Readiness
+
+The repo is ready for a same-day Slack launch as a v0.2 internal workflow. The launch message is in:
+
+```text
+docs/slack_launch.md
+```
+
+The command:
+
+```bash
+python scripts/paper-scaffold.py make-slack-summary
+```
+
+prints the same message with a configured repo URL when available from manuscript config.
