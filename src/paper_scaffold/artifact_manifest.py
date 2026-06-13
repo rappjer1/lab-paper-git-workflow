@@ -8,14 +8,9 @@ from typing import Any
 import shutil
 
 from .config import load_yaml, write_yaml
+from .schemas import ARTIFACT_TYPES, validate_artifact_manifest_schema
 
-SUPPORTED_ARTIFACT_TYPES = {
-    "figure",
-    "table",
-    "data_summary",
-    "supplement_figure",
-    "supplement_table",
-}
+SUPPORTED_ARTIFACT_TYPES = ARTIFACT_TYPES
 
 
 @dataclass(frozen=True)
@@ -48,28 +43,7 @@ def load_artifact_manifest(manuscript_repo_or_path: str | Path) -> dict[str, Any
 
 
 def validate_artifacts(manifest: dict[str, Any]) -> list[str]:
-    errors: list[str] = []
-    seen: set[str] = set()
-    for index, artifact in enumerate(manifest.get("artifacts", []), start=1):
-        if not isinstance(artifact, dict):
-            errors.append(f"artifact #{index} is not a mapping")
-            continue
-        artifact_id = str(artifact.get("id") or "").strip()
-        artifact_type = str(artifact.get("type") or "").strip()
-        manuscript_path_value = str(artifact.get("manuscript_path") or "").strip()
-        source_path_value = str(artifact.get("source_path") or "").strip()
-        if not artifact_id:
-            errors.append(f"artifact #{index} is missing id")
-        elif artifact_id in seen:
-            errors.append(f"artifact id is duplicated: {artifact_id}")
-        seen.add(artifact_id)
-        if artifact_type not in SUPPORTED_ARTIFACT_TYPES:
-            errors.append(f"artifact {artifact_id or index} has unsupported type: {artifact_type}")
-        if not manuscript_path_value:
-            errors.append(f"artifact {artifact_id or index} is missing manuscript_path")
-        if not source_path_value:
-            errors.append(f"artifact {artifact_id or index} is missing source_path")
-    return errors
+    return [finding.detail for finding in validate_artifact_manifest_schema(manifest) if finding.message.severity == "ERROR"]
 
 
 def resolve_source_path(artifact: dict[str, Any]) -> Path:

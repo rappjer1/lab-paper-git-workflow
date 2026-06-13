@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.5.0
+
+- Added architecture decision records and a public v1.0 roadmap.
+- Added dependency-free schema validation for manuscript config, artifact manifests, terminology maps, and validation JSON reports.
+- Added `validate --write-json`.
+- Added `stale-artifacts` and `unused-artifacts`.
+- Added development hygiene with Ruff, pre-commit configuration, and stronger CI smoke checks.
+
 ## v0.4.0
 
 - Added structured diagnostic codes with `paper-scaffold explain`.

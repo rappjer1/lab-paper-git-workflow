@@ -28,6 +28,7 @@ paper-scaffold explain --list
 | E013 | File larger than configured maximum | A file exceeds the manuscript repo size threshold. | Remove raw outputs or explicitly review whether the file belongs in the repo. |
 | E014 | Forbidden directory found | A raw/cache/output directory was copied into the manuscript repo. | Move the directory back to the research repo or archive. |
 | E015 | Artifact source missing | `copy-artifacts` cannot find a manifest source path. | Regenerate the source artifact or correct `source_repo` and `source_path`. |
+| E016 | Schema validation error | A config, manifest, terminology map, or validation JSON file has invalid structure. | Fix the reported field type, required field, or top-level structure. |
 
 ## Warnings
 
@@ -50,6 +51,10 @@ paper-scaffold explain --list
 | W015 | Uncited bibliography entry | A BibTeX entry is not cited by TeX source. | Remove stale references or cite them intentionally. |
 | W016 | Figure or table may be missing a label | A figure/table environment lacks `\label{...}`. | Add labels where cross-references are needed. |
 | W017 | Possible private or secret text | The privacy scan found a local path, email, token-like text, or private marker. | Redact the value before publishing. |
+| W018 | Unknown schema field | A metadata file contains a field Paper Scaffold does not use. | Remove it if accidental, or keep it if it is intentional project-local metadata. |
+| W019 | Artifact source changed after copy | A manifest source file is newer than the manuscript copy and has different content. | Review and rerun `copy-artifacts` if the manuscript should use the updated output. |
+| W020 | Unused manuscript artifact | A figure or table file exists but is not referenced by TeX source. | Remove stale files or reference them intentionally. |
+| W021 | Artifact discovery skipped raw output path | Discovery saw files under raw/cache/output directories and skipped them. | Keep raw outputs in the research repo and copy only selected manuscript artifacts. |
 
 ## Info
 

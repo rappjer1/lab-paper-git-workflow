@@ -136,7 +136,7 @@ pytest tests
 paper-scaffold doctor
 paper-scaffold init --manuscript-repo ./paper
 paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml
-paper-scaffold validate --manuscript-repo ./paper
+paper-scaffold validate --manuscript-repo ./paper --write-report ./paper/validation_report.md --write-json ./paper/validation_report.json
 ```
 
 Then push `./paper` to GitHub and import that GitHub repo into Overleaf if you use Overleaf.
@@ -153,6 +153,8 @@ More detail: [docs/getting_started.md](docs/getting_started.md)
 - `paper-scaffold discover-artifacts`: find likely manuscript figures/tables.
 - `paper-scaffold add-artifact`: add one manifest entry interactively or by flags.
 - `paper-scaffold copy-artifacts`: copy files listed in the manifest.
+- `paper-scaffold stale-artifacts`: report copied artifacts whose source changed later.
+- `paper-scaffold unused-artifacts`: report figure/table files not referenced from TeX.
 - `paper-scaffold terminology-check`: find banned implementation labels.
 - `paper-scaffold git-check`: summarize Git state.
 - `paper-scaffold validate`: check manuscript repo shape, artifacts, terminology, and Git state.
@@ -166,7 +168,7 @@ More detail: [docs/getting_started.md](docs/getting_started.md)
 - `paper-scaffold check-labels`: check duplicate and missing LaTeX label targets.
 - `paper-scaffold audit-word-conversion`: flag common Pandoc/Word conversion cleanup issues.
 
-## Diagnostics And Error Codes
+## Diagnostics And Reports
 
 When a check finds a problem, it prints a stable diagnostic code:
 
@@ -178,13 +180,15 @@ paper-scaffold explain --list
 Use focused checks before GitHub/Overleaf sync:
 
 ```bash
-paper-scaffold validate --manuscript-repo ./paper --write-report ./paper/validation_report.md
+paper-scaffold validate --manuscript-repo ./paper --write-report ./paper/validation_report.md --write-json ./paper/validation_report.json
 paper-scaffold overleaf-check --manuscript-repo ./paper
 paper-scaffold github-check --repo ./paper
 paper-scaffold privacy-check --path ./paper
 paper-scaffold check-figures --manuscript-repo ./paper
 paper-scaffold check-citations --manuscript-repo ./paper
 paper-scaffold check-labels --manuscript-repo ./paper
+paper-scaffold stale-artifacts --manuscript-repo ./paper
+paper-scaffold unused-artifacts --manuscript-repo ./paper
 ```
 
 Reference: [docs/error_codes.md](docs/error_codes.md)
@@ -244,6 +248,11 @@ Generate the Python example artifacts:
 ```bash
 python examples/minimal_python_artifacts/make_example_figure.py
 ```
+
+## Roadmap And Architecture
+
+- [ROADMAP.md](ROADMAP.md)
+- [Architecture decision records](docs/adr)
 
 ## Limitations
 

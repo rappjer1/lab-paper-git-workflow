@@ -8,11 +8,10 @@ from pathlib import Path
 import fnmatch
 from typing import Iterable
 
+from . import __version__
 from .artifact_manifest import load_artifact_manifest, validate_artifacts
-from .config import ManuscriptConfig
 from .git_helpers import git_summary
-from .messages import DiagnosticFinding, format_finding, severity_counts
-from .terminology import find_banned_terms
+from .messages import format_finding, severity_counts
 
 
 @dataclass
@@ -152,7 +151,42 @@ def validation_markdown_report(manuscript_repo: str | Path) -> str:
     if counts.get("WARNING", 0):
         lines.append("- Review warnings and decide whether they are acceptable for your project.")
     lines.append("- Run focused checks such as `check-figures`, `check-citations`, and `check-labels` when editing those areas.")
+    lines.append("- See `docs/error_codes.md` for diagnostic code explanations.")
     return "\n".join(lines) + "\n"
+
+
+def validation_json_report(manuscript_repo: str | Path) -> dict[str, object]:
+    root = Path(manuscript_repo)
+    from .checks import check_manuscript
+
+    findings = check_manuscript(root)
+    counts = severity_counts(findings)
+    diagnostics: list[dict[str, object]] = []
+    for finding in findings:
+        message = finding.message
+        entry: dict[str, object] = {
+            "code": message.code,
+            "severity": message.severity,
+            "title": message.title,
+            "path": finding.path,
+            "message": finding.detail or message.explanation,
+            "suggested_fix": message.suggested_fix,
+        }
+        if finding.line is not None:
+            entry["line"] = finding.line
+        diagnostics.append(entry)
+    return {
+        "tool": "Paper Scaffold",
+        "version": __version__,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "path": root.as_posix(),
+        "summary": {
+            "errors": counts.get("ERROR", 0),
+            "warnings": counts.get("WARNING", 0),
+            "info": counts.get("INFO", 0),
+        },
+        "diagnostics": diagnostics,
+    }
 
 
 def validate_manuscript_repo(manuscript_repo: str | Path) -> ValidationReport:

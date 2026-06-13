@@ -11,8 +11,18 @@ Open an issue first for major changes, new commands, or workflow changes. Small 
 ```bash
 python -m pip install -e ".[dev]"
 pytest tests
+ruff check .
 python scripts/paper-scaffold.py --help
 python scripts/paper-scaffold.py doctor
+python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwrite
+python scripts/paper-scaffold.py validate --manuscript-repo scratch/demo_manuscript --write-report scratch/demo_manuscript/validation_report.md --write-json scratch/demo_manuscript/validation_report.json
+```
+
+Pre-commit is optional for normal users but recommended for contributors:
+
+```bash
+pre-commit install
+pre-commit run --all-files
 ```
 
 ## Contribution Guidelines

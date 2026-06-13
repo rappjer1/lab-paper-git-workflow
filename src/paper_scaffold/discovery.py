@@ -40,6 +40,21 @@ def should_ignore_path(path: Path) -> bool:
     return path.suffix.lower() in IGNORED_EXTENSIONS
 
 
+def is_forbidden_output_path(path: Path) -> bool:
+    lowered_parts = {part.lower() for part in path.parts}
+    if lowered_parts & IGNORED_PATH_PARTS:
+        return True
+    as_posix = path.as_posix().lower()
+    return any(fragment in as_posix for fragment in IGNORED_PATH_FRAGMENTS)
+
+
+def forbidden_skipped_paths(source: str | Path) -> list[Path]:
+    source = Path(source)
+    if not source.exists():
+        return []
+    return [path for path in source.rglob("*") if path.is_file() and is_forbidden_output_path(path)]
+
+
 def classify_artifact(path: Path, supplement: bool = False) -> tuple[str, str]:
     suffix = path.suffix.lower()
     if suffix in {".pdf", ".png", ".jpg", ".jpeg"}:

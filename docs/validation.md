@@ -12,7 +12,30 @@ Write a report:
 paper-scaffold validate --manuscript-repo ./paper --write-report ./paper/validation_report.md
 ```
 
-The report includes diagnostic counts, grouped findings, Git status context, and next actions.
+Write Markdown and JSON reports:
+
+```bash
+paper-scaffold validate --manuscript-repo ./paper --write-report ./paper/validation_report.md --write-json ./paper/validation_report.json
+```
+
+The Markdown report includes diagnostic counts, grouped findings, Git status context, top next actions, and a reference to `docs/error_codes.md`.
+
+The JSON report has this stable shape:
+
+```json
+{
+  "tool": "Paper Scaffold",
+  "version": "0.5.0",
+  "timestamp": "...",
+  "path": "./paper",
+  "summary": {
+    "errors": 0,
+    "warnings": 0,
+    "info": 0
+  },
+  "diagnostics": []
+}
+```
 
 For a focused check, use:
 
@@ -23,6 +46,8 @@ paper-scaffold privacy-check --path ./paper
 paper-scaffold check-figures --manuscript-repo ./paper
 paper-scaffold check-citations --manuscript-repo ./paper
 paper-scaffold check-labels --manuscript-repo ./paper
+paper-scaffold stale-artifacts --manuscript-repo ./paper
+paper-scaffold unused-artifacts --manuscript-repo ./paper
 ```
 
 Explain any code:
@@ -66,11 +91,17 @@ Large publication figures may be valid, but validation asks you to inspect them 
 
 ## Artifact Manifest
 
-Checks that `metadata/artifact_manifest.yaml` parses and that every listed `manuscript_path` exists.
+Checks that `metadata/artifact_manifest.yaml` parses, follows the schema, and that every listed `manuscript_path` exists.
+
+Use `stale-artifacts` when regenerating outputs in the research repo. It compares source and manuscript copies by modification time and hash. It reports warnings only and does not copy files by default.
+
+Use `unused-artifacts` before submission cleanup. It scans figures and tables in manuscript artifact folders and reports files not referenced from TeX source.
 
 ## Terminology Map
 
 Searches `.tex`, `.bib`, and `.md` files for terms banned by `metadata/terminology_map.yaml`.
+
+The terminology map schema is also checked when the file exists.
 
 ## Git Status
 

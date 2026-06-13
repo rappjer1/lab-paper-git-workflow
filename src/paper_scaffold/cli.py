@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 from dataclasses import replace
 from datetime import date
 from pathlib import Path
@@ -16,17 +17,32 @@ from .checks import (
     check_labels,
     check_overleaf,
     check_privacy,
+    check_stale_artifacts,
+    check_unused_artifacts,
     check_word_conversion,
     format_findings,
 )
 from .config import ManuscriptConfig, write_yaml
-from .discovery import ArtifactCandidate, append_candidates_to_manifest, copy_candidates, discover_artifacts, format_candidates
+from .discovery import (
+    ArtifactCandidate,
+    append_candidates_to_manifest,
+    copy_candidates,
+    discover_artifacts,
+    forbidden_skipped_paths,
+    format_candidates,
+)
 from .doctor import format_doctor_checks, run_doctor
 from .git_helpers import git_summary
-from .messages import all_messages, format_message, get_message, severity_counts
+from .messages import DiagnosticFinding, all_messages, format_message, get_message, severity_counts
 from .scaffold import InitOptions, init_manuscript, project_config_from_options
 from .terminology import find_banned_terms, format_terminology_hits
-from .validation import forbidden_file_matches, large_files, validate_manuscript_repo, validation_markdown_report
+from .validation import (
+    forbidden_file_matches,
+    large_files,
+    validate_manuscript_repo,
+    validation_json_report,
+    validation_markdown_report,
+)
 from .word import WORD_REVIEW_MESSAGE, import_word
 
 
@@ -154,6 +170,11 @@ def command_validate(args: argparse.Namespace) -> int:
         report_path.parent.mkdir(parents=True, exist_ok=True)
         report_path.write_text(validation_markdown_report(repo), encoding="utf-8")
         print(f"Wrote validation report: {report_path}")
+    if args.write_json:
+        json_path = Path(args.write_json)
+        json_path.parent.mkdir(parents=True, exist_ok=True)
+        json_path.write_text(json.dumps(validation_json_report(repo), indent=2) + "\n", encoding="utf-8")
+        print(f"Wrote validation JSON report: {json_path}")
     return 0 if report.ok else 1
 
 
@@ -233,6 +254,19 @@ def command_import_word(args: argparse.Namespace) -> int:
 def command_discover_artifacts(args: argparse.Namespace) -> int:
     candidates = discover_artifacts(args.source, supplement=args.supplement)
     print(format_candidates(candidates))
+    skipped = forbidden_skipped_paths(args.source)
+    if skipped:
+        print(
+            format_findings(
+                [
+                    DiagnosticFinding(
+                        "W021",
+                        f"{len(skipped)} raw/cache/output paths skipped",
+                        Path(args.source).as_posix(),
+                    )
+                ]
+            )
+        )
     if not candidates:
         return 0
 
@@ -448,6 +482,32 @@ def command_audit_word_conversion(args: argparse.Namespace) -> int:
     return 1 if counts.get("ERROR", 0) else 0
 
 
+def command_stale_artifacts(args: argparse.Namespace) -> int:
+    findings = check_stale_artifacts(Path(args.manuscript_repo or Path.cwd()))
+    output = format_findings(findings) if findings else "No stale artifacts detected."
+    print(output)
+    if args.write_report:
+        report_path = Path(args.write_report)
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text("# Stale Artifact Report\n\n```text\n" + output + "\n```\n", encoding="utf-8")
+        print(f"Wrote stale artifact report: {report_path}")
+    counts = severity_counts(findings)
+    return 1 if counts.get("ERROR", 0) else 0
+
+
+def command_unused_artifacts(args: argparse.Namespace) -> int:
+    findings = check_unused_artifacts(Path(args.manuscript_repo or Path.cwd()))
+    output = format_findings(findings) if findings else "No unused manuscript artifacts detected."
+    print(output)
+    if args.write_report:
+        report_path = Path(args.write_report)
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text("# Unused Artifact Report\n\n```text\n" + output + "\n```\n", encoding="utf-8")
+        print(f"Wrote unused artifact report: {report_path}")
+    counts = severity_counts(findings)
+    return 1 if counts.get("ERROR", 0) else 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="paper-scaffold", description="Create and validate clean manuscript Git repositories.")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -492,6 +552,7 @@ def build_parser() -> argparse.ArgumentParser:
     validate = subparsers.add_parser("validate", help="Validate a manuscript repository")
     validate.add_argument("--manuscript-repo")
     validate.add_argument("--write-report", help="Write a Markdown validation report")
+    validate.add_argument("--write-json", help="Write a JSON validation report")
     validate.set_defaults(func=command_validate)
 
     copy = subparsers.add_parser("copy-artifacts", help="Copy files listed in the artifact manifest")
@@ -580,6 +641,16 @@ def build_parser() -> argparse.ArgumentParser:
     word_audit.add_argument("--input", required=True)
     word_audit.add_argument("--write-report")
     word_audit.set_defaults(func=command_audit_word_conversion)
+
+    stale = subparsers.add_parser("stale-artifacts", help="Report manifest artifacts whose source changed after copying")
+    stale.add_argument("--manuscript-repo")
+    stale.add_argument("--write-report")
+    stale.set_defaults(func=command_stale_artifacts)
+
+    unused = subparsers.add_parser("unused-artifacts", help="Report figure/table files that are not referenced by TeX source")
+    unused.add_argument("--manuscript-repo")
+    unused.add_argument("--write-report")
+    unused.set_defaults(func=command_unused_artifacts)
 
     return parser
 

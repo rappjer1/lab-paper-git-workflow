@@ -3,19 +3,22 @@
 from __future__ import annotations
 
 from collections import Counter
+import hashlib
 from pathlib import Path
 import re
 from typing import Iterable
 
-from .artifact_manifest import load_artifact_manifest, validate_artifacts
+from .artifact_manifest import load_artifact_manifest, resolve_source_path
 from .config import ManuscriptConfig
 from .git_helpers import git_summary, run_git, staged_latex_build_files, status_porcelain
 from .messages import DiagnosticFinding
+from .schemas import validate_artifact_manifest_file, validate_manuscript_config_file, validate_terminology_map_file
 from .terminology import find_banned_terms
 from .validation import forbidden_file_matches, large_files
 
 TEXT_EXTENSIONS = {".tex", ".bib", ".md", ".yaml", ".yml", ".txt"}
 FIGURE_EXTENSIONS = {".pdf", ".png", ".jpg", ".jpeg"}
+TABLE_EXTENSIONS = {".tex", ".csv"}
 LATEX_BUILD_EXTENSIONS = {".aux", ".bbl", ".bcf", ".blg", ".fdb_latexmk", ".fls", ".log", ".out", ".run.xml", ".synctex.gz", ".toc"}
 
 LOCAL_PATH_RE = re.compile(r"(?<![A-Za-z0-9])(?:[A-Za-z]:[\\/]|/[Uu]sers/|/home/|\\\\[^\\/\s]+\\[^\\/\s]+)")
@@ -23,6 +26,7 @@ LOCAL_PATH_VALUE_RE = re.compile(r"(?<![A-Za-z0-9])(?:[A-Za-z]:[\\/][^\s{}<>\"']
 EMAIL_RE = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b")
 SECRET_RE = re.compile(r"(?i)(api[_-]?key|secret|token|password|credential)\s*[:=]\s*['\"]?([A-Za-z0-9_\-]{8,})")
 INCLUDEGRAPHICS_RE = re.compile(r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}")
+INPUT_RE = re.compile(r"\\(?:input|include|subfile)\{([^}]+)\}")
 LABEL_RE = re.compile(r"\\label\{([^}]+)\}")
 REF_RE = re.compile(r"\\(?:ref|autoref|cref|Cref|eqref)\{([^}]+)\}")
 CITE_RE = re.compile(r"\\(?:cite|citep|citet|citealp|parencite|textcite)(?:\[[^\]]*\]){0,2}\{([^}]+)\}")
@@ -101,13 +105,13 @@ def check_manifest(root: Path) -> list[DiagnosticFinding]:
     manifest_path = root / "metadata" / "artifact_manifest.yaml"
     if not manifest_path.exists():
         return [DiagnosticFinding("W010", "metadata/artifact_manifest.yaml is missing", relative(manifest_path, root))]
-    findings: list[DiagnosticFinding] = []
+    findings: list[DiagnosticFinding] = validate_artifact_manifest_file(manifest_path)
+    if any(finding.message.severity == "ERROR" for finding in findings):
+        return findings
     try:
         manifest = load_artifact_manifest(root)
     except ValueError as exc:
         return [DiagnosticFinding("E004", str(exc), relative(manifest_path, root))]
-    for error in validate_artifacts(manifest):
-        findings.append(DiagnosticFinding("E004", error, relative(manifest_path, root)))
     missing = False
     for artifact in manifest.get("artifacts", []):
         if not isinstance(artifact, dict):
@@ -118,6 +122,17 @@ def check_manifest(root: Path) -> list[DiagnosticFinding]:
             findings.append(DiagnosticFinding("E004", f"missing artifact: {manuscript_path}", manuscript_path))
     if not findings and not missing:
         findings.append(DiagnosticFinding("I005", "metadata/artifact_manifest.yaml parsed successfully", relative(manifest_path, root)))
+    return findings
+
+
+def check_metadata_schemas(root: Path) -> list[DiagnosticFinding]:
+    findings: list[DiagnosticFinding] = []
+    config_path = root / "metadata" / "manuscript_config.yaml"
+    terminology_path = root / "metadata" / "terminology_map.yaml"
+    if config_path.exists():
+        findings.extend(validate_manuscript_config_file(config_path))
+    if terminology_path.exists():
+        findings.extend(validate_terminology_map_file(terminology_path))
     return findings
 
 
@@ -253,6 +268,96 @@ def check_word_conversion(input_path: Path) -> list[DiagnosticFinding]:
     return findings
 
 
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def check_stale_artifacts(root: Path) -> list[DiagnosticFinding]:
+    manifest_path = root / "metadata" / "artifact_manifest.yaml"
+    if not manifest_path.exists():
+        return [DiagnosticFinding("W010", "metadata/artifact_manifest.yaml is missing", relative(manifest_path, root))]
+    findings = check_manifest(root)
+    if any(finding.message.severity == "ERROR" for finding in findings):
+        return findings
+    manifest = load_artifact_manifest(root)
+    for artifact in manifest.get("artifacts", []):
+        if not isinstance(artifact, dict):
+            continue
+        artifact_id = str(artifact.get("id") or "<missing-id>")
+        source = resolve_source_path(artifact)
+        destination = root / str(artifact.get("manuscript_path") or "")
+        if not source.exists():
+            findings.append(DiagnosticFinding("E015", f"artifact {artifact_id}: source is missing", relative(manifest_path, root)))
+            continue
+        if not destination.exists():
+            findings.append(DiagnosticFinding("E004", f"artifact {artifact_id}: manuscript copy is missing", relative(manifest_path, root)))
+            continue
+        if source.is_dir() or destination.is_dir():
+            continue
+        if source.stat().st_mtime > destination.stat().st_mtime and file_sha256(source) != file_sha256(destination):
+            findings.append(
+                DiagnosticFinding(
+                    "W019",
+                    f"artifact {artifact_id}: source changed after manuscript copy",
+                    relative(destination, root),
+                )
+            )
+    return findings
+
+
+def _resolve_tex_path(root: Path, source_file: Path, raw_path: str) -> list[Path]:
+    raw = Path(raw_path)
+    candidates = [raw] if raw.is_absolute() else [root / raw, source_file.parent / raw]
+    expanded = list(candidates)
+    if raw.suffix == "":
+        expanded.extend(candidate.with_suffix(".tex") for candidate in candidates)
+    return [candidate.resolve() for candidate in expanded if candidate.exists()]
+
+
+def referenced_artifact_paths(root: Path) -> set[Path]:
+    referenced: set[Path] = set()
+    for source_file, _, graphic in extract_graphics(root):
+        if LOCAL_PATH_RE.search(graphic) or Path(graphic).is_absolute():
+            continue
+        resolved = resolve_graphic_path(root, source_file, graphic)
+        if resolved.exists():
+            referenced.add(resolved.resolve())
+    for path in root.rglob("*.tex") if root.exists() else []:
+        if any(part in {".git", "__pycache__"} for part in path.parts):
+            continue
+        for line in read_text(path).splitlines():
+            for match in INPUT_RE.finditer(line):
+                referenced.update(_resolve_tex_path(root, path, match.group(1).strip()))
+    return referenced
+
+
+def check_unused_artifacts(root: Path) -> list[DiagnosticFinding]:
+    referenced = referenced_artifact_paths(root)
+    findings: list[DiagnosticFinding] = []
+    artifact_dirs = {
+        root / "figures",
+        root / "tables",
+        root / "supplement" / "figures",
+        root / "supplement" / "tables",
+    }
+    for directory in sorted(artifact_dirs, key=lambda path: path.as_posix()):
+        if not directory.exists():
+            continue
+        for path in sorted(directory.rglob("*"), key=lambda item: item.as_posix().lower()):
+            if path.is_dir():
+                continue
+            suffix = path.suffix.lower()
+            if suffix not in FIGURE_EXTENSIONS | TABLE_EXTENSIONS:
+                continue
+            if path.resolve() not in referenced:
+                findings.append(DiagnosticFinding("W020", "not referenced by TeX source", relative(path, root)))
+    return findings
+
+
 def check_overleaf(root: Path) -> list[DiagnosticFinding]:
     config = ManuscriptConfig.load(root)
     findings: list[DiagnosticFinding] = []
@@ -320,6 +425,7 @@ def check_manuscript(root: Path) -> list[DiagnosticFinding]:
     findings: list[DiagnosticFinding] = []
     if not root.exists():
         return [DiagnosticFinding("E001", f"repository path does not exist: {root}")]
+    findings.extend(check_metadata_schemas(root))
     if not (root / config.main_tex).exists():
         findings.append(DiagnosticFinding("E001", config.main_tex))
     if not (root / "references.bib").exists():
