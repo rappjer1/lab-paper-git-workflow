@@ -12,6 +12,7 @@ from paper_scaffold.config import write_yaml
 from paper_scaffold.discovery import discover_artifacts
 from paper_scaffold.scaffold import InitOptions, init_manuscript
 from paper_scaffold.schemas import validate_artifact_manifest_schema, validate_validation_report_json_schema
+from paper_scaffold import __version__
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -69,7 +70,7 @@ def test_validate_writes_json_report(tmp_path):
     assert main(["validate", "--manuscript-repo", str(manuscript), "--write-json", str(report_path)]) == 0
     data = json.loads(report_path.read_text(encoding="utf-8"))
     assert data["tool"] == "Paper Scaffold"
-    assert data["version"] == "0.5.0"
+    assert data["version"] == __version__
     assert set(data["summary"]) == {"errors", "warnings", "info"}
     assert isinstance(data["diagnostics"], list)
     assert not validate_validation_report_json_schema(data)

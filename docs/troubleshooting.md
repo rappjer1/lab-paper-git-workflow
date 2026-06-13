@@ -14,6 +14,34 @@ After installation, use:
 paper-scaffold --help
 ```
 
+## `paper-scaffold` Is Not Found In Git Bash After Editable Install
+
+If editable install succeeds but Git Bash cannot find `paper-scaffold`, the environment's `Scripts` directory is probably not on `PATH`.
+
+Call the installed executable directly:
+
+```bash
+R:/Code/Envs/<env>/Scripts/paper-scaffold.exe --help
+```
+
+Or add the environment Scripts directory to `PATH`:
+
+```bash
+export PATH="/r/Code/Envs/<env>/Scripts:$PATH"
+paper-scaffold --help
+```
+
+## Pytest Cannot Access The Windows Temp Directory
+
+On some Windows machines, pytest may fail with a `PermissionError` for a user temp folder such as `C:\Users\<user>\AppData\Local\Temp\pytest-of-<user>`.
+
+Use repo-local temporary directories:
+
+```bash
+mkdir -p scratch/tmp scratch/pytest-tmp
+TMP="$PWD/scratch/tmp" TEMP="$PWD/scratch/tmp" python -m pytest tests --basetemp=scratch/pytest-tmp -p no:cacheprovider
+```
+
 ## `origin` Is Missing
 
 Check remotes:
