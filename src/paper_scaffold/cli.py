@@ -35,6 +35,13 @@ from .doctor import format_doctor_checks, run_doctor
 from .git_helpers import git_summary
 from .messages import DiagnosticFinding, all_messages, format_message, get_message, severity_counts
 from .project_audit import audit_project, format_project_audit
+from .provenance import (
+    artifact_status_text,
+    build_artifact_lock,
+    build_provenance_ledger,
+    provenance_markdown_report,
+    write_json as write_provenance_json,
+)
 from .recipes import RECIPES, format_recipe, get_recipe, list_recipes
 from .release import format_release_check, run_release_check
 from .scaffold import InitOptions, init_manuscript, project_config_from_options
@@ -608,6 +615,35 @@ def command_release_check(args: argparse.Namespace) -> int:
     return 0 if result.ok else 1
 
 
+def command_provenance_report(args: argparse.Namespace) -> int:
+    ledger = build_provenance_ledger(Path(args.manuscript_repo or Path.cwd()))
+    report = provenance_markdown_report(ledger)
+    print(report)
+    if args.write_md:
+        report_path = Path(args.write_md)
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text(report, encoding="utf-8")
+        print(f"Wrote provenance Markdown report: {report_path}")
+    if args.write_json:
+        write_provenance_json(args.write_json, ledger)
+        print(f"Wrote provenance JSON ledger: {args.write_json}")
+    return 0
+
+
+def command_artifact_status(args: argparse.Namespace) -> int:
+    ledger = build_provenance_ledger(Path(args.manuscript_repo or Path.cwd()))
+    print(artifact_status_text(ledger))
+    return 0
+
+
+def command_freeze_artifacts(args: argparse.Namespace) -> int:
+    ledger = build_provenance_ledger(Path(args.manuscript_repo or Path.cwd()))
+    lock = build_artifact_lock(ledger)
+    write_provenance_json(args.write_lock, lock)
+    print(f"Wrote artifact lock: {args.write_lock}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="paper-scaffold", description="Create and validate clean manuscript Git repositories.")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -726,6 +762,21 @@ def build_parser() -> argparse.ArgumentParser:
     release_check.add_argument("--manuscript-repo")
     release_check.add_argument("--write-report", help="Write a Markdown release check report")
     release_check.set_defaults(func=command_release_check)
+
+    provenance_report = subparsers.add_parser("provenance-report", help="Generate a manuscript artifact provenance report")
+    provenance_report.add_argument("--manuscript-repo", required=True)
+    provenance_report.add_argument("--write-md", help="Write a Markdown provenance report")
+    provenance_report.add_argument("--write-json", help="Write a generated JSON provenance ledger")
+    provenance_report.set_defaults(func=command_provenance_report)
+
+    artifact_status = subparsers.add_parser("artifact-status", help="Print compact artifact provenance status counts")
+    artifact_status.add_argument("--manuscript-repo", required=True)
+    artifact_status.set_defaults(func=command_artifact_status)
+
+    freeze_artifacts = subparsers.add_parser("freeze-artifacts", help="Write a lock file of current manuscript artifact hashes")
+    freeze_artifacts.add_argument("--manuscript-repo", required=True)
+    freeze_artifacts.add_argument("--write-lock", required=True, help="Write JSON artifact lock file")
+    freeze_artifacts.set_defaults(func=command_freeze_artifacts)
 
     explain = subparsers.add_parser("explain", help="Explain a diagnostic code")
     explain.add_argument("code", nargs="?", help="Diagnostic code such as E003")

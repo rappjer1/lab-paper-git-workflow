@@ -35,6 +35,7 @@ Paper Scaffold helps prevent:
 - Connecting Overleaf to an entire analysis repo.
 - Accidentally committing raw data, model outputs, or large result folders.
 - Losing track of which figure came from which script.
+- Losing track of whether a manuscript artifact matches its declared source output.
 - Using implementation labels in the main manuscript text.
 - Replacing Git branches/tags with repeated ZIP files.
 
@@ -47,6 +48,7 @@ python scripts/paper-scaffold.py doctor
 python scripts/paper-scaffold.py quickstart
 python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwrite
 python scripts/paper-scaffold.py validate --manuscript-repo scratch/demo_manuscript
+python scripts/paper-scaffold.py artifact-status --manuscript-repo scratch/demo_manuscript
 ```
 
 After installation, use `paper-scaffold` directly:
@@ -159,6 +161,7 @@ paper-scaffold init --manuscript-repo ./paper
 paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml
 paper-scaffold validate --manuscript-repo ./paper --write-report ./paper/validation_report.md --write-json ./paper/validation_report.json
 paper-scaffold release-check --manuscript-repo ./paper --write-report ./paper/release_check.md
+paper-scaffold provenance-report --manuscript-repo ./paper --write-md ./paper/provenance_report.md --write-json ./paper/metadata/provenance_ledger.json
 ```
 
 Then push `./paper` to GitHub and import that GitHub repo into Overleaf if you use Overleaf.
@@ -180,6 +183,9 @@ More detail: [docs/getting_started.md](docs/getting_started.md)
 - `paper-scaffold stale-artifacts`: report copied artifacts whose source changed later.
 - `paper-scaffold unused-artifacts`: report figure/table files not referenced from TeX.
 - `paper-scaffold release-check`: run consolidated pre-submission checks.
+- `paper-scaffold provenance-report`: generate a Markdown/JSON bill of materials for manuscript artifacts.
+- `paper-scaffold artifact-status`: print compact provenance status counts.
+- `paper-scaffold freeze-artifacts`: write current manuscript artifact hashes to a lock file.
 - `paper-scaffold terminology-check`: find banned implementation labels.
 - `paper-scaffold git-check`: summarize Git state.
 - `paper-scaffold validate`: check manuscript repo shape, artifacts, terminology, and Git state.
@@ -215,9 +221,13 @@ paper-scaffold check-labels --manuscript-repo ./paper
 paper-scaffold stale-artifacts --manuscript-repo ./paper
 paper-scaffold unused-artifacts --manuscript-repo ./paper
 paper-scaffold release-check --manuscript-repo ./paper --write-report ./paper/release_check.md
+paper-scaffold provenance-report --manuscript-repo ./paper --write-md ./paper/provenance_report.md --write-json ./paper/metadata/provenance_ledger.json
+paper-scaffold artifact-status --manuscript-repo ./paper
+paper-scaffold freeze-artifacts --manuscript-repo ./paper --write-lock ./paper/metadata/artifact_lock.json
 ```
 
 Reference: [docs/error_codes.md](docs/error_codes.md)
+Provenance guide: [docs/provenance_ledger.md](docs/provenance_ledger.md)
 
 ## Recommended Manuscript Repo Structure
 
@@ -236,6 +246,8 @@ paper/
     tables/
   metadata/
     artifact_manifest.yaml
+    artifact_lock.json
+    provenance_ledger.json
     terminology_map.yaml
     manuscript_config.yaml
 ```

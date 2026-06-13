@@ -18,6 +18,9 @@ Final edits often introduce missing figure paths, stale artifacts, unused files,
 paper-scaffold release-check --manuscript-repo ./paper --write-report ./paper/release_check.md
 paper-scaffold validate --manuscript-repo ./paper --write-json ./paper/validation_report.json
 paper-scaffold overleaf-check --manuscript-repo ./paper
+paper-scaffold provenance-report --manuscript-repo ./paper --write-md ./paper/provenance_report.md --write-json ./paper/metadata/provenance_ledger.json
+paper-scaffold artifact-status --manuscript-repo ./paper
+paper-scaffold freeze-artifacts --manuscript-repo ./paper --write-lock ./paper/metadata/artifact_lock.json
 ```
 
 ## What To Inspect Manually
@@ -26,10 +29,14 @@ paper-scaffold overleaf-check --manuscript-repo ./paper
 - Figure rendering and final layout in Overleaf or local LaTeX.
 - Journal-specific requirements.
 - Whether the Git working tree contains only intentional changes.
+- Whether each figure/table is listed in the manifest and referenced from TeX.
+- Whether any source/manuscript artifact hashes differ.
 
 ## Limitations
 
 Release checks are heuristics. They do not compile LaTeX, submit to a journal, or replace final human review.
+
+Provenance reports are also heuristic. They are a manuscript artifact bill of materials, not a full reproducibility proof.
 
 ## Folder Structure
 

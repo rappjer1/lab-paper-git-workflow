@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.7.0
+
+- Added generated artifact provenance ledgers for manuscript figures and tables.
+- Added `provenance-report` with Markdown and JSON output.
+- Added `artifact-status` for compact current/stale/missing/untracked counts.
+- Added `freeze-artifacts` to write submission or revision hash locks.
+- Added provenance diagnostics for missing manuscript artifacts, missing referenced artifacts, missing sources, stale artifacts, untracked artifacts, and unreferenced manifest artifacts.
+- Added provenance ledger documentation and tests.
+
 ## v0.6.0
 
 - Added workflow recipes with `paper-scaffold recipes list` and `paper-scaffold recipes show <recipe-id>`.

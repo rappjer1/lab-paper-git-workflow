@@ -35,7 +35,7 @@ class FileSchema:
 ARTIFACT_ENTRY_SCHEMA = FileSchema(
     name="artifact manifest entry",
     required_fields=("id", "type", "manuscript_path", "source_path"),
-    optional_fields=("source_repo", "generated_by", "input_data", "last_updated", "caption_hint", "status"),
+    optional_fields=("source_repo", "generated_by", "input_data", "last_updated", "copied_at", "caption_hint", "status", "notes"),
     description="One copied or candidate manuscript artifact with provenance.",
 )
 
@@ -92,6 +92,39 @@ VALIDATION_DIAGNOSTIC_SCHEMA = FileSchema(
     required_fields=("code", "severity", "title", "path", "message", "suggested_fix"),
     optional_fields=("line",),
     description="One diagnostic entry in validation_report.json.",
+)
+
+PROVENANCE_LEDGER_SCHEMA = FileSchema(
+    name="provenance_ledger.json",
+    required_fields=("tool", "version", "generated_at", "manuscript_repo", "summary", "artifacts"),
+    optional_fields=("git", "config", "untracked_artifacts", "referenced_missing_artifacts"),
+    description="Generated artifact provenance ledger emitted by paper-scaffold provenance-report --write-json.",
+)
+
+PROVENANCE_LEDGER_ENTRY_SCHEMA = FileSchema(
+    name="provenance ledger artifact entry",
+    required_fields=(
+        "artifact_id",
+        "artifact_type",
+        "manuscript_path",
+        "source_path",
+        "source_repo",
+        "source_git_commit",
+        "source_exists",
+        "manuscript_exists",
+        "source_sha256",
+        "manuscript_sha256",
+        "source_mtime",
+        "manuscript_mtime",
+        "copied_at",
+        "generated_by",
+        "used_in_tex_files",
+        "used_in_main_or_supplement",
+        "status",
+        "notes",
+    ),
+    optional_fields=(),
+    description="One generated artifact provenance ledger entry.",
 )
 
 
@@ -236,4 +269,31 @@ def validate_validation_report_json_schema(data: Any, path: str | Path = "valida
             if field not in diagnostic or diagnostic.get(field) is None:
                 findings.append(DiagnosticFinding("E016", f"{prefix} missing required field: {field}", _as_posix(path)))
         findings.extend(_unknown_field_findings(diagnostic, VALIDATION_DIAGNOSTIC_SCHEMA.allowed_fields, path, prefix))
+    return findings
+
+
+def validate_provenance_ledger_json_schema(data: Any, path: str | Path = "metadata/provenance_ledger.json") -> list[DiagnosticFinding]:
+    findings: list[DiagnosticFinding] = []
+    if not isinstance(data, dict):
+        return [DiagnosticFinding("E016", "provenance ledger must be a mapping", _as_posix(path))]
+    findings.extend(_required_field_findings(data, PROVENANCE_LEDGER_SCHEMA.required_fields, path, "top-level", "E016"))
+    findings.extend(_unknown_field_findings(data, PROVENANCE_LEDGER_SCHEMA.allowed_fields, path, "top-level"))
+    summary = data.get("summary", {})
+    if not isinstance(summary, dict):
+        findings.append(DiagnosticFinding("E016", "summary must be a mapping", _as_posix(path)))
+    artifacts = data.get("artifacts", [])
+    if not isinstance(artifacts, list):
+        findings.append(DiagnosticFinding("E016", "artifacts must be a list", _as_posix(path)))
+        return findings
+    for index, artifact in enumerate(artifacts, start=1):
+        prefix = f"artifacts[{index}]"
+        if not isinstance(artifact, dict):
+            findings.append(DiagnosticFinding("E016", f"{prefix} must be a mapping", _as_posix(path)))
+            continue
+        for field in PROVENANCE_LEDGER_ENTRY_SCHEMA.required_fields:
+            if field not in artifact:
+                findings.append(DiagnosticFinding("E016", f"{prefix} missing required field: {field}", _as_posix(path)))
+        findings.extend(_unknown_field_findings(artifact, PROVENANCE_LEDGER_ENTRY_SCHEMA.allowed_fields, path, prefix))
+        if not isinstance(artifact.get("used_in_tex_files"), list):
+            findings.append(DiagnosticFinding("E016", f"{prefix}.used_in_tex_files must be a list", _as_posix(path)))
     return findings
