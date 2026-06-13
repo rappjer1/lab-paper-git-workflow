@@ -44,7 +44,7 @@ artifacts:
   - id: model_comparison
     type: figure
     manuscript_path: figures/model_comparison.pdf
-    source_repo: R:/Code/my_project
+    source_repo: ./research-project
     source_path: outputs/final_figures/model_comparison.pdf
     generated_by: scripts/make_figures.py
     input_data: outputs/summary_metrics.csv
@@ -54,7 +54,7 @@ artifacts:
   - id: map_overview
     type: figure
     manuscript_path: figures/map_overview.png
-    source_repo: R:/Code/my_project
+    source_repo: ./research-project
     source_path: outputs/final_figures/map_overview.png
     generated_by: scripts/make_maps.py
     input_data: data/processed/site_summary.csv
@@ -64,7 +64,7 @@ artifacts:
   - id: summary_metrics_csv
     type: data_summary
     manuscript_path: tables/summary_metrics.csv
-    source_repo: R:/Code/my_project
+    source_repo: ./research-project
     source_path: outputs/final_tables/summary_metrics.csv
     generated_by: scripts/make_tables.py
     input_data: outputs/summary_metrics_raw.csv
@@ -74,7 +74,7 @@ artifacts:
   - id: summary_metrics_table
     type: table
     manuscript_path: tables/summary_metrics.tex
-    source_repo: R:/Code/my_project
+    source_repo: ./research-project
     source_path: outputs/final_tables/summary_metrics.tex
     generated_by: scripts/make_tables.py
     input_data: outputs/final_tables/summary_metrics.csv
@@ -112,7 +112,7 @@ Round values for publication. Keep high-precision raw outputs in the research re
 ## Discover Candidates
 
 ```bash
-paper-scaffold discover-artifacts --source R:/Code/my_project/outputs/final --manifest metadata/artifact_manifest.yaml
+paper-scaffold discover-artifacts --source ./research-project/outputs/final --manifest metadata/artifact_manifest.yaml
 ```
 
 This is dry-run by default. Use `--write` to append suggestions and `--copy` to copy files.

@@ -1,8 +1,8 @@
 # Terminology Cleanup
 
-Scientific labels belong in the paper. Code labels belong in provenance.
+Scientific labels belong in the paper. Implementation labels belong in provenance.
 
-Manuscripts should not expose raw cache names, model run IDs, implementation class names, or short labels that only make sense inside the codebase.
+Manuscripts should not expose raw cache names, model run IDs, class names, or short labels that only make sense inside code.
 
 Use:
 
@@ -10,38 +10,41 @@ Use:
 metadata/terminology_map.yaml
 ```
 
-to convert implementation labels into publication labels.
+to map implementation labels to publication-facing labels.
 
 ## Example
 
 ```yaml
 terms:
-  standard_cudalstm_ensemble:
-    publication_label: deterministic LSTM ensemble
+  baseline_run_slug:
+    publication_label: baseline model
     allowed_contexts:
       - supplement provenance table
-      - code manifest
+      - artifact manifest
     banned_in:
       - abstract
       - introduction
       - main results
-  classicallstm_ensemble:
-    publication_label: quantile LSTM ensemble
-  NeuralHydrology:
-    publication_label: LSTM rainfall-runoff workflow
-    note: Use NeuralHydrology only for software provenance, not as the scientific model label.
+  experiment_model_slug:
+    publication_label: probabilistic model
+    banned_in:
+      - abstract
+      - main results
+  package_name_used_in_code:
+    publication_label: modeling workflow
+    note: Use package names only for software provenance.
 ```
 
 ## How To Use It
 
-1. Add internal terms under `terms`.
+1. Add implementation terms under `terms`.
 2. Set `publication_label`.
 3. Add `banned_in` for terms that should not appear in main manuscript text.
 4. Add `allowed_contexts` when a code label is acceptable in supplement provenance or metadata.
 5. Run the terminology check.
 
 ```bash
-paper-scaffold terminology-check --manuscript-repo <manuscript-repo>
+paper-scaffold terminology-check --manuscript-repo ./paper
 ```
 
 ## Validation Rule

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 import fnmatch
 from typing import Iterable
@@ -10,6 +11,7 @@ from typing import Iterable
 from .artifact_manifest import load_artifact_manifest, validate_artifacts
 from .config import ManuscriptConfig
 from .git_helpers import git_summary
+from .messages import DiagnosticFinding, format_finding, severity_counts
 from .terminology import find_banned_terms
 
 
@@ -109,52 +111,64 @@ def _artifact_destinations_exist(root: Path, report: ValidationReport) -> None:
             report.add_error(f"listed artifact is missing from manuscript repo: {manuscript_path}")
 
 
+def validation_markdown_report(manuscript_repo: str | Path) -> str:
+    root = Path(manuscript_repo)
+    from .checks import check_manuscript
+
+    findings = check_manuscript(root)
+    counts = severity_counts(findings)
+
+    lines = [
+        "# Paper Scaffold Validation Report",
+        "",
+        f"- Timestamp: {datetime.now(timezone.utc).isoformat()}",
+        f"- Repository path: {root.as_posix()}",
+        f"- Summary: {counts.get('ERROR', 0)} errors, {counts.get('WARNING', 0)} warnings, {counts.get('INFO', 0)} info",
+    ]
+    summary = git_summary(root) if (root / ".git").exists() else {"branch": None, "remotes": {}, "status": []}
+    remotes = summary.get("remotes") or {}
+    origin = ", ".join(remotes.get("origin", [])) if isinstance(remotes, dict) else ""
+    lines.extend(
+        [
+            "",
+            "## Git Status Summary",
+            f"- Branch: {summary.get('branch') or '<not a git repo>'}",
+            f"- Origin: {origin or '<not configured>'}",
+            f"- Status entries: {len(summary.get('status') or [])}",
+        ]
+    )
+    for severity in ["ERROR", "WARNING", "INFO"]:
+        group = [finding for finding in findings if finding.message.severity == severity]
+        lines.extend(["", f"## {severity.title()}s"])
+        if group:
+            lines.extend(f"- {format_finding(finding)}" for finding in group)
+        else:
+            lines.append("- None.")
+    lines.extend(["", "## Next Actions"])
+    if counts.get("ERROR", 0):
+        lines.append("- Fix errors before syncing to Overleaf or publishing the manuscript repository.")
+    else:
+        lines.append("- Review warnings, commit intentionally, and sync through GitHub when ready.")
+    if counts.get("WARNING", 0):
+        lines.append("- Review warnings and decide whether they are acceptable for your project.")
+    lines.append("- Run focused checks such as `check-figures`, `check-citations`, and `check-labels` when editing those areas.")
+    return "\n".join(lines) + "\n"
+
+
 def validate_manuscript_repo(manuscript_repo: str | Path) -> ValidationReport:
     root = Path(manuscript_repo)
     report = ValidationReport()
-    config = ManuscriptConfig.load(root)
+    from .checks import check_manuscript
 
-    if not root.exists():
-        report.add_error(f"manuscript repo does not exist: {root}")
-        return report
-    if not (root / config.main_tex).exists():
-        report.add_error(f"missing main TeX file: {config.main_tex}")
-    if not (root / "references.bib").exists():
-        report.add_error("missing references.bib")
-    if not (root / "figures").exists():
-        report.add_error("missing figures/ directory")
-    if config.has_supplement and not (root / config.supplement_tex).exists():
-        report.add_error(f"missing supplement TeX file: {config.supplement_tex}")
-
-    forbidden = forbidden_file_matches(root, config.forbidden_patterns)
-    for path in forbidden:
-        report.add_error(f"forbidden file or path in manuscript repo: {_relative_posix(path, root)}")
-
-    _artifact_destinations_exist(root, report)
-
-    for hit in find_banned_terms(root):
-        report.add_error(
-            f"banned term '{hit.term}' in {_relative_posix(hit.path, root)}:{hit.line_number}; "
-            f"use '{hit.publication_label}'"
-        )
-
-    for path, size_mb in large_files(root, config.max_file_size_mb):
-        report.add_warning(f"large file over {config.max_file_size_mb:g} MB: {_relative_posix(path, root)} ({size_mb:.1f} MB)")
-
-    summary = git_summary(root)
-    report.add_info(f"current branch: {summary.get('branch') or '<not a git repo>'}")
-    remotes = summary.get("remotes") or {}
-    if isinstance(remotes, dict) and remotes.get("origin"):
-        report.add_info("remote origin: " + ", ".join(str(item) for item in remotes["origin"]))
-    else:
-        report.add_warning("remote origin is not configured")
-    status = summary.get("status") or []
-    if status:
-        report.add_info(f"git status entries: {len(status)}")
-    else:
-        report.add_info("git status entries: 0")
-    staged_build = summary.get("staged_latex_build_files") or []
-    for path in staged_build:
-        report.add_warning(f"LaTeX build artifact appears staged: {path}")
-
+    findings = check_manuscript(root)
+    counts = severity_counts(findings)
+    report.add_info(f"summary: {counts.get('ERROR', 0)} errors, {counts.get('WARNING', 0)} warnings, {counts.get('INFO', 0)} info")
+    for finding in findings:
+        formatted = format_finding(finding)
+        if finding.message.severity == "ERROR":
+            report.add_error(formatted)
+        elif finding.message.severity == "WARNING":
+            report.add_warning(formatted)
+        else:
+            report.add_info(formatted)
     return report

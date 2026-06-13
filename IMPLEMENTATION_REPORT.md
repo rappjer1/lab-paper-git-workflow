@@ -2,276 +2,110 @@
 
 ## Summary
 
-Implemented the first version of `lab-paper-git-workflow` as a standalone internal lab workflow repository. The repo now contains practical documentation, a reusable manuscript repository template, a lightweight Python CLI, generic examples, and tests.
+Paper Scaffold has been updated through v0.4.0 as a public-facing workflow and CLI for creating clean manuscript repositories from Word drafts, Python outputs, and existing LaTeX projects.
 
-## Files Created
+## v0.1.0
 
-- `README.md`
-- `QUICKSTART.md`
-- `docs/concepts.md`
-- `docs/github_overleaf_sync.md`
-- `docs/folder_structure.md`
-- `docs/artifact_manifest.md`
-- `docs/terminology_cleanup.md`
-- `docs/troubleshooting.md`
-- `docs/codex_workflows.md`
-- `templates/manuscript_repo/README.md`
-- `templates/manuscript_repo/.gitignore`
-- `templates/manuscript_repo/main.tex`
-- `templates/manuscript_repo/references.bib`
-- `templates/manuscript_repo/sections/*.tex`
-- `templates/manuscript_repo/figures/.gitkeep`
-- `templates/manuscript_repo/tables/.gitkeep`
-- `templates/manuscript_repo/supplement/supplement.tex`
-- `templates/manuscript_repo/supplement/**/.gitkeep`
-- `templates/manuscript_repo/metadata/artifact_manifest.yaml`
-- `templates/manuscript_repo/metadata/terminology_map.yaml`
-- `templates/manuscript_repo/metadata/manuscript_config.yaml`
-- `src/paper_scaffold/*.py`
-- `scripts/paper-scaffold.py`
-- `examples/example_project_config.yaml`
-- `examples/example_artifact_manifest.yaml`
-- `examples/example_terminology_map.yaml`
-- `tests/test_config.py`
-- `tests/test_scaffold.py`
-- `tests/test_manifest.py`
-- `pyproject.toml`
-- `LICENSE`
-- `.gitignore`
-- `IMPLEMENTATION_REPORT.md`
+- Added the initial manuscript Git/GitHub/Overleaf workflow toolkit.
+- Added manuscript repo templates.
+- Added artifact manifest and terminology map conventions.
+- Added validation, artifact copying, Git checks, and Overleaf instruction commands.
 
-## CLI Commands Implemented
+## v0.2.0
 
-- `paper-scaffold init`
-- `paper-scaffold add-artifact`
-- `paper-scaffold validate`
-- `paper-scaffold copy-artifacts`
-- `paper-scaffold terminology-check`
-- `paper-scaffold git-check`
-- `paper-scaffold overleaf-instructions`
+- Added Word/docx to Overleaf workflow docs.
+- Added Python-output to manuscript repo workflow docs.
+- Added `doctor`, `import-word`, `discover-artifacts`, and launch summary commands.
+- Added template notes for Word conversion and Python artifacts.
 
-The source-checkout wrapper is:
-
-```bash
-python scripts/paper-scaffold.py ...
-```
-
-The CLI is interactive by default and also supports noninteractive flags for repeatable setup and tests.
-
-## Docs Created
-
-- Main lab-facing README with workflow, examples, FAQ, common mistakes, and maintainer checklist.
-- Quickstart with Git Bash, PowerShell, tool-assisted setup, and manual fallback.
-- Concept guide for separating research repos, manuscript repos, artifacts, provenance, and Overleaf.
-- GitHub/Overleaf sync guide.
-- Folder structure and submission checklist.
-- Artifact manifest guide.
-- Terminology cleanup guide.
-- Troubleshooting guide.
-- Codex workflow prompt templates.
-
-## Test And Validation Results
-
-Environment note: `python` was not available on PATH in this shell. Validation was run with:
-
-```text
-R:\Code\Envs\nh_quantum\python.exe
-```
-
-Syntax checks:
-
-```text
-R:\Code\Envs\nh_quantum\python.exe -m py_compile src\paper_scaffold\__init__.py src\paper_scaffold\artifact_manifest.py src\paper_scaffold\cli.py src\paper_scaffold\config.py src\paper_scaffold\git_helpers.py src\paper_scaffold\scaffold.py src\paper_scaffold\terminology.py src\paper_scaffold\validation.py scripts\paper-scaffold.py
-```
-
-Result: passed.
-
-The exact wildcard command from the task:
-
-```text
-python -m py_compile src/paper_scaffold/*.py scripts/paper-scaffold.py
-```
-
-could not be run as written in PowerShell because the wildcard was passed literally to `py_compile`.
-
-CLI help:
-
-```text
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py --help
-```
-
-Result: passed.
-
-Dry-run init:
-
-```text
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py init --dry-run
-```
-
-Result: passed.
-
-Temporary scaffold creation:
-
-```text
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py init --manuscript-repo C:\Users\Jeremy\AppData\Local\Temp\paper_scaffold_validation_codex_20260613_002 --research-repo R:/Code/my_project --title "Temp Validation Manuscript" --slug temp_validation --has-supplement --use-template --non-interactive
-```
-
-Result: passed.
-
-Validation on temporary scaffold:
-
-```text
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py validate --manuscript-repo C:\Users\Jeremy\AppData\Local\Temp\paper_scaffold_validation_codex_20260613_002
-```
-
-Result: passed with the expected warning that `origin` is not configured because the temp scaffold is not a Git repo.
-
-Pytest:
-
-```text
-R:\Code\Envs\nh_quantum\python.exe -m pytest tests --basetemp C:\Users\Jeremy\AppData\Local\Temp\paper_scaffold_pytest_codex_20260613_001
-```
-
-Result: `7 passed in 0.11s`.
-
-Pytest note: the default pytest temp root was permission-blocked, so `--basetemp` was supplied explicitly.
-
-## Known Limitations
-
-- It does not compile LaTeX unless LaTeX is installed.
-- It does not automatically create GitHub repos unless GitHub CLI is installed.
-- It does not automatically connect Overleaf; it prints instructions.
-- It does not manage Git LFS.
-- It does not infer scientific terminology automatically; the terminology map must be curated.
-- The fallback YAML parser intentionally supports the simple YAML shape used by this repo, not every YAML feature.
-- Templates are copied from the source checkout; packaging template data for installed wheels can be improved later.
-
-## Recommended Next Improvements
-
-- Add package-data configuration so installed packages can include the manuscript template reliably.
-- Add a `--write-report` option for validation output.
-- Add optional GitHub CLI integration for repo creation when `gh` is installed.
-- Add optional LaTeX compile checks when `latexmk` is installed.
-- Add context-aware terminology rules for supplement-only allowed terms.
-- Add a release checklist command that verifies tags and remotes.
-
-## v0.2 Word/Python/Overleaf Launch Layer
+## v0.3.0
 
 ### Files Added
 
-- `docs/word_to_overleaf.md`
-- `docs/python_outputs_to_overleaf.md`
-- `docs/overleaf_from_github.md`
-- `docs/slack_launch.md`
-- `templates/manuscript_repo/metadata/word_conversion_notes.md`
-- `templates/manuscript_repo/metadata/python_artifact_notes.md`
-- `examples/word_to_overleaf_example.md`
-- `examples/python_outputs_example.yaml`
-- `src/paper_scaffold/doctor.py`
-- `src/paper_scaffold/word.py`
-- `src/paper_scaffold/discovery.py`
-- `tests/test_v02_cli.py`
+- Public docs: `docs/getting_started.md`, `docs/existing_latex_project.md`, `docs/validation.md`, `docs/faq.md`, `docs/design_principles.md`.
+- Public launch docs: `docs/public_launch.md`, `docs/lab_slack_launch.md`.
+- Public examples under `examples/minimal_word_workflow`, `examples/minimal_python_artifacts`, and `examples/existing_latex_cleanup`.
+- GitHub community files: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, `CHANGELOG.md`, `CITATION.cff`, issue templates, pull request template, and CI workflow.
+- Tests: `tests/test_v03_public.py`.
 
-### Files Updated
+### Commands Added Or Improved
 
-- `README.md`
-- `QUICKSTART.md`
-- `.gitignore`
-- `src/paper_scaffold/cli.py`
-- `IMPLEMENTATION_REPORT.md`
+- Added `paper-scaffold demo`.
+- Added `paper-scaffold quickstart`.
+- Improved `paper-scaffold doctor` so it distinguishes the Paper Scaffold tool repo from a manuscript repo.
+- Improved `paper-scaffold discover-artifacts` with `--suggest-only`, clearer skipped-output messaging, and manifest-entry previews.
+- Improved `paper-scaffold validate` with `--write-report`.
 
-### Commands Added
+### Packaging Changes
 
-- `paper-scaffold doctor`
-- `paper-scaffold import-word`
-- `paper-scaffold discover-artifacts`
-- `paper-scaffold make-slack-summary`
-
-All commands are also available through:
-
-```bash
-python scripts/paper-scaffold.py ...
-```
+- Project display/package metadata now uses `paper-scaffold`.
+- Version set to `0.3.0`.
+- Development optional dependency group includes `pytest`.
+- Console script remains `paper-scaffold = paper_scaffold.cli:main`.
 
 ### Validation Results
 
-Environment note: validation used:
+The v0.3 validation run used an explicit local Python interpreter because `python` may not be on PATH in every shell.
+
+Commands run:
 
 ```text
-R:\Code\Envs\nh_quantum\python.exe
+python -m py_compile <explicit source file list>
+python scripts/paper-scaffold.py --help
+python scripts/paper-scaffold.py doctor
+python scripts/paper-scaffold.py quickstart
+python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwrite
+python scripts/paper-scaffold.py validate --manuscript-repo scratch/demo_manuscript --write-report scratch/demo_manuscript/validation_report.md
+python scripts/paper-scaffold.py discover-artifacts --source examples --manifest scratch/demo_manifest.yaml --suggest-only
+python -m pytest tests
 ```
 
-Syntax check:
+Results are recorded in the final task summary and should be refreshed after any follow-up edits.
 
-```text
-R:\Code\Envs\nh_quantum\python.exe -m py_compile src\paper_scaffold\__init__.py src\paper_scaffold\artifact_manifest.py src\paper_scaffold\cli.py src\paper_scaffold\config.py src\paper_scaffold\discovery.py src\paper_scaffold\doctor.py src\paper_scaffold\git_helpers.py src\paper_scaffold\scaffold.py src\paper_scaffold\terminology.py src\paper_scaffold\validation.py src\paper_scaffold\word.py scripts\paper-scaffold.py
-```
+### Known Limitations
 
-Result: passed.
+- Word conversion requires Pandoc and still needs manual review.
+- Local LaTeX compilation requires separate LaTeX tools.
+- GitHub repository creation is manual or handled by GitHub CLI outside this tool.
+- Overleaf import/sync is manual through Overleaf.
+- Artifact discovery suggests candidates; users still review provenance and captions.
+- The tool does not manage Git LFS.
 
-CLI help:
+### Public Release Notes
 
-```text
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py --help
-```
+Before changing repository visibility, review `PUBLIC_RELEASE_CHECKLIST.md`, confirm CI passes on GitHub, and ensure no private manuscript content or raw research data has been added.
 
-Result: passed and listed the v0.2 commands.
+## v0.4.0
 
-Doctor:
+### Files Added
 
-```text
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py doctor
-```
+- Diagnostics source: `src/paper_scaffold/messages.py` and `src/paper_scaffold/checks.py`.
+- Diagnostics docs: `docs/error_codes.md`.
+- Release report: `V0_4_RELEASE_REPORT.md`.
+- Tests: `tests/test_v04_diagnostics.py`.
 
-Result: passed. It reported Git and Python available, Pandoc/LaTeX/GitHub CLI as optional missing tools, and correctly noted that this workflow repo is not itself a manuscript repo.
+### Commands Added Or Improved
 
-Artifact discovery dry run:
+- Added `paper-scaffold explain`.
+- Added `paper-scaffold overleaf-check`.
+- Added `paper-scaffold github-check`.
+- Added `paper-scaffold privacy-check`.
+- Added `paper-scaffold check-figures`.
+- Added `paper-scaffold check-citations`.
+- Added `paper-scaffold check-labels`.
+- Added `paper-scaffold audit-word-conversion`.
+- Improved validation reports with diagnostic summaries and Git status context.
+- Improved demo manifest provenance so it uses repository-relative public example paths.
 
-```text
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py discover-artifacts --source examples --manifest examples\example_artifact_manifest.yaml
-```
+### Packaging Changes
 
-Result: passed. No candidates were found in `examples/`, which is expected because the example folder intentionally contains docs/YAML rather than publication PDFs/PNGs/CSVs/TEX tables.
+- Version set to `0.4.0`.
+- CI now runs the CLI demo in addition to tests and CLI help.
 
-Scratch manuscript validation:
+### Validation Notes
 
-```text
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py init --manuscript-repo scratch\manuscript_test --research-repo R:/Code/my_project --title "Scratch Manuscript Test" --slug scratch_manuscript_test --has-supplement --use-template --non-interactive
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py validate --manuscript-repo scratch\manuscript_test
-```
+The v0.4 release keeps `validate` usable before GitHub setup. Missing `origin` is handled by `doctor` and `github-check`, while validation focuses on manuscript content, artifact hygiene, terminology, paths, citations, labels, privacy warnings, and report generation.
 
-Result: passed.
+### Public Release Notes
 
-Pytest:
-
-```text
-R:\Code\Envs\nh_quantum\python.exe -m pytest tests --basetemp C:\Users\Jeremy\AppData\Local\Temp\paper_scaffold_pytest_v02_codex_20260613_001
-```
-
-Result: `12 passed in 0.25s`.
-
-### Limitations
-
-- Word conversion requires Pandoc. If Pandoc is missing, `import-word` prints instructions and exits cleanly.
-- Word conversion is only a starting point; equations, references, figures, tables, captions, and cross-references need manual review.
-- The tool does not require LaTeX and does not compile LaTeX unless the user separately has build tools.
-- The tool does not create GitHub or Overleaf projects automatically.
-- The tool does not upload anything to Overleaf.
-- Artifact discovery suggests candidate entries. Users still need to review IDs, captions, status, and provenance fields.
-- Artifact copying remains intentionally conservative and does not copy raw/model/cache outputs.
-
-### Launch Readiness
-
-The repo is ready for a same-day Slack launch as a v0.2 internal workflow. The launch message is in:
-
-```text
-docs/slack_launch.md
-```
-
-The command:
-
-```bash
-python scripts/paper-scaffold.py make-slack-summary
-```
-
-prints the same message with a configured repo URL when available from manuscript config.
+Before changing repository visibility, review `PUBLIC_RELEASE_CHECKLIST.md`, confirm CI passes on GitHub, run the v0.4 diagnostics commands, and ensure no private manuscript content or raw research data has been added.

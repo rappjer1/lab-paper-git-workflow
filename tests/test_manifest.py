@@ -18,7 +18,7 @@ def test_artifact_manifest_parsing(tmp_path):
                     "id": "workflow_schematic",
                     "type": "figure",
                     "manuscript_path": "figures/workflow_schematic.pdf",
-                    "source_repo": "R:/Code/my_project",
+                    "source_repo": "./research-project",
                     "source_path": "outputs/workflow_schematic.pdf",
                     "generated_by": "scripts/make_figures.py",
                     "input_data": "outputs/summary.csv",
@@ -56,7 +56,7 @@ def test_terminology_detection(tmp_path):
         tmp_path / "metadata" / "terminology_map.yaml",
         {
             "terms": {
-                "internal_model_v1": {
+                "experiment_model_v1": {
                     "publication_label": "probabilistic model",
                     "banned_in": ["abstract", "main results"],
                 }
@@ -64,7 +64,7 @@ def test_terminology_detection(tmp_path):
         },
     )
     tex = tmp_path / "main.tex"
-    tex.write_text("The internal_model_v1 performed well.", encoding="utf-8")
+    tex.write_text("The experiment_model_v1 performed well.", encoding="utf-8")
     hits = find_banned_terms(tmp_path)
     assert len(hits) == 1
     assert hits[0].publication_label == "probabilistic model"

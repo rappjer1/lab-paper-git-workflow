@@ -3,18 +3,30 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import replace
 from datetime import date
 from pathlib import Path
 from typing import Any
 
 from .artifact_manifest import SUPPORTED_ARTIFACT_TYPES, append_artifact, copy_artifacts
-from .config import ManuscriptConfig
-from .discovery import append_candidates_to_manifest, copy_candidates, discover_artifacts, format_candidates
+from .checks import (
+    check_citations,
+    check_figures,
+    check_github_repo,
+    check_labels,
+    check_overleaf,
+    check_privacy,
+    check_word_conversion,
+    format_findings,
+)
+from .config import ManuscriptConfig, write_yaml
+from .discovery import ArtifactCandidate, append_candidates_to_manifest, copy_candidates, discover_artifacts, format_candidates
 from .doctor import format_doctor_checks, run_doctor
 from .git_helpers import git_summary
-from .scaffold import InitOptions, init_manuscript
+from .messages import all_messages, format_message, get_message, severity_counts
+from .scaffold import InitOptions, init_manuscript, project_config_from_options
 from .terminology import find_banned_terms, format_terminology_hits
-from .validation import forbidden_file_matches, large_files, validate_manuscript_repo
+from .validation import forbidden_file_matches, large_files, validate_manuscript_repo, validation_markdown_report
 from .word import WORD_REVIEW_MESSAGE, import_word
 
 
@@ -35,7 +47,7 @@ def prompt_bool(label: str, default: bool = True) -> bool:
 def _default_dry_run_options(args: argparse.Namespace) -> InitOptions:
     manuscript_repo = args.manuscript_repo or str(Path.cwd() / "example_manuscript_repo")
     return InitOptions(
-        research_repo=args.research_repo or "R:/Code/my_project",
+        research_repo=args.research_repo or "./research-project",
         manuscript_repo=manuscript_repo,
         title=args.title or "Example Manuscript",
         slug=args.slug or "example_project",
@@ -137,6 +149,11 @@ def command_validate(args: argparse.Namespace) -> int:
     repo = Path(args.manuscript_repo or Path.cwd())
     report = validate_manuscript_repo(repo)
     print(report.format())
+    if args.write_report:
+        report_path = Path(args.write_report)
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text(validation_markdown_report(repo), encoding="utf-8")
+        print(f"Wrote validation report: {report_path}")
     return 0 if report.ok else 1
 
 
@@ -223,7 +240,7 @@ def command_discover_artifacts(args: argparse.Namespace) -> int:
         append_candidates_to_manifest(args.manifest, candidates)
         print(f"Appended {len(candidates)} candidate entries to {args.manifest}.")
     else:
-        print("Dry run only. Pass --write to append these suggestions to the manifest.")
+        print("Suggest-only dry run. Pass --write to append these suggestions to the manifest.")
 
     if args.copy:
         manifest_path = Path(args.manifest)
@@ -239,17 +256,196 @@ def command_make_slack_summary(args: argparse.Namespace) -> int:
     repo = Path(args.manuscript_repo or Path.cwd())
     config = ManuscriptConfig.load(repo)
     repo_url = config.project.get("github_repo") or "<GITHUB_REPO_URL>"
-    docs_path = Path(__file__).resolve().parents[2] / "docs" / "slack_launch.md"
+    docs_path = Path(__file__).resolve().parents[2] / "docs" / "public_launch.md"
     if docs_path.exists():
         message = docs_path.read_text(encoding="utf-8").replace("<GITHUB_REPO_URL>", str(repo_url))
     else:
         message = (
-            "New lab workflow repo: <GITHUB_REPO_URL>\n\n"
+            "Paper Scaffold: <GITHUB_REPO_URL>\n\n"
             "Use it to create clean manuscript GitHub repos from Word drafts, Python outputs, and LaTeX projects.\n"
             "Start with `paper-scaffold doctor`, then `paper-scaffold validate`. Do not commit raw data or model outputs."
         ).replace("<GITHUB_REPO_URL>", str(repo_url))
     print(message)
     return 0
+
+
+def command_quickstart(args: argparse.Namespace) -> int:
+    print(
+        """Paper Scaffold quickstart
+
+Workflow 1: Word draft to Overleaf-ready repo
+  paper-scaffold doctor
+  paper-scaffold init --manuscript-repo ./paper
+  paper-scaffold import-word --input draft.docx --output ./paper/converted.tex
+  paper-scaffold validate --manuscript-repo ./paper
+  Read: docs/word_to_overleaf.md
+
+Workflow 2: Python outputs to paper
+  paper-scaffold doctor
+  paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml
+  paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml --write --copy --manuscript-repo ./paper
+  paper-scaffold validate --manuscript-repo ./paper
+  Read: docs/python_outputs_to_overleaf.md
+
+Workflow 3: Existing LaTeX to GitHub/Overleaf
+  paper-scaffold doctor --manuscript-repo ./paper
+  paper-scaffold validate --manuscript-repo ./paper
+  git add .
+  git commit -m "Clean manuscript repository"
+  git push
+  Read: docs/existing_latex_project.md and docs/github_overleaf_sync.md
+"""
+    )
+    return 0
+
+
+def command_demo(args: argparse.Namespace) -> int:
+    output = Path(args.output)
+    repo_root = Path(__file__).resolve().parents[2]
+    example_outputs = repo_root / "examples" / "minimal_python_artifacts" / "outputs"
+    if output.exists() and not args.overwrite:
+        print(f"Output exists: {output}")
+        print("Pass --overwrite to replace/update the demo manuscript.")
+        return 2
+    options = InitOptions(
+        research_repo="examples/minimal_python_artifacts",
+        manuscript_repo=str(output),
+        title="Paper Scaffold Demo Manuscript",
+        slug="paper_scaffold_demo",
+        has_supplement=True,
+        use_template=True,
+    )
+    actions = init_manuscript(options, dry_run=args.dry_run, overwrite=args.overwrite)
+    if args.dry_run:
+        print("Demo dry-run plan:")
+        for action in actions:
+            print("-", action)
+        print(f"- copy example artifacts from {example_outputs}")
+        print("- write artifact manifest entries")
+        print("- run validation")
+        return 0
+
+    public_config_options = replace(options, manuscript_repo=output.name if output.is_absolute() else output.as_posix())
+    write_yaml(output / "metadata" / "manuscript_config.yaml", project_config_from_options(public_config_options))
+
+    manifest = output / "metadata" / "artifact_manifest.yaml"
+    candidates = discover_artifacts(example_outputs)
+    copy_candidates(output, candidates)
+    entries = []
+    display_candidates = []
+    for candidate in candidates:
+        source_rel = candidate.source_path.relative_to(repo_root / "examples" / "minimal_python_artifacts")
+        display_source = Path("examples") / "minimal_python_artifacts" / source_rel
+        display_candidates.append(
+            ArtifactCandidate(
+                source_path=display_source,
+                artifact_id=candidate.artifact_id,
+                artifact_type=candidate.artifact_type,
+                manuscript_path=candidate.manuscript_path,
+            )
+        )
+        entries.append(
+            {
+                "id": candidate.artifact_id,
+                "type": candidate.artifact_type,
+                "manuscript_path": candidate.manuscript_path,
+                "source_repo": "examples/minimal_python_artifacts",
+                "source_path": source_rel.as_posix(),
+                "generated_by": "make_example_figure.py",
+                "input_data": "synthetic data generated by example script",
+                "last_updated": date.today().isoformat(),
+                "caption_hint": "Synthetic demo artifact.",
+                "status": "example",
+            }
+        )
+    write_yaml(manifest, {"artifacts": entries})
+    report = validate_manuscript_repo(output)
+    print(f"Created demo manuscript: {output}")
+    print(format_candidates(display_candidates))
+    print(report.format())
+    print("Next steps:")
+    print(f"- Inspect {output}")
+    print("- Run: paper-scaffold validate --manuscript-repo <demo-path>")
+    print("- Try importing the manuscript repo into Overleaf after pushing it to GitHub.")
+    return 0 if report.ok else 1
+
+
+def _print_findings(findings: list) -> int:
+    print(format_findings(findings))
+    counts = severity_counts(findings)
+    return 1 if counts.get("ERROR", 0) else 0
+
+
+def command_explain(args: argparse.Namespace) -> int:
+    if args.list:
+        for message in all_messages():
+            print(f"{message.code} [{message.severity}] {message.title}")
+        return 0
+    if not args.code:
+        print("Provide a diagnostic code or pass --list.")
+        return 2
+    try:
+        message = get_message(args.code)
+    except KeyError:
+        print(f"Unknown diagnostic code: {args.code}")
+        print("Available codes:")
+        for message in all_messages():
+            print(f"- {message.code}: {message.title}")
+        return 2
+    print(format_message(message))
+    return 0
+
+
+def command_overleaf_check(args: argparse.Namespace) -> int:
+    return _print_findings(check_overleaf(Path(args.manuscript_repo or Path.cwd())))
+
+
+def command_github_check(args: argparse.Namespace) -> int:
+    return _print_findings(check_github_repo(Path(args.repo or Path.cwd())))
+
+
+def command_privacy_check(args: argparse.Namespace) -> int:
+    findings = check_privacy(Path(args.path or Path.cwd()))
+    if findings:
+        print(format_findings(findings))
+    else:
+        print("No obvious private paths, credentials, or secret-like strings found.")
+    return 0
+
+
+def command_check_figures(args: argparse.Namespace) -> int:
+    return _print_findings(check_figures(Path(args.manuscript_repo or Path.cwd())))
+
+
+def command_check_citations(args: argparse.Namespace) -> int:
+    return _print_findings(check_citations(Path(args.manuscript_repo or Path.cwd())))
+
+
+def command_check_labels(args: argparse.Namespace) -> int:
+    return _print_findings(check_labels(Path(args.manuscript_repo or Path.cwd())))
+
+
+def command_audit_word_conversion(args: argparse.Namespace) -> int:
+    findings = check_word_conversion(Path(args.input))
+    output = format_findings(findings) if findings else "No common Word/Pandoc conversion issues found by heuristic checks."
+    print(output)
+    print(WORD_REVIEW_MESSAGE)
+    if args.write_report:
+        report_path = Path(args.write_report)
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text(
+            "# Word Conversion Audit Report\n\n"
+            f"- Input: {args.input}\n"
+            f"- Findings: {len(findings)}\n\n"
+            "```text\n"
+            f"{output}\n"
+            "```\n\n"
+            f"{WORD_REVIEW_MESSAGE}\n",
+            encoding="utf-8",
+        )
+        print(f"Wrote word conversion report: {report_path}")
+    counts = severity_counts(findings)
+    return 1 if counts.get("ERROR", 0) else 0
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -295,6 +491,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     validate = subparsers.add_parser("validate", help="Validate a manuscript repository")
     validate.add_argument("--manuscript-repo")
+    validate.add_argument("--write-report", help="Write a Markdown validation report")
     validate.set_defaults(func=command_validate)
 
     copy = subparsers.add_parser("copy-artifacts", help="Copy files listed in the artifact manifest")
@@ -333,12 +530,56 @@ def build_parser() -> argparse.ArgumentParser:
     discover.add_argument("--manuscript-repo", help="Manuscript repo root used with --copy")
     discover.add_argument("--write", action="store_true", help="Append candidates to the manifest")
     discover.add_argument("--copy", action="store_true", help="Copy candidates into figures/tables folders")
+    discover.add_argument("--suggest-only", action="store_true", help="Alias for the default dry-run behavior")
     discover.add_argument("--supplement", action="store_true", help="Suggest supplement figure/table destinations")
     discover.set_defaults(func=command_discover_artifacts)
 
     slack = subparsers.add_parser("make-slack-summary", help="Print a Slack-ready launch message")
     slack.add_argument("--manuscript-repo")
     slack.set_defaults(func=command_make_slack_summary)
+
+    quickstart = subparsers.add_parser("quickstart", help="Print the three common Paper Scaffold workflows")
+    quickstart.set_defaults(func=command_quickstart)
+
+    demo = subparsers.add_parser("demo", help="Create a small demo manuscript repository")
+    demo.add_argument("--output", default="scratch/demo_manuscript")
+    demo.add_argument("--overwrite", action="store_true")
+    demo.add_argument("--dry-run", action="store_true")
+    demo.set_defaults(func=command_demo)
+
+    explain = subparsers.add_parser("explain", help="Explain a diagnostic code")
+    explain.add_argument("code", nargs="?", help="Diagnostic code such as E003")
+    explain.add_argument("--list", action="store_true", help="List all diagnostic codes")
+    explain.set_defaults(func=command_explain)
+
+    overleaf_check = subparsers.add_parser("overleaf-check", help="Check whether a manuscript repo is likely Overleaf-ready")
+    overleaf_check.add_argument("--manuscript-repo")
+    overleaf_check.set_defaults(func=command_overleaf_check)
+
+    github_check = subparsers.add_parser("github-check", help="Check GitHub-readiness for a repository")
+    github_check.add_argument("--repo")
+    github_check.set_defaults(func=command_github_check)
+
+    privacy_check = subparsers.add_parser("privacy-check", help="Search for private paths, credentials, and secret-like text")
+    privacy_check.add_argument("--path")
+    privacy_check.set_defaults(func=command_privacy_check)
+
+    figure_check = subparsers.add_parser("check-figures", help="Check figure references and figure files")
+    figure_check.add_argument("--manuscript-repo")
+    figure_check.set_defaults(func=command_check_figures)
+
+    citation_check = subparsers.add_parser("check-citations", help="Check citation keys against references.bib")
+    citation_check.add_argument("--manuscript-repo")
+    citation_check.set_defaults(func=command_check_citations)
+
+    label_check = subparsers.add_parser("check-labels", help="Check LaTeX labels and references")
+    label_check.add_argument("--manuscript-repo")
+    label_check.set_defaults(func=command_check_labels)
+
+    word_audit = subparsers.add_parser("audit-word-conversion", help="Audit converted Word/Pandoc TeX or Markdown")
+    word_audit.add_argument("--input", required=True)
+    word_audit.add_argument("--write-report")
+    word_audit.set_defaults(func=command_audit_word_conversion)
 
     return parser
 

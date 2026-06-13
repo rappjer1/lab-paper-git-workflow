@@ -1,154 +1,72 @@
-# Quickstart
+# Quick Start
 
-This is the short path for a lab member who already has:
+Paper Scaffold helps you create a clean manuscript repository from research outputs.
 
-- A research repo.
-- A folder of final figures.
-- A folder of LaTeX manuscript files, or a plan to start from the template.
-- A private GitHub repo for the manuscript.
-- Optional Overleaf access.
+Use it from a checkout:
+
+```bash
+python scripts/paper-scaffold.py doctor
+python scripts/paper-scaffold.py quickstart
+```
+
+Or after editable install:
+
+```bash
+paper-scaffold doctor
+paper-scaffold quickstart
+```
 
 ## Word + Python To Overleaf In 20 Minutes
 
-This is the launch-night path when you have a Word draft and Python-generated outputs.
-
-1. Clone or create the manuscript repo.
+1. Create or clone a manuscript repo.
 2. Run doctor.
-3. Convert the Word draft or start from the LaTeX template.
+3. Convert a Word draft or start from the LaTeX template.
 4. Discover Python artifacts.
 5. Copy selected artifacts.
 6. Validate.
 7. Commit and push.
-8. Import from GitHub into Overleaf.
-
-```powershell
-Set-Location R:\Code\lab_tools\lab-paper-git-workflow
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py doctor
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py init --manuscript-repo R:\Code\manuscripts\my_project_paper
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py import-word --input draft.docx --output R:\Code\manuscripts\my_project_paper\converted.tex
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py discover-artifacts --source R:\Code\my_project\outputs\final --manifest R:\Code\manuscripts\my_project_paper\metadata\artifact_manifest.yaml
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py discover-artifacts --source R:\Code\my_project\outputs\final --manifest R:\Code\manuscripts\my_project_paper\metadata\artifact_manifest.yaml --write --copy --manuscript-repo R:\Code\manuscripts\my_project_paper
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py validate --manuscript-repo R:\Code\manuscripts\my_project_paper
-```
-
-Git Bash equivalent:
+8. Import the GitHub repo into Overleaf if you use Overleaf.
 
 ```bash
-cd /r/Code/lab_tools/lab-paper-git-workflow
-python scripts/paper-scaffold.py doctor
-python scripts/paper-scaffold.py init --manuscript-repo /r/Code/manuscripts/my_project_paper
-python scripts/paper-scaffold.py import-word --input draft.docx --output /r/Code/manuscripts/my_project_paper/converted.tex
-python scripts/paper-scaffold.py discover-artifacts --source /r/Code/my_project/outputs/final --manifest /r/Code/manuscripts/my_project_paper/metadata/artifact_manifest.yaml
-python scripts/paper-scaffold.py discover-artifacts --source /r/Code/my_project/outputs/final --manifest /r/Code/manuscripts/my_project_paper/metadata/artifact_manifest.yaml --write --copy --manuscript-repo /r/Code/manuscripts/my_project_paper
-python scripts/paper-scaffold.py validate --manuscript-repo /r/Code/manuscripts/my_project_paper
+paper-scaffold doctor
+paper-scaffold init --manuscript-repo ./paper
+paper-scaffold import-word --input draft.docx --output ./paper/converted.tex
+paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml
+paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml --write --copy --manuscript-repo ./paper
+paper-scaffold validate --manuscript-repo ./paper --write-report ./paper/validation_report.md
 ```
 
-If Pandoc is not installed, skip `import-word` and paste/split text manually using `docs/word_to_overleaf.md`.
+If Pandoc is not installed, skip `import-word` and paste/split text manually using [docs/word_to_overleaf.md](docs/word_to_overleaf.md).
 
-## Git Bash
+## Run The Demo
 
 ```bash
-git clone <research-repo>
-git clone <manuscript-repo>
-cd /r/Code/lab_tools/lab-paper-git-workflow
-python scripts/paper-scaffold.py init
-python scripts/paper-scaffold.py add-artifact
-python scripts/paper-scaffold.py validate --manuscript-repo <manuscript-repo>
-cd <manuscript-repo>
-git add .
-git commit -m "Initialize manuscript repo"
-git push
+paper-scaffold demo --output scratch/demo_manuscript --overwrite
+paper-scaffold validate --manuscript-repo scratch/demo_manuscript
 ```
 
-Git Bash uses forward slashes:
+From a checkout:
 
 ```bash
-cd /r/Code/manuscripts/my_project_paper
+python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwrite
 ```
 
-## PowerShell
+## Manual Fallback Without The CLI
 
-```powershell
-git clone <research-repo>
-git clone <manuscript-repo>
-Set-Location R:\Code\lab_tools\lab-paper-git-workflow
-python scripts\paper-scaffold.py init
-python scripts\paper-scaffold.py add-artifact
-python scripts\paper-scaffold.py validate --manuscript-repo <manuscript-repo>
-Set-Location <manuscript-repo>
-git add .
-git commit -m "Initialize manuscript repo"
-git push
-```
+1. Create a separate manuscript repository.
+2. Add `main.tex`, `references.bib`, `sections/`, `figures/`, `tables/`, `supplement/`, and `metadata/`.
+3. Copy only selected publication figures and tables.
+4. Create `metadata/artifact_manifest.yaml`.
+5. Create `metadata/terminology_map.yaml` if implementation labels need cleanup.
+6. Add a `.gitignore` for LaTeX build files and raw/model/cache outputs.
+7. Run `git status` and inspect every staged file.
+8. Commit and push to GitHub.
+9. Import the GitHub repo into Overleaf if desired.
 
-PowerShell can use backslashes, but quote paths that contain spaces:
+## Next Reading
 
-```powershell
-Set-Location "R:\Code\manuscripts\my project paper"
-```
-
-## Starting From Template
-
-```bash
-python scripts/paper-scaffold.py init \
-  --research-repo R:/Code/my_project \
-  --manuscript-repo R:/Code/manuscripts/my_project_paper \
-  --title "My Project Paper" \
-  --slug my_project_paper \
-  --has-supplement \
-  --use-template \
-  --non-interactive
-```
-
-## Starting From Existing LaTeX
-
-```bash
-python scripts/paper-scaffold.py init \
-  --research-repo R:/Code/my_project \
-  --manuscript-repo R:/Code/manuscripts/my_project_paper \
-  --title "My Project Paper" \
-  --slug my_project_paper \
-  --no-template \
-  --non-interactive
-```
-
-Then copy your existing `main.tex`, `sections/`, `references.bib`, figures, and supplement files into the manuscript repo by hand.
-
-## Add One Artifact
-
-```bash
-python scripts/paper-scaffold.py add-artifact \
-  --manuscript-repo R:/Code/manuscripts/my_project_paper \
-  --id workflow_schematic \
-  --type figure \
-  --source-repo R:/Code/my_project \
-  --source-path outputs/final_figures/workflow_schematic.pdf \
-  --destination figures/workflow_schematic.pdf \
-  --generated-by scripts/make_publication_figures.py \
-  --input-data outputs/summary_metrics.csv \
-  --caption-hint "Workflow schematic." \
-  --status final \
-  --copy-now \
-  --non-interactive
-```
-
-## Manual Fallback Without The Tool
-
-1. Create a new private GitHub repo for the manuscript.
-2. Clone it locally.
-3. Create `main.tex`, `references.bib`, `sections/`, `figures/`, `tables/`, `supplement/`, and `metadata/`.
-4. Copy only selected publication figures and tables.
-5. Create `metadata/artifact_manifest.yaml`.
-6. Create `metadata/terminology_map.yaml`.
-7. Add a `.gitignore` that excludes LaTeX build files and raw/model/cache outputs.
-8. Run `git status` and inspect every staged file.
-9. Commit and push.
-10. Create a new Overleaf project from GitHub.
-
-## Validate Before Overleaf Sync
-
-```bash
-python scripts/paper-scaffold.py validate --manuscript-repo R:/Code/manuscripts/my_project_paper
-python scripts/paper-scaffold.py terminology-check --manuscript-repo R:/Code/manuscripts/my_project_paper
-python scripts/paper-scaffold.py git-check --manuscript-repo R:/Code/manuscripts/my_project_paper
-```
+- [docs/getting_started.md](docs/getting_started.md)
+- [docs/word_to_overleaf.md](docs/word_to_overleaf.md)
+- [docs/python_outputs_to_overleaf.md](docs/python_outputs_to_overleaf.md)
+- [docs/existing_latex_project.md](docs/existing_latex_project.md)
+- [docs/github_overleaf_sync.md](docs/github_overleaf_sync.md)

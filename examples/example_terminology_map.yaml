@@ -1,5 +1,5 @@
 terms:
-  internal_baseline_v4:
+  baseline_run_slug:
     publication_label: baseline process model
     allowed_contexts:
       - supplement provenance table
@@ -15,5 +15,5 @@ terms:
       - introduction
       - main results
   package_name_used_in_code:
-    publication_label: rainfall-runoff modeling workflow
+    publication_label: modeling workflow
     note: Use package names only for software provenance.

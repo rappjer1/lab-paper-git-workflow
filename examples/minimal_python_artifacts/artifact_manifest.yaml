@@ -1,0 +1,41 @@
+artifacts:
+  - id: example_metric_plot_pdf
+    type: figure
+    manuscript_path: figures/example_metric_plot.pdf
+    source_repo: examples/minimal_python_artifacts
+    source_path: outputs/example_metric_plot.pdf
+    generated_by: make_example_figure.py
+    input_data: synthetic data generated in script
+    last_updated: 2026-06-13
+    caption_hint: Example metric plot from synthetic data.
+    status: example
+  - id: example_metric_plot_png
+    type: figure
+    manuscript_path: figures/example_metric_plot.png
+    source_repo: examples/minimal_python_artifacts
+    source_path: outputs/example_metric_plot.png
+    generated_by: make_example_figure.py
+    input_data: synthetic data generated in script
+    last_updated: 2026-06-13
+    caption_hint: PNG version of the example metric plot.
+    status: example
+  - id: example_summary_table
+    type: data_summary
+    manuscript_path: tables/example_summary_table.csv
+    source_repo: examples/minimal_python_artifacts
+    source_path: outputs/example_summary_table.csv
+    generated_by: make_example_figure.py
+    input_data: synthetic data generated in script
+    last_updated: 2026-06-13
+    caption_hint: Small CSV summary table.
+    status: example
+  - id: example_table
+    type: table
+    manuscript_path: tables/example_table.tex
+    source_repo: examples/minimal_python_artifacts
+    source_path: outputs/example_table.tex
+    generated_by: make_example_figure.py
+    input_data: synthetic data generated in script
+    last_updated: 2026-06-13
+    caption_hint: Small generated LaTeX table.
+    status: example

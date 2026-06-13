@@ -1,29 +1,29 @@
 # GitHub And Overleaf Sync
 
-Use GitHub as the canonical manuscript source. Use Overleaf as the editor and compiler connected to that GitHub repo.
+Use GitHub as the canonical manuscript source. Use Overleaf as an editing and compilation frontend connected to that GitHub repository.
 
 ## Preferred Workflow
 
-1. Create a private GitHub manuscript repo.
-2. Push manuscript source.
+1. Create a manuscript repository separate from the research/code repository.
+2. Push manuscript source to GitHub.
 3. In Overleaf, create a new project from GitHub.
-4. Use GitHub as canonical source.
+4. Set `main.tex` as the main document.
 5. Pull/sync in Overleaf after local commits.
 6. Push from Overleaf only when edits were made there.
 7. Avoid editing the same lines simultaneously in Overleaf and locally.
 
 ## Create The GitHub Repo
 
-GitHub CLI is optional. If `gh` is installed:
+GitHub CLI is optional. If it is installed:
 
 ```bash
-gh repo create my-project-paper --private --source . --remote origin --push
+gh repo create paper-repo --private --source . --remote origin --push
 ```
 
-If `gh` is not installed, create the private repo in the browser, then add the remote:
+If it is not installed, create the repository in the browser, then:
 
 ```bash
-git remote add origin https://github.com/<owner>/<repo>.git
+git remote add origin https://github.com/<owner>/<paper-repo>.git
 git branch -M main
 git push -u origin main
 ```
@@ -36,67 +36,58 @@ git remote add orign ...
 
 The remote should be `origin`, not `orign`.
 
-## Git Bash Paths
+## Import Into Overleaf
 
-Git Bash uses forward slashes:
+1. Create a new Overleaf project.
+2. Choose Import from GitHub.
+3. Select the manuscript repository.
+4. Set `main.tex` as the main document.
+5. Compile.
+6. If there is a supplement, compile `supplement/supplement.tex` separately or temporarily set it as the main document.
+
+## Sync Rules
+
+If editing locally:
 
 ```bash
-cd /r/Code/manuscripts/my_project_paper
-git status
+git add .
+git commit -m "Update manuscript"
+git push
 ```
 
-## PowerShell Paths
+Then pull/sync in Overleaf.
 
-PowerShell can use backslashes:
+If editing in Overleaf:
 
-```powershell
-Set-Location R:\Code\manuscripts\my_project_paper
-git status
+1. Push Overleaf changes to GitHub.
+2. Pull locally before making more edits.
+
+```bash
+git pull
 ```
 
-Quote paths with spaces:
+## Common Errors
 
-```powershell
-Set-Location "R:\Code\manuscripts\my project paper"
-```
+Repo not found:
 
-## Create Overleaf From GitHub
+- Confirm the GitHub repository exists.
+- Confirm Overleaf has permission to access it.
 
-In Overleaf:
+Private repository permission:
 
-1. Create a new project.
-2. Choose the GitHub import option.
-3. Select the private manuscript repo.
-4. Set the main document, usually `main.tex`.
-5. Compile once.
-6. Sync from GitHub after local commits.
+- Reconnect GitHub in Overleaf or check organization permissions.
 
-Existing Overleaf projects usually should not be attached to existing GitHub repos. Create a new Overleaf project from GitHub when possible and keep old Overleaf projects as archives.
+File too large:
 
-## Avoid Sync Conflicts
+- Remove raw outputs from the manuscript repo.
+- Keep large artifacts in the research repo, archive, or Git LFS workflow.
 
-Do not edit the same paragraph locally and in Overleaf at the same time.
+Missing figure path:
 
-Clean pattern:
+- Check the relative path in LaTeX.
+- Check the figure exists in the manuscript repo.
+- Check filename case.
 
-1. Pull latest from GitHub locally.
-2. Edit locally.
-3. Commit and push.
-4. Pull/sync in Overleaf.
+Wrong main document:
 
-Or:
-
-1. Edit in Overleaf.
-2. Push from Overleaf.
-3. Pull locally before making more edits.
-
-## What Not To Sync
-
-Do not sync:
-
-- Full analysis repos.
-- Raw data.
-- Model outputs.
-- Prediction caches.
-- Large evaluation directories.
-- ZIP snapshots.
+- Set `main.tex` as the main document.

@@ -54,16 +54,16 @@ def test_terminology_check_command_still_works(tmp_path, capsys):
         tmp_path / "metadata" / "terminology_map.yaml",
         {
             "terms": {
-                "internal_label": {
+                "experiment_label": {
                     "publication_label": "publication label",
                     "banned_in": ["main results"],
                 }
             }
         },
     )
-    (tmp_path / "main.tex").write_text("The internal_label result is shown.", encoding="utf-8")
+    (tmp_path / "main.tex").write_text("The experiment_label result is shown.", encoding="utf-8")
     exit_code = main(["terminology-check", "--manuscript-repo", str(tmp_path)])
     output = capsys.readouterr().out
     assert exit_code == 1
-    assert "internal_label" in output
+    assert "experiment_label" in output
     assert "publication label" in output
