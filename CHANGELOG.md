@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.5.1
+
+- Clean-clone public-user hardening.
+- Documented the Windows/Git Bash installed CLI PATH workaround.
+- Documented a Windows pytest temp-directory workaround.
+- Made the demo manuscript reference its included PDF figure and bibliography entry so validation is warning-free.
+
 ## v0.5.0
 
 - Added architecture decision records and a public v1.0 roadmap.

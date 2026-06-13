@@ -25,7 +25,7 @@ The JSON report has this stable shape:
 ```json
 {
   "tool": "Paper Scaffold",
-  "version": "0.5.0",
+  "version": "...",
   "timestamp": "...",
   "path": "./paper",
   "summary": {
