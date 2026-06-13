@@ -1,0 +1,6 @@
+artifacts:
+  - id: paper_a_figure_1
+    type: figure
+    source_path: project_outputs/paper_a/figure_1.pdf
+    manuscript_path: figures/paper_a_figure_1.pdf
+    note: synthetic example entry for Paper A
