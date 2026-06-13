@@ -13,7 +13,7 @@ from typing import Any
 
 from . import __version__
 from .artifact_manifest import load_artifact_manifest, resolve_source_path
-from .checks import FIGURE_EXTENSIONS, TABLE_EXTENSIONS, iter_files, read_text, relative
+from .checks import FIGURE_EXTENSIONS, TABLE_EXTENSIONS, read_text, relative
 from .config import ManuscriptConfig
 from .git_helpers import current_branch, run_git
 
