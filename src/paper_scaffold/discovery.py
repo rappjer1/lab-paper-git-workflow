@@ -63,7 +63,7 @@ def discover_artifacts(source: str | Path, supplement: bool = False) -> list[Art
     seen_ids: dict[str, int] = {}
     if not source.exists():
         return candidates
-    for path in source.rglob("*"):
+    for path in sorted(source.rglob("*"), key=lambda p: str(p).lower()):
         if path.is_dir() or should_ignore_path(path):
             continue
         if path.suffix.lower() not in DISCOVER_EXTENSIONS:
@@ -81,7 +81,7 @@ def discover_artifacts(source: str | Path, supplement: bool = False) -> list[Art
                 manuscript_path=f"{destination_root}/{path.name}",
             )
         )
-    return sorted(candidates, key=lambda candidate: str(candidate.source_path).lower())
+    return candidates
 
 
 def append_candidates_to_manifest(manifest_path: str | Path, candidates: Iterable[ArtifactCandidate]) -> None:
