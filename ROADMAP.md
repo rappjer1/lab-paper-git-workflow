@@ -8,19 +8,23 @@ v0.4 made Paper Scaffold public-ready with diagnostics, public examples, validat
 
 v0.5 adds architecture decision records, schema validation, JSON validation reports, artifact stale/unused checks, Ruff/pre-commit development hygiene, stronger CI, and a clearer path toward v1.0.
 
-## v0.6 Docs Site And Template Engine Evaluation
+## v0.6 Recipes And Use-Case Workflows
 
-Evaluate MkDocs Material for documentation and Copier for versioned template updates. Adopt only if the workflow benefit outweighs dependency and maintenance cost.
+v0.6 added use-case recipes, project archaeology, release checks, and synthetic public examples for common manuscript cleanup workflows.
 
-## v0.7 Word/Pandoc Conversion Quality
+## v0.7 Provenance Ledger
+
+v0.7 adds generated provenance ledgers, artifact status summaries, and artifact hash locks so manuscript figures/tables have a lightweight bill of materials.
+
+## v0.8 Word/Pandoc Conversion Quality
 
 Improve Word conversion audits, section splitting guidance, equation/citation cleanup checks, and examples for converted drafts.
 
-## v0.8 Manuscript CI Templates And Release Packaging
+## v0.9 Manuscript CI Templates And Release Packaging
 
 Add optional manuscript-repo CI templates and prepare PyPI release mechanics. Prefer PyPI Trusted Publishing when packaging is ready.
 
-## v0.9 Schema Freeze And Cross-Platform Hardening
+## v0.10 Schema Freeze And Cross-Platform Hardening
 
 Stabilize the manifest/config/report schemas, broaden Windows/macOS/Linux path tests, and tighten error messages before v1.0.
 

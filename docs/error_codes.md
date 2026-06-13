@@ -29,6 +29,8 @@ paper-scaffold explain --list
 | E014 | Forbidden directory found | A raw/cache/output directory was copied into the manuscript repo. | Move the directory back to the research repo or archive. |
 | E015 | Artifact source missing | `copy-artifacts` cannot find a manifest source path. | Regenerate the source artifact or correct `source_repo` and `source_path`. |
 | E016 | Schema validation error | A config, manifest, terminology map, or validation JSON file has invalid structure. | Fix the reported field type, required field, or top-level structure. |
+| E020 | Manifest artifact missing manuscript file | A provenance report found a manifest entry whose manuscript artifact file is missing. | Copy the artifact into the manuscript repo or update `metadata/artifact_manifest.yaml`. |
+| E021 | Referenced artifact missing from disk | A TeX source references a figure or table file that is not present on disk. | Restore the referenced file or fix the TeX path. |
 
 ## Warnings
 
@@ -58,6 +60,10 @@ paper-scaffold explain --list
 | W022 | Suspicious final filename | A project audit found a filename such as `final2` or `final_FINAL`. | Inspect manually and choose one canonical source or artifact. |
 | W023 | LaTeX build artifact found | A project audit found generated files such as `.aux`, `.log`, `.bbl`, or `.synctex.gz`. | Do not copy build artifacts into the clean manuscript repo. |
 | W024 | Raw or generated output found | A project audit found raw/generated output files such as `.npz`, `.pt`, `.pkl`, `.nc`, `.parquet`, `.h5`, `.tif`, or `.zip`. | Keep these in the research repo or archive and copy only selected paper-ready artifacts. |
+| W030 | Manifest artifact source missing | The manifest declares a source file that the provenance report cannot find. | Update the source path or document why only the manuscript copy remains. |
+| W031 | Manuscript artifact stale relative to source | Source and manuscript artifact hashes differ. | Review and refresh the manuscript copy when the source update should be used. |
+| W032 | Manuscript artifact present but not in manifest | A figure/table file exists in manuscript artifact folders but is not listed in the manifest. | Add a manifest entry or remove the stale file. |
+| W033 | Artifact in manifest but not referenced | A manifest figure/table is present but not referenced from TeX. | Reference it intentionally or remove the stale artifact. |
 
 ## Info
 
@@ -71,3 +77,5 @@ paper-scaffold explain --list
 | I006 | No forbidden files found | No raw/model/cache output patterns were detected. |
 | I020 | Likely manuscript file found | `audit-project` found a manuscript source candidate or Overleaf export folder. |
 | I021 | Likely figure or table candidate found | `audit-project` found a figure or table candidate to review. |
+| I030 | Provenance ledger generated | A generated provenance ledger or report was written. |
+| I031 | Artifact lock written | `freeze-artifacts` wrote current manuscript artifact hashes. |

@@ -8,6 +8,13 @@ It lives at:
 metadata/artifact_manifest.yaml
 ```
 
+The manifest is user-authored. Generated provenance reports and locks are separate files such as:
+
+```text
+metadata/provenance_ledger.json
+metadata/artifact_lock.json
+```
+
 ## Supported Types
 
 - `figure`
@@ -28,8 +35,10 @@ artifacts:
     generated_by: scripts/make_workflow.py
     input_data: experiments/results/summary.csv
     last_updated: 2026-06-10
+    copied_at: 2026-06-10T15:30:00Z
     caption_hint: Evaluation-only workflow schematic.
     status: final
+    notes: Used in main text Figure 1.
 ```
 
 ## Schema
@@ -66,9 +75,13 @@ paper-scaffold validate --manuscript-repo <manuscript-repo>
 
 `last_updated` is the date the manuscript copy was updated.
 
+`copied_at` is an optional timestamp for when the artifact was copied into the manuscript repo.
+
 `caption_hint` is a reminder for the writer. Final captions live in LaTeX.
 
 `status` is usually `draft`, `final`, or `needs_update`.
+
+`notes` is optional free text for short provenance or review notes.
 
 ## Valid Example
 
@@ -126,6 +139,30 @@ Check whether copied manuscript artifacts are not referenced by TeX:
 paper-scaffold unused-artifacts --manuscript-repo <manuscript-repo>
 ```
 
+## Provenance Ledger
+
+Generate a bill of materials for manuscript artifacts:
+
+```bash
+paper-scaffold provenance-report --manuscript-repo <manuscript-repo> --write-md provenance_report.md --write-json metadata/provenance_ledger.json
+```
+
+The generated ledger includes hashes, file mtimes, source existence, manuscript artifact existence, TeX usage, and status values such as `current`, `stale`, `missing_source`, `missing_manuscript`, `untracked`, and `unknown`.
+
+Print compact status counts:
+
+```bash
+paper-scaffold artifact-status --manuscript-repo <manuscript-repo>
+```
+
+Freeze current manuscript artifact hashes before submission or revision handoff:
+
+```bash
+paper-scaffold freeze-artifacts --manuscript-repo <manuscript-repo> --write-lock metadata/artifact_lock.json
+```
+
+Guide: [provenance_ledger.md](provenance_ledger.md)
+
 ## What The Manifest Is Not
 
 It is not a raw data archive.
@@ -133,3 +170,5 @@ It is not a raw data archive.
 It is not a replacement for the research repo.
 
 It is not a place to paste full result tables unless those tables are part of the submitted manuscript or supplement.
+
+It is not a complete reproducibility system. Use the provenance ledger to audit manuscript artifacts; keep full computational reproducibility in the research repo, workflow engine, or archive.

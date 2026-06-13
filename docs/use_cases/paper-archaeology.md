@@ -19,6 +19,7 @@ paper-scaffold audit-project --path ./messy_project --write-report project_audit
 paper-scaffold init --manuscript-repo ./paper
 paper-scaffold discover-artifacts --source ./messy_project/outputs --manifest ./paper/metadata/artifact_manifest.yaml
 paper-scaffold validate --manuscript-repo ./paper
+paper-scaffold provenance-report --manuscript-repo ./paper --write-md ./paper/provenance_report.md
 ```
 
 ## What To Inspect Manually
@@ -27,10 +28,14 @@ paper-scaffold validate --manuscript-repo ./paper
 - Whether final-looking outputs are duplicates or actual publication artifacts.
 - Whether raw outputs belong in an archive instead of the manuscript repo.
 - Whether Overleaf export folders contain source files worth copying.
+- Whether copied manuscript figures/tables are listed in the manifest and referenced from TeX.
+- Whether source files still exist after the clean manuscript repo is assembled.
 
 ## Limitations
 
 The audit does not determine scientific correctness and does not move files. It is a triage report.
+
+The provenance report becomes useful after selected files have been copied into the clean manuscript repo. It checks the copied artifact state; it does not clean the messy source folder.
 
 ## Folder Structure
 
