@@ -337,6 +337,18 @@ def referenced_artifact_paths(root: Path) -> set[Path]:
 
 def check_unused_artifacts(root: Path) -> list[DiagnosticFinding]:
     referenced = referenced_artifact_paths(root)
+    data_summary_paths: set[Path] = set()
+    manifest_path = root / "metadata" / "artifact_manifest.yaml"
+    if manifest_path.exists():
+        try:
+            manifest = load_artifact_manifest(root)
+        except ValueError:
+            manifest = {"artifacts": []}
+        for artifact in manifest.get("artifacts", []):
+            if not isinstance(artifact, dict):
+                continue
+            if str(artifact.get("type") or "") == "data_summary" and artifact.get("manuscript_path"):
+                data_summary_paths.add((root / str(artifact["manuscript_path"])).resolve())
     findings: list[DiagnosticFinding] = []
     artifact_dirs = {
         root / "figures",
@@ -352,6 +364,8 @@ def check_unused_artifacts(root: Path) -> list[DiagnosticFinding]:
                 continue
             suffix = path.suffix.lower()
             if suffix not in FIGURE_EXTENSIONS | TABLE_EXTENSIONS:
+                continue
+            if path.resolve() in data_summary_paths:
                 continue
             if path.resolve() not in referenced:
                 findings.append(DiagnosticFinding("W020", "not referenced by TeX source", relative(path, root)))

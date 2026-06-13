@@ -55,6 +55,9 @@ paper-scaffold explain --list
 | W019 | Artifact source changed after copy | A manifest source file is newer than the manuscript copy and has different content. | Review and rerun `copy-artifacts` if the manuscript should use the updated output. |
 | W020 | Unused manuscript artifact | A figure or table file exists but is not referenced by TeX source. | Remove stale files or reference them intentionally. |
 | W021 | Artifact discovery skipped raw output path | Discovery saw files under raw/cache/output directories and skipped them. | Keep raw outputs in the research repo and copy only selected manuscript artifacts. |
+| W022 | Suspicious final filename | A project audit found a filename such as `final2` or `final_FINAL`. | Inspect manually and choose one canonical source or artifact. |
+| W023 | LaTeX build artifact found | A project audit found generated files such as `.aux`, `.log`, `.bbl`, or `.synctex.gz`. | Do not copy build artifacts into the clean manuscript repo. |
+| W024 | Raw or generated output found | A project audit found raw/generated output files such as `.npz`, `.pt`, `.pkl`, `.nc`, `.parquet`, `.h5`, `.tif`, or `.zip`. | Keep these in the research repo or archive and copy only selected paper-ready artifacts. |
 
 ## Info
 
@@ -66,3 +69,5 @@ paper-scaffold explain --list
 | I004 | Git remote origin configured | A Git remote named `origin` exists. |
 | I005 | Artifact manifest valid | The manifest parsed and referenced files exist. |
 | I006 | No forbidden files found | No raw/model/cache output patterns were detected. |
+| I020 | Likely manuscript file found | `audit-project` found a manuscript source candidate or Overleaf export folder. |
+| I021 | Likely figure or table candidate found | `audit-project` found a figure or table candidate to review. |

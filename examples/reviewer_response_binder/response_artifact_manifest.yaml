@@ -1,0 +1,11 @@
+response_artifacts:
+  - id: response_fig_1
+    reviewer_point: R1.2
+    manuscript_path: figures/response_fig_1.pdf
+    source_summary: synthetic rerun output summarized for the response
+    status: review
+  - id: response_table_1
+    reviewer_point: R2.1
+    manuscript_path: tables/response_table_1.tex
+    source_summary: small summary table prepared for the response
+    status: review

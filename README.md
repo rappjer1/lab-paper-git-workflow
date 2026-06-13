@@ -22,6 +22,7 @@ Use this if you are a researcher, graduate student, analyst, or research softwar
 - Python-generated figures or tables that need to move into a paper.
 - An existing LaTeX folder that needs cleanup before GitHub/Overleaf sync.
 - A research/code repository that should feed selected artifacts into a separate manuscript repository.
+- A messy inherited project, Overleaf ZIP export, revision binder, or multi-paper output folder that needs triage before copying files.
 
 You do not need Overleaf, Pandoc, LaTeX, GitHub CLI, or GitHub Actions to read the workflow docs or use the basic scaffold.
 
@@ -106,6 +107,26 @@ git push
 
 Guide: [docs/existing_latex_project.md](docs/existing_latex_project.md)
 
+## Use-Case Recipes
+
+Paper Scaffold includes workflow recipes for common cleanup and handoff situations:
+
+```bash
+paper-scaffold recipes list
+paper-scaffold recipes show paper-archaeology
+```
+
+Out-of-box recipes cover:
+
+- Paper archaeology for messy inherited project folders.
+- Overleaf ZIP rehab for turning downloaded exports into clean Git repos.
+- Reviewer response binders for revision artifacts and checklists.
+- Pre-submission flight checks before sync, sharing, or journal submission.
+- Undergraduate-safe artifact harvesting for reviewable figure/table handoff.
+- Multi-paper project splits where one research project feeds multiple manuscript repos.
+
+Guide: [docs/use_cases](docs/use_cases)
+
 ## Install
 
 No install is required if you run from a checkout:
@@ -137,6 +158,7 @@ paper-scaffold doctor
 paper-scaffold init --manuscript-repo ./paper
 paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml
 paper-scaffold validate --manuscript-repo ./paper --write-report ./paper/validation_report.md --write-json ./paper/validation_report.json
+paper-scaffold release-check --manuscript-repo ./paper --write-report ./paper/release_check.md
 ```
 
 Then push `./paper` to GitHub and import that GitHub repo into Overleaf if you use Overleaf.
@@ -147,14 +169,17 @@ More detail: [docs/getting_started.md](docs/getting_started.md)
 
 - `paper-scaffold doctor`: check Python, Git, optional tools, and repo shape.
 - `paper-scaffold quickstart`: print the three common workflows.
+- `paper-scaffold recipes`: list or show workflow recipes.
 - `paper-scaffold demo`: create a small demo manuscript repo.
 - `paper-scaffold init`: create a clean manuscript repo scaffold.
 - `paper-scaffold import-word`: convert `.docx` with Pandoc when available.
+- `paper-scaffold audit-project`: read-only audit of a messy project folder.
 - `paper-scaffold discover-artifacts`: find likely manuscript figures/tables.
 - `paper-scaffold add-artifact`: add one manifest entry interactively or by flags.
 - `paper-scaffold copy-artifacts`: copy files listed in the manifest.
 - `paper-scaffold stale-artifacts`: report copied artifacts whose source changed later.
 - `paper-scaffold unused-artifacts`: report figure/table files not referenced from TeX.
+- `paper-scaffold release-check`: run consolidated pre-submission checks.
 - `paper-scaffold terminology-check`: find banned implementation labels.
 - `paper-scaffold git-check`: summarize Git state.
 - `paper-scaffold validate`: check manuscript repo shape, artifacts, terminology, and Git state.
@@ -189,6 +214,7 @@ paper-scaffold check-citations --manuscript-repo ./paper
 paper-scaffold check-labels --manuscript-repo ./paper
 paper-scaffold stale-artifacts --manuscript-repo ./paper
 paper-scaffold unused-artifacts --manuscript-repo ./paper
+paper-scaffold release-check --manuscript-repo ./paper --write-report ./paper/release_check.md
 ```
 
 Reference: [docs/error_codes.md](docs/error_codes.md)
@@ -242,6 +268,9 @@ Guide: [docs/github_overleaf_sync.md](docs/github_overleaf_sync.md)
 - [examples/minimal_word_workflow](examples/minimal_word_workflow)
 - [examples/minimal_python_artifacts](examples/minimal_python_artifacts)
 - [examples/existing_latex_cleanup](examples/existing_latex_cleanup)
+- [examples/messy_project_archaeology](examples/messy_project_archaeology)
+- [examples/reviewer_response_binder](examples/reviewer_response_binder)
+- [examples/multi_paper_split](examples/multi_paper_split)
 
 Generate the Python example artifacts:
 

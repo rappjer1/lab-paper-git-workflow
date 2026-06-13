@@ -1,0 +1,6 @@
+artifacts:
+  - id: paper_b_table_1
+    type: table
+    source_path: project_outputs/paper_b/table_1.tex
+    manuscript_path: tables/paper_b_table_1.tex
+    note: synthetic example entry for Paper B

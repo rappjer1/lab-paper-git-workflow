@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.6.0
+
+- Added workflow recipes with `paper-scaffold recipes list` and `paper-scaffold recipes show <recipe-id>`.
+- Added the use-case gallery in `docs/use_cases/` for paper archaeology, Overleaf ZIP rehab, reviewer response binders, pre-submission checks, undergraduate artifact harvesting, and multi-paper splits.
+- Added `audit-project` for read-only triage of messy project folders.
+- Added `release-check` for consolidated manuscript pre-submission checks.
+- Added synthetic examples for messy project archaeology, reviewer response binders, and multi-paper project splits.
+- Added audit diagnostics for suspicious final filenames, LaTeX build artifacts, raw/generated outputs, and likely manuscript artifact candidates.
+
 ## v0.5.1
 
 - Clean-clone public-user hardening.
