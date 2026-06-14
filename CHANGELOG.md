@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.9.2
+
+- Added `scripts/dev/clean_install_audit.py` for clone, no-install, editable-install, fallback, text-blob, test-runner, and optional package-build checks.
+- Documented clean-install audit expectations for public-user release checks.
+- Added tests for audit command construction without network cloning.
+- Bumped Paper Scaffold to `0.9.2`.
+
 ## v0.9.1
 
 - Added `scripts/dev/run_tests.py` as the preferred shell-independent local pytest runner.

@@ -29,6 +29,20 @@ R:\Code\Envs\nh_quantum\python.exe scripts\dev\run_tests.py
 
 `scripts/dev/run_tests.py` creates a unique repo-local pytest basetemp and `TMP`/`TEMP` directory under `scratch/test-runs/` on every run. This avoids shell-specific environment-variable syntax and avoids reusing a stale `scratch\pytest-tmp` directory that Windows may keep locked after a failed or interrupted run.
 
+Before release candidates, run a clean-install audit from a committed state:
+
+```bash
+python scripts/dev/clean_install_audit.py
+```
+
+In the lab Windows environment:
+
+```powershell
+R:\Code\Envs\nh_quantum\python.exe scripts\dev\clean_install_audit.py
+```
+
+The audit clones into `scratch/clean-install/`, checks no-install usage, performs `python -m pip install -e ".[dev]"`, verifies the module fallback, runs `self-test`, runs the text blob guard, and runs tests through `scripts/dev/run_tests.py`. The console-script and package-build checks are optional because PATH and installed build tooling differ by machine.
+
 On Git Bash for Windows, editable install can succeed while `paper-scaffold` is still not on `PATH`. Either call the installed executable directly:
 
 ```bash
