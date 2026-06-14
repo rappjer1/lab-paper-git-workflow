@@ -16,6 +16,7 @@ python scripts/paper-scaffold.py --help
 python scripts/paper-scaffold.py doctor
 python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwrite
 python scripts/paper-scaffold.py validate --manuscript-repo scratch/demo_manuscript --write-report scratch/demo_manuscript/validation_report.md --write-json scratch/demo_manuscript/validation_report.json
+python scripts/dev/check_text_blobs.py
 ```
 
 On Git Bash for Windows, editable install can succeed while `paper-scaffold` is still not on `PATH`. Either call the installed executable directly:
@@ -44,6 +45,24 @@ Pre-commit is optional for normal users but recommended for contributors:
 pre-commit install
 pre-commit run --all-files
 ```
+
+## Text Blob Line Endings
+
+GitHub raw view reads committed Git blobs, not the local working tree. A local checkout can show normal line counts while the committed blob is stored with CR-only or otherwise collapsed line endings. That makes public raw files look like one very long line.
+
+Run this guard before release branches:
+
+```bash
+python scripts/dev/check_text_blobs.py
+```
+
+If it reports CR bytes or collapsed blobs, normalize tracked text files and the index:
+
+```bash
+python scripts/dev/normalize_text_blobs.py --apply
+```
+
+`.gitattributes` is present to make Git store common text files with LF endings. The normalization utility also writes exact LF bytes to the Git index with `git hash-object -w --no-filters` and `git update-index`, which is the part that fixes the blob GitHub raw will display after commit.
 
 ## Contribution Guidelines
 

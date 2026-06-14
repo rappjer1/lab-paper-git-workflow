@@ -42,6 +42,33 @@ mkdir -p scratch/tmp scratch/pytest-tmp
 TMP="$PWD/scratch/tmp" TEMP="$PWD/scratch/tmp" python -m pytest tests --basetemp=scratch/pytest-tmp -p no:cacheprovider
 ```
 
+## GitHub Raw Shows A Python Or TOML File As One Long Line
+
+GitHub raw view displays the committed Git blob. If a blob was stored with CR-only or collapsed line endings, GitHub can show a file as one very long line even when the local working tree appears normal and local tests pass.
+
+Check tracked text blobs, not just files on disk:
+
+```bash
+python scripts/dev/check_text_blobs.py
+```
+
+If CR bytes or collapsed blobs are reported, normalize tracked text files and the Git index:
+
+```bash
+python scripts/dev/normalize_text_blobs.py --apply
+```
+
+The repository has `.gitattributes` rules so common text files are stored with LF endings:
+
+```text
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+```
+
+Changing `.gitattributes` alone does not rewrite existing blobs. The normalization utility rewrites LF-normalized blobs into the index so the next normal commit fixes GitHub raw view going forward without rewriting history.
+
 ## `origin` Is Missing
 
 Check remotes:
