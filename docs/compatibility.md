@@ -35,6 +35,14 @@ R:\Code\Envs\nh_quantum\python.exe scripts\dev\run_tests.py
 
 The runner creates unique `scratch/test-runs/pytest-*` and `scratch/test-runs/tmp-*` directories for every run and sets `TMP` and `TEMP` inside the pytest subprocess.
 
+For release audits that need a fresh clone plus editable install check, use:
+
+```bash
+python scripts/dev/clean_install_audit.py
+```
+
+The audit script is cross-platform, but it requires Git and may require package-index access if the selected Python environment does not already have the `dev` extra dependencies installed.
+
 ## Optional Tools
 
 These are optional and not required for normal validation, self-test, packaging, or provenance workflows:

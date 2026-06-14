@@ -28,6 +28,14 @@ python scripts/dev/run_tests.py
 
 The test runner creates unique repo-local pytest and temp directories under `scratch/test-runs/`, so it works from CMD, PowerShell, and Git Bash without shell-specific `TMP=...` syntax.
 
+For clean-clone release audits:
+
+```bash
+python scripts/dev/clean_install_audit.py
+```
+
+See [clean_install_audit.md](clean_install_audit.md) for clone source and optional check details.
+
 For local package builds:
 
 ```bash

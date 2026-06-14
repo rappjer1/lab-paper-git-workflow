@@ -82,7 +82,7 @@ Minimal shape:
 ```json
 {
   "tool": "Paper Scaffold",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "generated_at": "2026-01-01T00:00:00+00:00",
   "manuscript_repo": "./paper",
   "summary": {
@@ -104,7 +104,7 @@ Purpose: freeze manuscript artifact hashes at submission or revision handoff.
 ```json
 {
   "tool": "Paper Scaffold",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "generated_at": "2026-01-01T00:00:00+00:00",
   "manuscript_repo": "./paper",
   "artifacts": [
@@ -127,7 +127,7 @@ Purpose: machine-readable validation diagnostics.
 ```json
 {
   "tool": "Paper Scaffold",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "timestamp": "2026-01-01T00:00:00+00:00",
   "path": "./paper",
   "summary": {
