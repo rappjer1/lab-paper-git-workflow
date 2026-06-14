@@ -7,6 +7,8 @@ This guide walks through two practical paths:
 
 No LaTeX installation or Overleaf account is required for the demo. Paper Scaffold checks repository shape, metadata, artifact provenance, and common sync risks; it does not compile the paper or upload anything.
 
+For the shortest entry points, see [start_here.md](start_here.md), [common_paths.md](common_paths.md), and [walkthroughs/README.md](walkthroughs/README.md).
+
 The bundled examples are synthetic and intentionally small. Example file integrity is documented in [example_integrity.md](example_integrity.md).
 
 ## Install Or No Install

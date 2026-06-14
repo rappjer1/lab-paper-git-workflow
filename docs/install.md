@@ -2,6 +2,8 @@
 
 Paper Scaffold can run without installation from a checkout, through an editable install, or through the module fallback.
 
+Start with [start_here.md](start_here.md) if you are trying the project for the first time. Use [common_paths.md](common_paths.md) to choose a workflow after installation.
+
 ## No-Install Usage From Checkout
 
 ```bash

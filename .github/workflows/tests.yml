@@ -27,6 +27,8 @@ jobs:
         run: python scripts/dev/check_contracts.py
       - name: Docs and examples check
         run: python scripts/dev/check_docs_examples.py
+      - name: Docs link check
+        run: python scripts/dev/check_docs_links.py
       - name: Example integrity
         run: python scripts/dev/check_example_integrity.py
       - name: Dogfood scenarios

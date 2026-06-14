@@ -2,6 +2,8 @@
 
 Use this guide when you know what material you have but not which Paper Scaffold path to start with.
 
+For a shorter public entry point, see [start_here.md](start_here.md) and [common_paths.md](common_paths.md).
+
 Examples are synthetic and intentionally small. See [example_integrity.md](example_integrity.md) for how example artifacts are checked.
 
 ## Decision Table

@@ -1,5 +1,7 @@
 # Troubleshooting
 
+For first-run commands, see [start_here.md](start_here.md). For workflow selection, see [common_paths.md](common_paths.md). For command syntax, see [one_page_reference.md](one_page_reference.md).
+
 ## `python` Is Not Found
 
 Use whichever Python launcher is available on the machine. From a source checkout, the wrapper is:

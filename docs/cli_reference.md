@@ -10,6 +10,8 @@ python -m paper_scaffold <command>
 
 Command names and documented flags are part of the public contract described in [contract.md](contract.md). Dev audit scripts such as `scripts/dev/clean_install_audit.py` remain maintainer tools, not user CLI commands.
 
+For shorter command lists, see [one_page_reference.md](one_page_reference.md) and [common_paths.md](common_paths.md).
+
 ## Global Options
 
 ```bash

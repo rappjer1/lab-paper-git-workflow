@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.9.7
+
+- Added public entry-point docs: `docs/start_here.md`, `docs/common_paths.md`, `docs/one_page_reference.md`, and `docs/glossary.md`.
+- Added public walkthroughs for the five-minute demo, Python artifact handoff, existing LaTeX cleanup, pre-submission packaging, and reviewer response rounds.
+- Added `scripts/dev/check_docs_links.py` and CI coverage for local Markdown link checks.
+- Refreshed README and QUICKSTART as public first-run guides.
+- Bumped Paper Scaffold to `0.9.7`.
+
 ## v0.9.6
 
 - Added `scripts/dev/build_package.py` for local wheel/sdist builds without publishing.

@@ -26,6 +26,10 @@ DOGFOOD_SCENARIOS = [
 REQUIRED_DOCS = [
     "README.md",
     "QUICKSTART.md",
+    "docs/start_here.md",
+    "docs/common_paths.md",
+    "docs/one_page_reference.md",
+    "docs/glossary.md",
     "docs/getting_started.md",
     "docs/which_workflow.md",
     "docs/cli_reference.md",
@@ -33,17 +37,36 @@ REQUIRED_DOCS = [
     "docs/contract.md",
     "docs/v1_0_readiness.md",
     "docs/example_integrity.md",
+    "docs/walkthroughs/README.md",
+    "docs/walkthroughs/five_minute_demo.md",
+    "docs/walkthroughs/python_outputs_to_manuscript.md",
+    "docs/walkthroughs/existing_latex_cleanup.md",
+    "docs/walkthroughs/pre_submission_package.md",
+    "docs/walkthroughs/reviewer_response_round.md",
     "examples/README.md",
 ]
 
 
 README_LINKS = [
+    "docs/start_here.md",
+    "docs/common_paths.md",
+    "docs/one_page_reference.md",
+    "docs/walkthroughs/README.md",
     "docs/which_workflow.md",
     "docs/cli_reference.md",
     "docs/schema_reference.md",
     "docs/contract.md",
+    "docs/glossary.md",
     "docs/v1_0_readiness.md",
     "docs/example_integrity.md",
+]
+
+QUICKSTART_LINKS = [
+    "docs/start_here.md",
+    "docs/common_paths.md",
+    "docs/one_page_reference.md",
+    "docs/walkthroughs/README.md",
+    "docs/cli_reference.md",
 ]
 
 
@@ -66,6 +89,17 @@ def main() -> int:
     for link in README_LINKS:
         if link not in readme:
             problems.append(f"README missing link: {link}")
+
+    quickstart = (REPO_ROOT / "QUICKSTART.md").read_text(encoding="utf-8")
+    for link in QUICKSTART_LINKS:
+        if link not in quickstart:
+            problems.append(f"QUICKSTART missing link: {link}")
+
+    examples_readme = (REPO_ROOT / "examples" / "README.md").read_text(encoding="utf-8")
+    for scenario in DOGFOOD_SCENARIOS:
+        link = f"dogfood/{scenario}"
+        if link not in examples_readme:
+            problems.append(f"examples README missing dogfood link: {link}")
 
     for scenario in DOGFOOD_SCENARIOS:
         folder = REPO_ROOT / "examples" / "dogfood" / scenario
@@ -102,6 +136,8 @@ def main() -> int:
         return 1
     print("- required docs: ok")
     print("- README links: ok")
+    print("- QUICKSTART links: ok")
+    print("- examples README dogfood links: ok")
     print("- dogfood examples: ok")
     print("- CLI reference command headings: ok")
     return 0

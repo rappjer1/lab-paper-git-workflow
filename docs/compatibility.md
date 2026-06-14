@@ -1,5 +1,7 @@
 # Compatibility
 
+For first-run instructions, see [start_here.md](start_here.md). For common workflow commands, see [common_paths.md](common_paths.md) and [one_page_reference.md](one_page_reference.md).
+
 ## Python
 
 Paper Scaffold supports Python 3.10 and 3.11 in v0.9. The package uses only the Python standard library for core workflows.

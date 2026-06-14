@@ -13,6 +13,7 @@ python scripts/paper-scaffold.py --version
 python -m paper_scaffold --help
 python scripts/dev/check_contracts.py
 python scripts/dev/check_docs_examples.py
+python scripts/dev/check_docs_links.py
 python scripts/dev/check_example_integrity.py
 python scripts/dev/build_package.py
 python scripts/dev/install_matrix_audit.py
