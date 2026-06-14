@@ -45,6 +45,7 @@ From a source checkout:
 
 ```bash
 python scripts/paper-scaffold.py doctor
+python scripts/paper-scaffold.py self-test
 python scripts/paper-scaffold.py quickstart
 python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwrite
 python scripts/paper-scaffold.py validate --manuscript-repo scratch/demo_manuscript
@@ -56,20 +57,28 @@ After installation, use `paper-scaffold` directly:
 
 ```bash
 paper-scaffold doctor
+paper-scaffold self-test
 paper-scaffold quickstart
 paper-scaffold demo --output scratch/demo_manuscript --overwrite
+```
+
+If the console script is not on `PATH`, use the module fallback:
+
+```bash
+python -m paper_scaffold self-test
+python -m paper_scaffold --help
 ```
 
 The first command to run is usually:
 
 ```bash
-paper-scaffold doctor
+python -m paper_scaffold self-test
 ```
 
 or, from a checkout:
 
 ```bash
-python scripts/paper-scaffold.py doctor
+python scripts/paper-scaffold.py self-test
 ```
 
 ## Three Common Workflows
@@ -138,6 +147,7 @@ No install is required if you run from a checkout:
 git clone https://github.com/rappjer1/lab-paper-git-workflow.git
 cd lab-paper-git-workflow
 python scripts/paper-scaffold.py --help
+python scripts/paper-scaffold.py self-test
 ```
 
 Editable install:
@@ -147,6 +157,13 @@ python -m pip install -e .
 paper-scaffold --help
 ```
 
+Module fallback after install:
+
+```bash
+python -m paper_scaffold --help
+python -m paper_scaffold self-test
+```
+
 Development install:
 
 ```bash
@@ -154,9 +171,17 @@ python -m pip install -e ".[dev]"
 pytest tests
 ```
 
+v0.9 install hardening:
+
+- `python scripts/paper-scaffold.py ...` works from a checkout.
+- `paper-scaffold ...` works when the console script is on `PATH`.
+- `python -m paper_scaffold ...` works after install even when the console script path is unavailable.
+- `paper-scaffold self-test` runs the core no-network smoke workflow.
+
 ## Quick Start
 
 ```bash
+python -m paper_scaffold self-test
 paper-scaffold doctor
 paper-scaffold init --manuscript-repo ./paper
 paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml
@@ -177,6 +202,8 @@ More detail: [docs/getting_started.md](docs/getting_started.md)
 
 - `paper-scaffold doctor`: check Python, Git, optional tools, and repo shape.
 - `paper-scaffold quickstart`: print the three common workflows.
+- `paper-scaffold self-test`: run an installed-use no-network smoke test.
+- `paper-scaffold schema`: list or show metadata schema summaries.
 - `paper-scaffold recipes`: list or show workflow recipes.
 - `paper-scaffold demo`: create a small demo manuscript repo.
 - `paper-scaffold init`: create a clean manuscript repo scaffold.
@@ -243,6 +270,12 @@ Reference: [docs/error_codes.md](docs/error_codes.md)
 Provenance guide: [docs/provenance_ledger.md](docs/provenance_ledger.md)
 Artifact lock guide: [docs/artifact_locks.md](docs/artifact_locks.md)
 Submission package guide: [docs/submission_packaging.md](docs/submission_packaging.md)
+Install guide: [docs/install.md](docs/install.md)
+CLI reference: [docs/cli_reference.md](docs/cli_reference.md)
+Schema reference: [docs/schema_reference.md](docs/schema_reference.md)
+Release process: [docs/release_process.md](docs/release_process.md)
+Exit codes: [docs/exit_codes.md](docs/exit_codes.md)
+Compatibility: [docs/compatibility.md](docs/compatibility.md)
 
 ## Recommended Manuscript Repo Structure
 

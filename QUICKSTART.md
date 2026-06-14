@@ -6,14 +6,24 @@ Use it from a checkout:
 
 ```bash
 python scripts/paper-scaffold.py doctor
+python scripts/paper-scaffold.py self-test
 python scripts/paper-scaffold.py quickstart
 ```
 
 Or after editable install:
 
 ```bash
+python -m paper_scaffold self-test
 paper-scaffold doctor
 paper-scaffold quickstart
+```
+
+Use any of these invocation modes:
+
+```bash
+python scripts/paper-scaffold.py --help
+paper-scaffold --help
+python -m paper_scaffold --help
 ```
 
 ## Word + Python To Overleaf In 20 Minutes
@@ -44,6 +54,7 @@ If Pandoc is not installed, skip `import-word` and paste/split text manually usi
 ## Run The Demo
 
 ```bash
+python -m paper_scaffold self-test
 paper-scaffold demo --output scratch/demo_manuscript --overwrite
 paper-scaffold validate --manuscript-repo scratch/demo_manuscript
 paper-scaffold freeze-artifacts --manuscript-repo scratch/demo_manuscript --write-lock scratch/demo_manuscript/metadata/artifact_lock.json
@@ -81,6 +92,9 @@ paper-scaffold reviewer-binder --manuscript-repo ./paper --round 1 --output ./re
 ## Next Reading
 
 - [docs/getting_started.md](docs/getting_started.md)
+- [docs/install.md](docs/install.md)
+- [docs/cli_reference.md](docs/cli_reference.md)
+- [docs/schema_reference.md](docs/schema_reference.md)
 - [docs/word_to_overleaf.md](docs/word_to_overleaf.md)
 - [docs/python_outputs_to_overleaf.md](docs/python_outputs_to_overleaf.md)
 - [docs/existing_latex_project.md](docs/existing_latex_project.md)

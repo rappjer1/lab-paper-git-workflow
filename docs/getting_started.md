@@ -10,6 +10,7 @@ Run from a source checkout:
 git clone https://github.com/rappjer1/lab-paper-git-workflow.git
 cd lab-paper-git-workflow
 python scripts/paper-scaffold.py --help
+python scripts/paper-scaffold.py self-test
 ```
 
 Editable install:
@@ -17,6 +18,22 @@ Editable install:
 ```bash
 python -m pip install -e .
 paper-scaffold --help
+paper-scaffold self-test
+```
+
+Module fallback after install:
+
+```bash
+python -m paper_scaffold --help
+python -m paper_scaffold self-test
+```
+
+These three invocation modes are equivalent for normal commands:
+
+```bash
+python scripts/paper-scaffold.py doctor
+paper-scaffold doctor
+python -m paper_scaffold doctor
 ```
 
 ## Run Doctor

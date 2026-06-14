@@ -8,6 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from paper_scaffold.cli import main
 from paper_scaffold.config import write_yaml
 from paper_scaffold.messages import all_messages
+from paper_scaffold import __version__
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -210,4 +211,4 @@ def test_release_check_and_provenance_commands_still_pass_on_demo(tmp_path):
     ) == 0
     assert "# Paper Scaffold Release Check" in release_report.read_text(encoding="utf-8")
     assert "# Paper Scaffold Provenance Report" in provenance_report.read_text(encoding="utf-8")
-    assert json.loads(provenance_json.read_text(encoding="utf-8"))["version"] == "0.8.0"
+    assert json.loads(provenance_json.read_text(encoding="utf-8"))["version"] == __version__

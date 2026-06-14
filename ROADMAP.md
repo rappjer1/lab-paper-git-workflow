@@ -20,13 +20,13 @@ v0.7 adds generated provenance ledgers, artifact status summaries, and artifact 
 
 v0.8 adds dependency-free manuscript CI workflow generation, submission package folders, artifact lock comparison, and reviewer response binders.
 
-## v0.9 Word/Pandoc Conversion Quality
+## v0.9 Release-Candidate Hardening
 
-Improve Word conversion audits, section splitting guidance, equation/citation cleanup checks, and examples for converted drafts.
+v0.9 hardens install paths, module fallback invocation, self-test, schema/reference docs, multi-OS CI, and local package build readiness as the final pre-1.0 release candidate.
 
 ## v0.10 Schema Freeze And Cross-Platform Hardening
 
-Stabilize the manifest/config/report schemas, prepare PyPI release mechanics, broaden Windows/macOS/Linux path tests, and tighten error messages before v1.0.
+Freeze command behavior and schema/report contracts, tighten exit-code consistency, and resolve any remaining Windows/macOS/Linux issues before v1.0.
 
 ## v1.0 Stable CLI And Manifest Schema
 

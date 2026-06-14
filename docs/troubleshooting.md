@@ -14,6 +14,13 @@ After installation, use:
 paper-scaffold --help
 ```
 
+After editable install, this fallback does not require the environment Scripts directory on `PATH`:
+
+```bash
+python -m paper_scaffold --help
+python -m paper_scaffold self-test
+```
+
 ## `paper-scaffold` Is Not Found In Git Bash After Editable Install
 
 If editable install succeeds but Git Bash cannot find `paper-scaffold`, the environment's `Scripts` directory is probably not on `PATH`.
@@ -21,19 +28,26 @@ If editable install succeeds but Git Bash cannot find `paper-scaffold`, the envi
 Call the installed executable directly:
 
 ```bash
-R:/Code/Envs/<env>/Scripts/paper-scaffold.exe --help
+<env-root>/Scripts/paper-scaffold.exe --help
 ```
 
 Or add the environment Scripts directory to `PATH`:
 
 ```bash
-export PATH="/r/Code/Envs/<env>/Scripts:$PATH"
+export PATH="/path/to/env/Scripts:$PATH"
 paper-scaffold --help
+```
+
+The module fallback also works after editable install:
+
+```bash
+python -m paper_scaffold --help
+python -m paper_scaffold self-test
 ```
 
 ## Pytest Cannot Access The Windows Temp Directory
 
-On some Windows machines, pytest may fail with a `PermissionError` for a user temp folder such as `C:\Users\<user>\AppData\Local\Temp\pytest-of-<user>`.
+On some Windows machines, pytest may fail with a `PermissionError` for the default user temp folder.
 
 Use repo-local temporary directories:
 
