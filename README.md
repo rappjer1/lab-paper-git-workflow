@@ -210,6 +210,15 @@ python scripts/dev/run_tests.py
 
 The test runner creates unique repo-local pytest temp directories for CMD, PowerShell, and Git Bash.
 
+Local package and install-matrix audits:
+
+```bash
+python scripts/dev/build_package.py
+python scripts/dev/install_matrix_audit.py
+```
+
+These checks build or consume local artifacts only. They do not publish to PyPI.
+
 v0.9 install and test hardening:
 
 - `python scripts/paper-scaffold.py ...` works from a checkout.
@@ -217,6 +226,7 @@ v0.9 install and test hardening:
 - `python -m paper_scaffold ...` works after install even when the console script path is unavailable.
 - `paper-scaffold self-test` runs the core no-network smoke workflow.
 - `python scripts/dev/run_tests.py` avoids shell-specific pytest temp-directory syntax.
+- `python scripts/dev/install_matrix_audit.py` checks source, editable, fallback, console-script, and optional wheel/sdist install modes.
 
 ## Quick Start
 

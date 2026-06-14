@@ -39,6 +39,15 @@ python scripts/dev/clean_install_audit.py
 
 The audit script is cross-platform, but it requires Git and may require package-index access if the selected Python environment does not already have the `dev` extra dependencies installed.
 
+For package and install-matrix hardening, use:
+
+```bash
+python scripts/dev/build_package.py
+python scripts/dev/install_matrix_audit.py
+```
+
+`build_package.py` skips cleanly when the optional `build` frontend is not installed. `install_matrix_audit.py` uses temporary virtual environments under `scratch/install-matrix/` and defaults to network-free `--no-deps --no-build-isolation` installs. Wheel and sdist checks run only when local artifacts already exist in `dist/`.
+
 ## Optional Tools
 
 These are optional and not required for normal validation, self-test, packaging, or provenance workflows:

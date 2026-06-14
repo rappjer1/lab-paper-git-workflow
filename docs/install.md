@@ -40,8 +40,18 @@ For local package builds:
 
 ```bash
 python -m pip install -e ".[build]"
-python -m build
+python scripts/dev/build_package.py --clean
 ```
+
+`scripts/dev/build_package.py` runs `python -m build --no-isolation` only when the optional build frontend is installed, then checks that local `dist/` contains a wheel and an sdist. It does not publish anything.
+
+For local install-matrix release audits:
+
+```bash
+python scripts/dev/install_matrix_audit.py
+```
+
+The install matrix checks no-install wrapper usage, `python -m paper_scaffold`, editable install, console-script creation, self-test after editable install, and optional wheel/sdist installs when local `dist/` artifacts exist. By default it uses `--no-deps --no-build-isolation` for install checks so it does not need package-index access. Use `--allow-deps` only when you intentionally want dependency resolution.
 
 Do not publish to PyPI from this repository unless the release process explicitly changes.
 

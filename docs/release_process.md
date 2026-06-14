@@ -14,6 +14,8 @@ python -m paper_scaffold --help
 python scripts/dev/check_contracts.py
 python scripts/dev/check_docs_examples.py
 python scripts/dev/check_example_integrity.py
+python scripts/dev/build_package.py
+python scripts/dev/install_matrix_audit.py
 python scripts/dev/run_dogfood.py --output scratch/dogfood --keep-output
 python scripts/paper-scaffold.py self-test --output scratch/self_test --keep-output
 python scripts/paper-scaffold.py schema list
@@ -31,10 +33,20 @@ Install the build extra, then build locally:
 
 ```bash
 python -m pip install -e ".[build]"
-python -m build
+python scripts/dev/build_package.py --clean
 ```
 
-Inspect `dist/` locally. Do not publish to PyPI in v0.9.
+Inspect `dist/` locally. The script validates that local wheel and sdist artifacts exist when build succeeds. Do not publish to PyPI in v0.9.
+
+## Install Matrix
+
+Run the install matrix before a release candidate:
+
+```bash
+python scripts/dev/install_matrix_audit.py
+```
+
+It checks no-install source usage, `python -m paper_scaffold`, editable install, console script help, self-test after editable install, and optional local wheel/sdist installs. These are local checks only; they are not PyPI publishing.
 
 ## Clean Clone Test
 
