@@ -47,9 +47,23 @@ python -m paper_scaffold self-test
 
 ## Pytest Cannot Access The Windows Temp Directory
 
-On some Windows machines, pytest may fail with a `PermissionError` for the default user temp folder.
+On some Windows machines, pytest may fail with a `PermissionError` for the default user temp folder or for a reused repo-local folder such as `scratch\pytest-tmp`. A reused basetemp can remain locked after an interrupted run, antivirus scan, editor indexing pass, or stale pytest process.
 
-Use repo-local temporary directories:
+Use the shell-independent test runner:
+
+```bash
+python scripts/dev/run_tests.py
+```
+
+In the lab Windows environment:
+
+```powershell
+R:\Code\Envs\nh_quantum\python.exe scripts\dev\run_tests.py
+```
+
+The runner creates unique `scratch/test-runs/pytest-*` and `scratch/test-runs/tmp-*` folders every time, sets `TMP` and `TEMP` for the pytest subprocess, and does not require Bash, CMD, or PowerShell environment-variable syntax.
+
+The older Git Bash style is still fine in Git Bash for one-off debugging:
 
 ```bash
 mkdir -p scratch/tmp scratch/pytest-tmp

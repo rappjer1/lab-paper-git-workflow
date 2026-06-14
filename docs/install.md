@@ -23,8 +23,10 @@ For contributor tools:
 
 ```bash
 python -m pip install -e ".[dev]"
-python -m pytest tests
+python scripts/dev/run_tests.py
 ```
+
+The test runner creates unique repo-local pytest and temp directories under `scratch/test-runs/`, so it works from CMD, PowerShell, and Git Bash without shell-specific `TMP=...` syntax.
 
 For local package builds:
 
@@ -69,13 +71,16 @@ python -m paper_scaffold --help
 python -m paper_scaffold self-test
 ```
 
-Temporary pytest folders on Windows:
+Preferred test command on Windows:
 
 ```powershell
-New-Item -ItemType Directory -Force -Path scratch/tmp,scratch/pytest-tmp | Out-Null
-$env:TMP = (Resolve-Path scratch/tmp).Path
-$env:TEMP = (Resolve-Path scratch/tmp).Path
-python -m pytest tests --basetemp=scratch/pytest-tmp -p no:cacheprovider
+python scripts/dev/run_tests.py
+```
+
+In the lab Windows environment:
+
+```powershell
+R:\Code\Envs\nh_quantum\python.exe scripts\dev\run_tests.py
 ```
 
 ## Git Bash
@@ -98,6 +103,8 @@ Or call the executable directly:
 ```bash
 <env-root>/Scripts/paper-scaffold.exe --help
 ```
+
+The older Git Bash pytest workaround still works in Git Bash, but `scripts/dev/run_tests.py` is preferred because it creates a fresh basetemp for each run and works the same way from CMD and PowerShell.
 
 ## First Commands
 

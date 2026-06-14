@@ -16,10 +16,10 @@ python scripts/paper-scaffold.py schema list
 python scripts/paper-scaffold.py schema show artifact-manifest
 python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwrite
 python scripts/paper-scaffold.py release-check --manuscript-repo scratch/demo_manuscript --write-report scratch/demo_manuscript/release_check.md
-python -m pytest tests
+python scripts/dev/run_tests.py
 ```
 
-On Windows, use the repo-local pytest temp workaround documented in `docs/install.md`.
+`scripts/dev/run_tests.py` is the preferred local test command on all shells. It creates unique repo-local pytest temp directories and avoids reusing locked Windows basetemp folders.
 
 ## Package Build
 
@@ -59,9 +59,9 @@ After review and merge:
 ```bash
 git checkout main
 git pull --ff-only
-git tag -a v0.9.0 -m "Paper Scaffold v0.9.0"
+git tag -a v<version> -m "Paper Scaffold v<version>"
 git push origin main
-git push origin v0.9.0
+git push origin v<version>
 ```
 
 ## What Not To Publish Accidentally

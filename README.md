@@ -168,15 +168,18 @@ Development install:
 
 ```bash
 python -m pip install -e ".[dev]"
-pytest tests
+python scripts/dev/run_tests.py
 ```
 
-v0.9 install hardening:
+The test runner creates unique repo-local pytest temp directories for CMD, PowerShell, and Git Bash.
+
+v0.9 install and test hardening:
 
 - `python scripts/paper-scaffold.py ...` works from a checkout.
 - `paper-scaffold ...` works when the console script is on `PATH`.
 - `python -m paper_scaffold ...` works after install even when the console script path is unavailable.
 - `paper-scaffold self-test` runs the core no-network smoke workflow.
+- `python scripts/dev/run_tests.py` avoids shell-specific pytest temp-directory syntax.
 
 ## Quick Start
 

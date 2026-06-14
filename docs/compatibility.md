@@ -21,6 +21,20 @@ CI covers:
 
 Windows is a first-class target because manuscript workflows often run from PowerShell, CMD, or Git Bash.
 
+For local test runs, use the shell-independent runner:
+
+```bash
+python scripts/dev/run_tests.py
+```
+
+In the lab Windows environment:
+
+```powershell
+R:\Code\Envs\nh_quantum\python.exe scripts\dev\run_tests.py
+```
+
+The runner creates unique `scratch/test-runs/pytest-*` and `scratch/test-runs/tmp-*` directories for every run and sets `TMP` and `TEMP` inside the pytest subprocess.
+
 ## Optional Tools
 
 These are optional and not required for normal validation, self-test, packaging, or provenance workflows:
@@ -46,7 +60,13 @@ or add the scripts directory:
 export PATH="/path/to/env/Scripts:$PATH"
 ```
 
-Pytest can fail if Windows blocks the default user temp directory. Use repo-local temp folders:
+Pytest can fail if Windows blocks the default user temp directory or if a reused `scratch\pytest-tmp` basetemp remains locked. Prefer:
+
+```bash
+python scripts/dev/run_tests.py
+```
+
+The older Git Bash style remains acceptable in Git Bash for one-off debugging:
 
 ```bash
 mkdir -p scratch/tmp scratch/pytest-tmp
