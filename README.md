@@ -26,6 +26,12 @@ Use this if you are a researcher, graduate student, analyst, or research softwar
 
 You do not need Overleaf, Pandoc, LaTeX, GitHub CLI, or GitHub Actions to read the workflow docs or use the basic scaffold.
 
+## Stability Status
+
+v0.9.x is the release-candidate hardening series. The core CLI is approaching v1.0, and command names, schemas, diagnostic codes, and exit-code conventions are being frozen. Users should expect small polish changes before v1.0, not major workflow churn.
+
+See [contract.md](docs/contract.md), [versioning_policy.md](docs/versioning_policy.md), and [v1_0_readiness.md](docs/v1_0_readiness.md).
+
 ## The Problem It Solves
 
 Research repositories often collect scripts, notebooks, model outputs, generated figures, result caches, manuscript drafts, and copied submission folders. That is convenient during analysis but risky for manuscript writing.

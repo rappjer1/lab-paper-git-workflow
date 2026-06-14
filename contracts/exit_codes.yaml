@@ -1,0 +1,10 @@
+exit_codes:
+  - code: 0
+    meaning: Success or no blocking issues.
+    stable_for_1_0: true
+  - code: 1
+    meaning: Unexpected runtime failure, user-input failure, or pre-1.0 blocking finding from legacy checks.
+    stable_for_1_0: true
+  - code: 2
+    meaning: Validation errors, invalid command input, missing required paths, or overwrite protection.
+    stable_for_1_0: true
