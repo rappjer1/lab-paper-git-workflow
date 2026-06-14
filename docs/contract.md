@@ -1,6 +1,6 @@
 # Public Contract
 
-Paper Scaffold v0.9.5 documents the public interface that is intended to become stable at v1.0.
+Paper Scaffold v0.9.6 documents the public interface that is intended to become stable at v1.0.
 
 ## Command Contract
 
@@ -38,4 +38,4 @@ Commands that create, copy, package, or overwrite files should keep explicit dry
 
 ## Dev Scripts
 
-Maintainer scripts under `scripts/dev/`, including `run_tests.py`, `check_text_blobs.py`, `check_contracts.py`, and `clean_install_audit.py`, are release tooling. They are documented for contributors but are not normal manuscript-user workflows.
+Maintainer scripts under `scripts/dev/`, including `run_tests.py`, `check_text_blobs.py`, `check_contracts.py`, `clean_install_audit.py`, `build_package.py`, and `install_matrix_audit.py`, are release tooling. They are documented for contributors but are not normal manuscript-user workflows.

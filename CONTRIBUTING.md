@@ -19,12 +19,14 @@ python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwri
 python scripts/paper-scaffold.py validate --manuscript-repo scratch/demo_manuscript --write-report scratch/demo_manuscript/validation_report.md --write-json scratch/demo_manuscript/validation_report.json
 python scripts/paper-scaffold.py self-test --output scratch/self_test --keep-output
 python scripts/dev/check_text_blobs.py
+python scripts/dev/build_package.py
+python scripts/dev/install_matrix_audit.py
 ```
 
-In the lab Windows environment, the same test runner can be called with the explicit interpreter:
+With an explicit environment interpreter, the same test runner can be called as:
 
 ```powershell
-R:\Code\Envs\nh_quantum\python.exe scripts\dev\run_tests.py
+<env-python> scripts\dev\run_tests.py
 ```
 
 `scripts/dev/run_tests.py` creates a unique repo-local pytest basetemp and `TMP`/`TEMP` directory under `scratch/test-runs/` on every run. This avoids shell-specific environment-variable syntax and avoids reusing a stale `scratch\pytest-tmp` directory that Windows may keep locked after a failed or interrupted run.
@@ -35,13 +37,15 @@ Before release candidates, run a clean-install audit from a committed state:
 python scripts/dev/clean_install_audit.py
 ```
 
-In the lab Windows environment:
+With an explicit environment interpreter:
 
 ```powershell
-R:\Code\Envs\nh_quantum\python.exe scripts\dev\clean_install_audit.py
+<env-python> scripts\dev\clean_install_audit.py
 ```
 
 The audit clones into `scratch/clean-install/`, checks no-install usage, performs `python -m pip install -e ".[dev]"`, verifies the module fallback, runs `self-test`, runs the text blob guard, and runs tests through `scripts/dev/run_tests.py`. The console-script and package-build checks are optional because PATH and installed build tooling differ by machine.
+
+For packaging release checks, `scripts/dev/build_package.py` builds local wheel/sdist artifacts when the optional `build` frontend is installed, and `scripts/dev/install_matrix_audit.py` checks source, editable, fallback, console-script, and optional wheel/sdist install modes. These scripts do not publish to PyPI and default to network-free install checks.
 
 On Git Bash for Windows, editable install can succeed while `paper-scaffold` is still not on `PATH`. Either call the installed executable directly:
 

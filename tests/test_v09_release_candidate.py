@@ -44,8 +44,8 @@ def test_version_output_includes_current_version():
         check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
-    assert __version__ == "0.9.5"
-    assert "0.9.5" in result.stdout
+    assert __version__ == "0.9.6"
+    assert "0.9.6" in result.stdout
 
 
 def test_self_test_with_temp_output_cleans_up(tmp_path):
@@ -105,7 +105,7 @@ def test_package_version_consistency():
     pyproject = (REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8")
     match = re.search(r'^version = "([^"]+)"', pyproject, re.MULTILINE)
     assert match is not None
-    assert match.group(1) == __version__ == "0.9.5"
+    assert match.group(1) == __version__ == "0.9.6"
 
 
 def test_text_blob_guard_still_passes():

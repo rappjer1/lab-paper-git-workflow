@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.9.6
+
+- Added `scripts/dev/build_package.py` for local wheel/sdist builds without publishing.
+- Added `scripts/dev/install_matrix_audit.py` for no-install, module fallback, editable install, console script, and optional wheel/sdist checks.
+- Documented network-free package build and install-matrix release checks.
+- Kept build tooling as an optional extra, not a runtime dependency.
+- Bumped Paper Scaffold to `0.9.6`.
+
 ## v0.9.5
 
 - Added example artifact integrity checks for synthetic public examples and templates.
