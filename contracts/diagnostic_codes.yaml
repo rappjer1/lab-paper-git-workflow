@@ -1,0 +1,366 @@
+diagnostics:
+  - code: E001
+    severity: ERROR
+    title: main.tex missing
+    stable_for_1_0: true
+    notes: Documented validation error.
+  - code: E002
+    severity: ERROR
+    title: references.bib missing
+    stable_for_1_0: true
+    notes: Documented validation error.
+  - code: E003
+    severity: ERROR
+    title: Missing figure path
+    stable_for_1_0: true
+    notes: Documented figure error.
+  - code: E004
+    severity: ERROR
+    title: Manifest artifact missing
+    stable_for_1_0: true
+    notes: Documented manifest error.
+  - code: E005
+    severity: ERROR
+    title: Forbidden raw output found
+    stable_for_1_0: true
+    notes: Documented privacy and repo hygiene error.
+  - code: E006
+    severity: ERROR
+    title: Banned implementation label found
+    stable_for_1_0: true
+    notes: Documented terminology error.
+  - code: E007
+    severity: ERROR
+    title: Git remote origin missing
+    stable_for_1_0: true
+    notes: Documented GitHub readiness error.
+  - code: E008
+    severity: ERROR
+    title: Absolute local path found
+    stable_for_1_0: true
+    notes: Documented portability error.
+  - code: E009
+    severity: ERROR
+    title: Supplement configured but missing
+    stable_for_1_0: true
+    notes: Documented validation error.
+  - code: E010
+    severity: ERROR
+    title: Duplicate LaTeX label
+    stable_for_1_0: true
+    notes: Documented label error.
+  - code: E011
+    severity: ERROR
+    title: Missing LaTeX label target
+    stable_for_1_0: true
+    notes: Documented label error.
+  - code: E012
+    severity: ERROR
+    title: Citation key missing from bibliography
+    stable_for_1_0: true
+    notes: Documented citation error.
+  - code: E013
+    severity: ERROR
+    title: File larger than configured maximum
+    stable_for_1_0: true
+    notes: Documented size error.
+  - code: E014
+    severity: ERROR
+    title: Forbidden directory found
+    stable_for_1_0: true
+    notes: Documented repo hygiene error.
+  - code: E015
+    severity: ERROR
+    title: Artifact source missing
+    stable_for_1_0: true
+    notes: Documented manifest source error.
+  - code: E016
+    severity: ERROR
+    title: Schema validation error
+    stable_for_1_0: true
+    notes: Documented schema error.
+  - code: E020
+    severity: ERROR
+    title: Manifest artifact missing manuscript file
+    stable_for_1_0: true
+    notes: Documented provenance error.
+  - code: E021
+    severity: ERROR
+    title: Referenced artifact missing from disk
+    stable_for_1_0: true
+    notes: Documented provenance error.
+  - code: E030
+    severity: ERROR
+    title: Manuscript CI workflow could not be written
+    stable_for_1_0: true
+    notes: Documented workflow error.
+  - code: E031
+    severity: ERROR
+    title: Submission package output exists
+    stable_for_1_0: true
+    notes: Documented overwrite-protection error.
+  - code: E032
+    severity: ERROR
+    title: Artifact lock missing
+    stable_for_1_0: true
+    notes: Documented artifact-lock error.
+  - code: E033
+    severity: ERROR
+    title: Locked artifact missing
+    stable_for_1_0: true
+    notes: Documented artifact-lock error.
+  - code: E034
+    severity: ERROR
+    title: Manuscript repository missing
+    stable_for_1_0: true
+    notes: Documented workflow input error.
+  - code: E035
+    severity: ERROR
+    title: Reviewer binder output exists
+    stable_for_1_0: true
+    notes: Documented overwrite-protection error.
+  - code: W001
+    severity: WARNING
+    title: Pandoc missing
+    stable_for_1_0: true
+    notes: Optional-tool warning.
+  - code: W002
+    severity: WARNING
+    title: LaTeX compiler missing
+    stable_for_1_0: true
+    notes: Optional-tool warning.
+  - code: W003
+    severity: WARNING
+    title: GitHub CLI missing
+    stable_for_1_0: true
+    notes: Optional-tool warning.
+  - code: W004
+    severity: WARNING
+    title: Working tree has uncommitted changes
+    stable_for_1_0: true
+    notes: Git status warning.
+  - code: W005
+    severity: WARNING
+    title: Figure present but not referenced
+    stable_for_1_0: true
+    notes: Figure hygiene warning.
+  - code: W006
+    severity: WARNING
+    title: Raster figure concern
+    stable_for_1_0: true
+    notes: Figure quality warning.
+  - code: W007
+    severity: WARNING
+    title: Table may be too wide
+    stable_for_1_0: true
+    notes: Table layout warning.
+  - code: W008
+    severity: WARNING
+    title: Word conversion needs cleanup
+    stable_for_1_0: true
+    notes: Word conversion warning.
+  - code: W009
+    severity: WARNING
+    title: Overleaf sync may fail with Git LFS or submodules
+    stable_for_1_0: true
+    notes: Sync compatibility warning.
+  - code: W010
+    severity: WARNING
+    title: No artifact manifest found
+    stable_for_1_0: true
+    notes: Missing optional metadata warning.
+  - code: W011
+    severity: WARNING
+    title: No terminology map found
+    stable_for_1_0: true
+    notes: Missing optional metadata warning.
+  - code: W012
+    severity: WARNING
+    title: No supplement found
+    stable_for_1_0: true
+    notes: Missing optional supplement warning.
+  - code: W013
+    severity: WARNING
+    title: No LICENSE found
+    stable_for_1_0: true
+    notes: Public repo hygiene warning.
+  - code: W014
+    severity: WARNING
+    title: No README found
+    stable_for_1_0: true
+    notes: Public repo hygiene warning.
+  - code: W015
+    severity: WARNING
+    title: Uncited bibliography entry
+    stable_for_1_0: true
+    notes: Citation hygiene warning.
+  - code: W016
+    severity: WARNING
+    title: Figure or table may be missing a label
+    stable_for_1_0: true
+    notes: Label hygiene warning.
+  - code: W017
+    severity: WARNING
+    title: Possible private or secret text
+    stable_for_1_0: true
+    notes: Privacy warning.
+  - code: W018
+    severity: WARNING
+    title: Unknown schema field
+    stable_for_1_0: true
+    notes: Schema compatibility warning.
+  - code: W019
+    severity: WARNING
+    title: Artifact source changed after copy
+    stable_for_1_0: true
+    notes: Artifact freshness warning.
+  - code: W020
+    severity: WARNING
+    title: Unused manuscript artifact
+    stable_for_1_0: true
+    notes: Artifact hygiene warning.
+  - code: W021
+    severity: WARNING
+    title: Artifact discovery skipped raw output path
+    stable_for_1_0: true
+    notes: Discovery hygiene warning.
+  - code: W022
+    severity: WARNING
+    title: Suspicious final filename
+    stable_for_1_0: true
+    notes: Project audit warning.
+  - code: W023
+    severity: WARNING
+    title: LaTeX build artifact found
+    stable_for_1_0: true
+    notes: Project audit warning.
+  - code: W024
+    severity: WARNING
+    title: Raw or generated output found
+    stable_for_1_0: true
+    notes: Project audit warning.
+  - code: W030
+    severity: WARNING
+    title: Manifest artifact source missing
+    stable_for_1_0: true
+    notes: Provenance warning.
+  - code: W031
+    severity: WARNING
+    title: Manuscript artifact stale relative to source
+    stable_for_1_0: true
+    notes: Provenance warning.
+  - code: W032
+    severity: WARNING
+    title: Manuscript artifact present but not in manifest
+    stable_for_1_0: true
+    notes: Provenance warning.
+  - code: W033
+    severity: WARNING
+    title: Artifact in manifest but not referenced
+    stable_for_1_0: true
+    notes: Provenance warning.
+  - code: W040
+    severity: WARNING
+    title: Artifact hash changed since lock
+    stable_for_1_0: true
+    notes: Lock comparison warning.
+  - code: W041
+    severity: WARNING
+    title: New artifact not present in lock
+    stable_for_1_0: true
+    notes: Lock comparison warning.
+  - code: W042
+    severity: WARNING
+    title: Untracked artifact excluded from package
+    stable_for_1_0: true
+    notes: Packaging warning.
+  - code: W043
+    severity: WARNING
+    title: Unreferenced artifact excluded from package
+    stable_for_1_0: true
+    notes: Packaging warning.
+  - code: W044
+    severity: WARNING
+    title: Manuscript CI is advisory
+    stable_for_1_0: true
+    notes: Workflow warning.
+  - code: W045
+    severity: WARNING
+    title: Reviewer binder needs manual review
+    stable_for_1_0: true
+    notes: Workflow warning.
+  - code: I001
+    severity: INFO
+    title: Running inside Paper Scaffold tool repo
+    stable_for_1_0: true
+    notes: Context info.
+  - code: I002
+    severity: INFO
+    title: Optional tool missing but workflow can continue
+    stable_for_1_0: true
+    notes: Optional-tool info.
+  - code: I003
+    severity: INFO
+    title: Manuscript repo shape detected
+    stable_for_1_0: true
+    notes: Repo-shape info.
+  - code: I004
+    severity: INFO
+    title: Git remote origin configured
+    stable_for_1_0: true
+    notes: Git info.
+  - code: I005
+    severity: INFO
+    title: Artifact manifest valid
+    stable_for_1_0: true
+    notes: Manifest info.
+  - code: I006
+    severity: INFO
+    title: No forbidden files found
+    stable_for_1_0: true
+    notes: Validation info.
+  - code: I020
+    severity: INFO
+    title: Likely manuscript file found
+    stable_for_1_0: true
+    notes: Project audit info.
+  - code: I021
+    severity: INFO
+    title: Likely figure or table candidate found
+    stable_for_1_0: true
+    notes: Project audit info.
+  - code: I030
+    severity: INFO
+    title: Provenance ledger generated
+    stable_for_1_0: true
+    notes: Provenance info.
+  - code: I031
+    severity: INFO
+    title: Artifact lock written
+    stable_for_1_0: true
+    notes: Lock info.
+  - code: I040
+    severity: INFO
+    title: Manuscript CI workflow written
+    stable_for_1_0: true
+    notes: Workflow info.
+  - code: I041
+    severity: INFO
+    title: Submission package written
+    stable_for_1_0: true
+    notes: Packaging info.
+  - code: I042
+    severity: INFO
+    title: Artifact lock comparison passed
+    stable_for_1_0: true
+    notes: Lock comparison info.
+  - code: I043
+    severity: INFO
+    title: Reviewer binder written
+    stable_for_1_0: true
+    notes: Workflow info.
+  - code: I044
+    severity: INFO
+    title: Artifact lock comparison report written
+    stable_for_1_0: true
+    notes: Lock comparison info.

@@ -1,0 +1,36 @@
+schemas:
+  - schema: artifact-manifest
+    user_authored: true
+    generated: false
+    stable_for_1_0: true
+    docs_path: docs/schema_reference.md
+  - schema: manuscript-config
+    user_authored: true
+    generated: false
+    stable_for_1_0: true
+    docs_path: docs/schema_reference.md
+  - schema: terminology-map
+    user_authored: true
+    generated: false
+    stable_for_1_0: true
+    docs_path: docs/schema_reference.md
+  - schema: validation-report
+    user_authored: false
+    generated: true
+    stable_for_1_0: true
+    docs_path: docs/schema_reference.md
+  - schema: provenance-ledger
+    user_authored: false
+    generated: true
+    stable_for_1_0: true
+    docs_path: docs/schema_reference.md
+  - schema: artifact-lock
+    user_authored: false
+    generated: true
+    stable_for_1_0: true
+    docs_path: docs/schema_reference.md
+  - schema: lock-comparison
+    user_authored: false
+    generated: true
+    stable_for_1_0: true
+    docs_path: docs/schema_reference.md

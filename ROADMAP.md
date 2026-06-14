@@ -22,11 +22,11 @@ v0.8 adds dependency-free manuscript CI workflow generation, submission package 
 
 ## v0.9 Release-Candidate Hardening
 
-v0.9 hardens install paths, module fallback invocation, self-test, schema/reference docs, multi-OS CI, and local package build readiness as the final pre-1.0 release candidate.
+v0.9 hardens install paths, module fallback invocation, self-test, schema/reference docs, multi-OS CI, local package build readiness, cross-platform test running, clean-install auditing, and public contract metadata as the final pre-1.0 release-candidate series.
 
-## v0.10 Schema Freeze And Cross-Platform Hardening
+## v0.10 Reserved Stabilization Window
 
-Freeze command behavior and schema/report contracts, tighten exit-code consistency, and resolve any remaining Windows/macOS/Linux issues before v1.0.
+Use only if v0.9.x contract audits find remaining command, schema, diagnostic, exit-code, or cross-platform issues that should be fixed before v1.0.
 
 ## v1.0 Stable CLI And Manifest Schema
 

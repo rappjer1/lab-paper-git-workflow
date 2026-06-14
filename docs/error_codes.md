@@ -2,6 +2,8 @@
 
 Paper Scaffold diagnostics use stable codes so command output, reports, and docs can point to the same fix.
 
+Documented diagnostic codes are intended to remain stable through v1.0 unless explicitly marked provisional. New codes may be added, but existing documented codes should not silently change severity or meaning.
+
 Use:
 
 ```bash

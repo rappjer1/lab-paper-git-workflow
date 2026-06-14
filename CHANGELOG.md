@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.9.3
+
+- Added public contract documentation for CLI commands, diagnostics, schemas, exit codes, deprecation policy, versioning policy, and v1.0 readiness.
+- Added `contracts/` metadata for CLI commands, diagnostic codes, schema names, and exit codes.
+- Added `scripts/dev/check_contracts.py` and CI coverage for contract drift.
+- Tightened CLI, schema, and diagnostic references for v1.0 readiness.
+- Bumped Paper Scaffold to `0.9.3`.
+
 ## v0.9.2
 
 - Added `scripts/dev/clean_install_audit.py` for clone, no-install, editable-install, fallback, text-blob, test-runner, and optional package-build checks.

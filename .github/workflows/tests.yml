@@ -23,6 +23,8 @@ jobs:
         run: ruff check .
       - name: Text blob line-ending guard
         run: python scripts/dev/check_text_blobs.py
+      - name: Contract audit
+        run: python scripts/dev/check_contracts.py
       - name: Run tests
         run: python scripts/dev/run_tests.py
       - name: CLI help

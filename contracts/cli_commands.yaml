@@ -1,0 +1,176 @@
+commands:
+  - command: init
+    purpose: Create a manuscript repository scaffold.
+    modifies_files: true
+    stable_for_1_0: true
+    notes: Keeps non-interactive and overwrite safeguards.
+  - command: add-artifact
+    purpose: Add one artifact entry and optionally copy its file.
+    modifies_files: true
+    stable_for_1_0: true
+    notes: Manifest changes remain explicit.
+  - command: validate
+    purpose: Validate manuscript repository shape and metadata.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Optional report flags write files only when requested.
+  - command: copy-artifacts
+    purpose: Copy files listed in the artifact manifest.
+    modifies_files: true
+    stable_for_1_0: true
+    notes: Directory copies require explicit opt-in.
+  - command: terminology-check
+    purpose: Find banned implementation labels in manuscript text.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Read-only check.
+  - command: git-check
+    purpose: Print Git status, remotes, and manuscript warnings.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Read-only check.
+  - command: overleaf-instructions
+    purpose: Print GitHub and Overleaf sync guidance.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Guidance only.
+  - command: doctor
+    purpose: Check local tools and manuscript repo shape.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Optional tools are advisory.
+  - command: import-word
+    purpose: Convert a Word draft with Pandoc when available.
+    modifies_files: true
+    stable_for_1_0: false
+    notes: Requires Pandoc and remains pre-1.0 provisional.
+  - command: discover-artifacts
+    purpose: Find likely manuscript artifacts in output folders.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Optional write and copy flags modify files.
+  - command: make-slack-summary
+    purpose: Print a launch message from manuscript metadata.
+    modifies_files: false
+    stable_for_1_0: false
+    notes: Messaging text may change before v1.0.
+  - command: quickstart
+    purpose: Print common workflow commands.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Guidance only.
+  - command: self-test
+    purpose: Run a no-network installed-use smoke workflow.
+    modifies_files: true
+    stable_for_1_0: true
+    notes: Writes only to scratch or the requested output folder.
+  - command: schema
+    purpose: List and show schema summaries.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Includes list and show subcommands.
+  - command: recipes
+    purpose: List and show use-case recipes.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Includes list and show subcommands.
+  - command: demo
+    purpose: Create a small synthetic demo manuscript.
+    modifies_files: true
+    stable_for_1_0: true
+    notes: Uses synthetic examples only.
+  - command: audit-project
+    purpose: Read-only audit of a messy project folder.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Optional report flag writes a file.
+  - command: release-check
+    purpose: Run consolidated pre-submission checks.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Optional report flag writes a file.
+  - command: provenance-report
+    purpose: Generate artifact provenance reports.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Optional Markdown and JSON flags write files.
+  - command: artifact-status
+    purpose: Print compact artifact provenance status counts.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Read-only summary.
+  - command: freeze-artifacts
+    purpose: Write current manuscript artifact hashes.
+    modifies_files: true
+    stable_for_1_0: true
+    notes: Writes an explicit lock path.
+  - command: add-manuscript-ci
+    purpose: Add a dependency-free manuscript CI workflow.
+    modifies_files: true
+    stable_for_1_0: true
+    notes: Existing workflow replacement requires overwrite.
+  - command: package-submission
+    purpose: Create a clean submission package folder.
+    modifies_files: true
+    stable_for_1_0: true
+    notes: Existing output replacement requires overwrite.
+  - command: compare-lock
+    purpose: Compare current artifacts to an artifact lock.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Optional report flags write files.
+  - command: reviewer-binder
+    purpose: Create a reviewer-response binder folder.
+    modifies_files: true
+    stable_for_1_0: true
+    notes: Existing output replacement requires overwrite.
+  - command: explain
+    purpose: Explain a diagnostic code.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Read-only reference command.
+  - command: overleaf-check
+    purpose: Check whether a manuscript repo is likely Overleaf-ready.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Read-only check.
+  - command: github-check
+    purpose: Check GitHub-readiness for a repository.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Read-only check.
+  - command: privacy-check
+    purpose: Scan text files for local or private values.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Read-only check.
+  - command: check-figures
+    purpose: Check includegraphics paths and figure files.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Read-only check.
+  - command: check-citations
+    purpose: Compare TeX citation keys to references.bib.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Read-only check.
+  - command: check-labels
+    purpose: Check duplicate and missing LaTeX labels.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Read-only check.
+  - command: audit-word-conversion
+    purpose: Flag common Word and Pandoc conversion issues.
+    modifies_files: false
+    stable_for_1_0: false
+    notes: Optional report flag writes a file.
+  - command: stale-artifacts
+    purpose: Report manifest artifacts that differ from sources.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Optional report flag writes a file.
+  - command: unused-artifacts
+    purpose: Report unreferenced manuscript artifact files.
+    modifies_files: false
+    stable_for_1_0: true
+    notes: Optional report flag writes a file.
