@@ -10,7 +10,7 @@ Open an issue first for major changes, new commands, or workflow changes. Small 
 
 ```bash
 python -m pip install -e ".[dev]"
-pytest tests
+python scripts/dev/run_tests.py
 ruff check .
 python scripts/paper-scaffold.py --help
 python -m paper_scaffold --help
@@ -20,6 +20,14 @@ python scripts/paper-scaffold.py validate --manuscript-repo scratch/demo_manuscr
 python scripts/paper-scaffold.py self-test --output scratch/self_test --keep-output
 python scripts/dev/check_text_blobs.py
 ```
+
+In the lab Windows environment, the same test runner can be called with the explicit interpreter:
+
+```powershell
+R:\Code\Envs\nh_quantum\python.exe scripts\dev\run_tests.py
+```
+
+`scripts/dev/run_tests.py` creates a unique repo-local pytest basetemp and `TMP`/`TEMP` directory under `scratch/test-runs/` on every run. This avoids shell-specific environment-variable syntax and avoids reusing a stale `scratch\pytest-tmp` directory that Windows may keep locked after a failed or interrupted run.
 
 On Git Bash for Windows, editable install can succeed while `paper-scaffold` is still not on `PATH`. Either call the installed executable directly:
 
@@ -41,7 +49,13 @@ python -m paper_scaffold --help
 python -m paper_scaffold self-test
 ```
 
-If pytest cannot access the default Windows temp directory, use repo-local temp folders:
+If pytest cannot access the default Windows temp directory, prefer the shell-independent runner:
+
+```bash
+python scripts/dev/run_tests.py
+```
+
+The older Git Bash style is still fine in Git Bash when a one-off command is useful:
 
 ```bash
 mkdir -p scratch/tmp scratch/pytest-tmp

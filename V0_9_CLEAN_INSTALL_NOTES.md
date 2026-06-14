@@ -52,6 +52,22 @@ python -m paper_scaffold self-test
 
 ## Windows Pytest Temp Workaround
 
+Preferred for v0.9.1 and later:
+
+```bash
+python scripts/dev/run_tests.py
+```
+
+In the lab Windows environment:
+
+```powershell
+R:\Code\Envs\nh_quantum\python.exe scripts\dev\run_tests.py
+```
+
+This runner creates a unique pytest basetemp and `TMP`/`TEMP` directory under `scratch/test-runs/` on every run. Reusing `scratch\pytest-tmp` can fail on Windows if the directory remains locked after a failed or interrupted run.
+
+The older Git Bash style remains valid in Git Bash:
+
 ```bash
 mkdir -p scratch/tmp scratch/pytest-tmp
 TMP="$PWD/scratch/tmp" TEMP="$PWD/scratch/tmp" python -m pytest tests --basetemp=scratch/pytest-tmp -p no:cacheprovider

@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.9.1
+
+- Added `scripts/dev/run_tests.py` as the preferred shell-independent local pytest runner.
+- Created unique repo-local pytest basetemp and `TMP`/`TEMP` directories for each test run.
+- Updated CI to use the test runner instead of raw `pytest tests`.
+- Documented the Windows locked-basetemp failure mode and the preferred runner command.
+- Bumped Paper Scaffold to `0.9.1`.
+
 ## v0.9.0
 
 - Added `python -m paper_scaffold` as an installed-use fallback when the console script is not on `PATH`.
