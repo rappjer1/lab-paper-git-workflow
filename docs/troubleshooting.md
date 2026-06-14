@@ -203,6 +203,42 @@ paper-scaffold copy-artifacts --manuscript-repo <manuscript-repo>
 paper-scaffold validate --manuscript-repo <manuscript-repo>
 ```
 
+## Artifact Lock Comparison Reports Changes
+
+Run:
+
+```bash
+paper-scaffold compare-lock --manuscript-repo <manuscript-repo> --lock metadata/artifact_lock.json --write-report <manuscript-repo>/lock_comparison.md
+```
+
+For `W040`, review the changed figure or table before creating a new lock. For `E033`, restore the missing locked artifact or document why the new submission intentionally removed it.
+
+If `E032` appears, create a lock first or pass the correct lock path:
+
+```bash
+paper-scaffold freeze-artifacts --manuscript-repo <manuscript-repo> --write-lock <manuscript-repo>/metadata/artifact_lock.json
+```
+
+## Submission Package Output Already Exists
+
+`package-submission` will not replace an existing folder by default:
+
+```bash
+paper-scaffold package-submission --manuscript-repo <manuscript-repo> --output <submission-folder> --overwrite
+```
+
+Review the old package before overwriting. If unreferenced files are intentionally required by the journal, use `--include-unreferenced` after checking them.
+
+## Reviewer Binder Output Already Exists
+
+`reviewer-binder` will not replace an existing folder by default:
+
+```bash
+paper-scaffold reviewer-binder --manuscript-repo <manuscript-repo> --round 1 --output <response-folder> --overwrite
+```
+
+Use a new output folder for each response round unless you are intentionally regenerating the same binder.
+
 ## Citation Or Label Errors
 
 Run:

@@ -48,6 +48,12 @@ Freeze current manuscript artifact hashes:
 paper-scaffold freeze-artifacts --manuscript-repo ./paper --write-lock ./paper/metadata/artifact_lock.json
 ```
 
+Compare current artifacts against a previous lock:
+
+```bash
+paper-scaffold compare-lock --manuscript-repo ./paper --lock metadata/artifact_lock.json --write-report ./paper/lock_comparison.md
+```
+
 ## Generated Ledger Fields
 
 Each generated artifact entry includes:
@@ -82,7 +88,7 @@ Statuses are:
 
 ## Revision Use
 
-During revisions, generate a provenance report before and after updating figures or tables. Review `stale`, `missing_source`, and `untracked` entries before committing. Use `freeze-artifacts` after a submission or response handoff to record the exact hashes of manuscript artifacts at that point.
+During revisions, generate a provenance report before and after updating figures or tables. Review `stale`, `missing_source`, and `untracked` entries before committing. Use `freeze-artifacts` after a submission or response handoff to record the exact hashes of manuscript artifacts at that point, then use `compare-lock` to see which locked artifacts changed or disappeared.
 
 ## Reviewer Responses
 
@@ -96,6 +102,8 @@ Before submission:
 paper-scaffold release-check --manuscript-repo ./paper --write-report ./paper/release_check.md
 paper-scaffold provenance-report --manuscript-repo ./paper --write-md ./paper/provenance_report.md --write-json ./paper/metadata/provenance_ledger.json
 paper-scaffold freeze-artifacts --manuscript-repo ./paper --write-lock ./paper/metadata/artifact_lock.json
+paper-scaffold compare-lock --manuscript-repo ./paper --lock metadata/artifact_lock.json --write-report ./paper/lock_comparison.md
+paper-scaffold package-submission --manuscript-repo ./paper --output ./submission_package
 ```
 
 Review all warnings and errors before sharing or syncing the repository.

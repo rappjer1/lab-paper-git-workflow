@@ -31,6 +31,12 @@ paper-scaffold explain --list
 | E016 | Schema validation error | A config, manifest, terminology map, or validation JSON file has invalid structure. | Fix the reported field type, required field, or top-level structure. |
 | E020 | Manifest artifact missing manuscript file | A provenance report found a manifest entry whose manuscript artifact file is missing. | Copy the artifact into the manuscript repo or update `metadata/artifact_manifest.yaml`. |
 | E021 | Referenced artifact missing from disk | A TeX source references a figure or table file that is not present on disk. | Restore the referenced file or fix the TeX path. |
+| E030 | Manuscript CI workflow could not be written | `add-manuscript-ci` could not create or replace the workflow. | Check the manuscript repo path and pass `--overwrite` only when replacing intentionally. |
+| E031 | Submission package output exists | `package-submission` found an existing output folder. | Choose a new output folder or pass `--overwrite` after reviewing the old package. |
+| E032 | Artifact lock missing | `compare-lock` cannot find the requested lock JSON. | Create a lock with `freeze-artifacts` or pass the correct `--lock` path. |
+| E033 | Locked artifact missing | A locked artifact is no longer present in the current manifest artifact set. | Restore the artifact or create a new lock only after reviewing the change. |
+| E034 | Manuscript repository missing | A workflow command was given a non-existent manuscript repo path. | Create the manuscript repo or fix `--manuscript-repo`. |
+| E035 | Reviewer binder output exists | `reviewer-binder` found an existing output folder. | Choose a new output folder or pass `--overwrite` after reviewing the old binder. |
 
 ## Warnings
 
@@ -64,6 +70,12 @@ paper-scaffold explain --list
 | W031 | Manuscript artifact stale relative to source | Source and manuscript artifact hashes differ. | Review and refresh the manuscript copy when the source update should be used. |
 | W032 | Manuscript artifact present but not in manifest | A figure/table file exists in manuscript artifact folders but is not listed in the manifest. | Add a manifest entry or remove the stale file. |
 | W033 | Artifact in manifest but not referenced | A manifest figure/table is present but not referenced from TeX. | Reference it intentionally or remove the stale artifact. |
+| W040 | Artifact hash changed since lock | `compare-lock` found a different hash for a locked artifact. | Review the artifact change before creating a new lock. |
+| W041 | New artifact not present in lock | A current artifact is not in the lock file. | Review whether the artifact belongs in the current submission or revision package. |
+| W042 | Untracked artifact excluded from package | A manuscript artifact is present but not listed in the manifest. | Add intentional files to the manifest before packaging or remove stale artifacts. |
+| W043 | Unreferenced artifact excluded from package | `package-submission` skipped a manifest artifact that TeX does not reference. | Reference it from TeX or pass `--include-unreferenced` after review. |
+| W044 | Manuscript CI is advisory | The generated CI checks hygiene but does not compile or submit the paper. | Use it with release checks and journal-specific manual review. |
+| W045 | Reviewer binder needs manual review | The generated binder is a checklist and evidence folder. | Fill in response content and verify confidential text handling manually. |
 
 ## Info
 
@@ -79,3 +91,8 @@ paper-scaffold explain --list
 | I021 | Likely figure or table candidate found | `audit-project` found a figure or table candidate to review. |
 | I030 | Provenance ledger generated | A generated provenance ledger or report was written. |
 | I031 | Artifact lock written | `freeze-artifacts` wrote current manuscript artifact hashes. |
+| I040 | Manuscript CI workflow written | `add-manuscript-ci` wrote the generated workflow. |
+| I041 | Submission package written | `package-submission` wrote a clean output folder. |
+| I042 | Artifact lock comparison passed | `compare-lock` found no changed or missing locked artifacts. |
+| I043 | Reviewer binder written | `reviewer-binder` wrote a revision evidence folder. |
+| I044 | Artifact lock comparison report written | `compare-lock` wrote a Markdown or JSON report. |

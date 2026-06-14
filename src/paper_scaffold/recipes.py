@@ -178,8 +178,10 @@ RECIPES: dict[str, Recipe] = {
             "A checklist records which reviewer point each artifact supports.",
         ],
         commands=[
+            "paper-scaffold reviewer-binder --manuscript-repo ./paper --round 1 --output ./reviewer_response_round_1",
             "paper-scaffold validate --manuscript-repo ./paper",
             "paper-scaffold stale-artifacts --manuscript-repo ./paper",
+            "paper-scaffold compare-lock --manuscript-repo ./paper --lock metadata/artifact_lock.json --write-report ./paper/lock_comparison.md",
             "paper-scaffold release-check --manuscript-repo ./paper --write-report ./paper/release_check.md",
         ],
         failure_modes=[
@@ -192,7 +194,7 @@ RECIPES: dict[str, Recipe] = {
             "Do not put confidential review text in a public repository.",
             "Do not leave response-only artifacts referenced nowhere.",
         ],
-        next_docs=["docs/use_cases/reviewer-response-binder.md", "examples/reviewer_response_binder/README.md"],
+        next_docs=["docs/reviewer_response_binder.md", "docs/use_cases/reviewer-response-binder.md", "examples/reviewer_response_round/README.md"],
     ),
     "undergraduate-artifact-harvest": Recipe(
         id="undergraduate-artifact-harvest",
@@ -237,6 +239,9 @@ RECIPES: dict[str, Recipe] = {
             "paper-scaffold release-check --manuscript-repo ./paper --write-report ./paper/release_check.md",
             "paper-scaffold validate --manuscript-repo ./paper --write-json ./paper/validation_report.json",
             "paper-scaffold overleaf-check --manuscript-repo ./paper",
+            "paper-scaffold freeze-artifacts --manuscript-repo ./paper --write-lock ./paper/metadata/artifact_lock.json",
+            "paper-scaffold compare-lock --manuscript-repo ./paper --lock metadata/artifact_lock.json --write-report ./paper/lock_comparison.md",
+            "paper-scaffold package-submission --manuscript-repo ./paper --output ./submission_package",
         ],
         failure_modes=[
             "A last-minute figure path change breaks Overleaf.",
@@ -248,7 +253,13 @@ RECIPES: dict[str, Recipe] = {
             "Do not assume a clean local compile means the repository is clean.",
             "Do not skip privacy checks for public repositories.",
         ],
-        next_docs=["docs/validation.md", "docs/error_codes.md", "docs/use_cases/pre-submission-flight-check.md"],
+        next_docs=[
+            "docs/validation.md",
+            "docs/error_codes.md",
+            "docs/artifact_locks.md",
+            "docs/submission_packaging.md",
+            "docs/use_cases/pre-submission-flight-check.md",
+        ],
     ),
     "multi-paper-project-split": Recipe(
         id="multi-paper-project-split",

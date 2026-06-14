@@ -21,6 +21,13 @@ paper-scaffold recipes show paper-archaeology
 - [Pre-submission flight check](pre-submission-flight-check.md)
 - [Multi-paper project split](multi-paper-project-split.md)
 
+## v0.8 Handoff Guides
+
+- [Manuscript CI](../manuscript_ci.md)
+- [Submission packaging](../submission_packaging.md)
+- [Artifact locks](../artifact_locks.md)
+- [Reviewer response binder command](../reviewer_response_binder.md)
+
 ## General Pattern
 
 ```text

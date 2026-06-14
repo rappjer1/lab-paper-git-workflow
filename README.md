@@ -49,6 +49,7 @@ python scripts/paper-scaffold.py quickstart
 python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwrite
 python scripts/paper-scaffold.py validate --manuscript-repo scratch/demo_manuscript
 python scripts/paper-scaffold.py artifact-status --manuscript-repo scratch/demo_manuscript
+python scripts/paper-scaffold.py package-submission --manuscript-repo scratch/demo_manuscript --output scratch/submission_package --overwrite
 ```
 
 After installation, use `paper-scaffold` directly:
@@ -162,6 +163,10 @@ paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/me
 paper-scaffold validate --manuscript-repo ./paper --write-report ./paper/validation_report.md --write-json ./paper/validation_report.json
 paper-scaffold release-check --manuscript-repo ./paper --write-report ./paper/release_check.md
 paper-scaffold provenance-report --manuscript-repo ./paper --write-md ./paper/provenance_report.md --write-json ./paper/metadata/provenance_ledger.json
+paper-scaffold freeze-artifacts --manuscript-repo ./paper --write-lock ./paper/metadata/artifact_lock.json
+paper-scaffold compare-lock --manuscript-repo ./paper --lock metadata/artifact_lock.json --write-report ./paper/lock_comparison.md
+paper-scaffold add-manuscript-ci --manuscript-repo ./paper
+paper-scaffold package-submission --manuscript-repo ./paper --output ./submission_package
 ```
 
 Then push `./paper` to GitHub and import that GitHub repo into Overleaf if you use Overleaf.
@@ -186,6 +191,10 @@ More detail: [docs/getting_started.md](docs/getting_started.md)
 - `paper-scaffold provenance-report`: generate a Markdown/JSON bill of materials for manuscript artifacts.
 - `paper-scaffold artifact-status`: print compact provenance status counts.
 - `paper-scaffold freeze-artifacts`: write current manuscript artifact hashes to a lock file.
+- `paper-scaffold compare-lock`: compare current manuscript artifact hashes to a lock file.
+- `paper-scaffold add-manuscript-ci`: add a dependency-free GitHub Actions manuscript hygiene workflow.
+- `paper-scaffold package-submission`: create a clean source/artifact folder for journal upload review.
+- `paper-scaffold reviewer-binder`: create a lightweight response-round checklist and evidence folder.
 - `paper-scaffold terminology-check`: find banned implementation labels.
 - `paper-scaffold git-check`: summarize Git state.
 - `paper-scaffold validate`: check manuscript repo shape, artifacts, terminology, and Git state.
@@ -224,10 +233,16 @@ paper-scaffold release-check --manuscript-repo ./paper --write-report ./paper/re
 paper-scaffold provenance-report --manuscript-repo ./paper --write-md ./paper/provenance_report.md --write-json ./paper/metadata/provenance_ledger.json
 paper-scaffold artifact-status --manuscript-repo ./paper
 paper-scaffold freeze-artifacts --manuscript-repo ./paper --write-lock ./paper/metadata/artifact_lock.json
+paper-scaffold compare-lock --manuscript-repo ./paper --lock metadata/artifact_lock.json --write-report ./paper/lock_comparison.md --write-json ./paper/lock_comparison.json
+paper-scaffold add-manuscript-ci --manuscript-repo ./paper
+paper-scaffold package-submission --manuscript-repo ./paper --output ./submission_package
+paper-scaffold reviewer-binder --manuscript-repo ./paper --round 1 --output ./reviewer_response_round_1
 ```
 
 Reference: [docs/error_codes.md](docs/error_codes.md)
 Provenance guide: [docs/provenance_ledger.md](docs/provenance_ledger.md)
+Artifact lock guide: [docs/artifact_locks.md](docs/artifact_locks.md)
+Submission package guide: [docs/submission_packaging.md](docs/submission_packaging.md)
 
 ## Recommended Manuscript Repo Structure
 
@@ -282,6 +297,9 @@ Guide: [docs/github_overleaf_sync.md](docs/github_overleaf_sync.md)
 - [examples/existing_latex_cleanup](examples/existing_latex_cleanup)
 - [examples/messy_project_archaeology](examples/messy_project_archaeology)
 - [examples/reviewer_response_binder](examples/reviewer_response_binder)
+- [examples/reviewer_response_round](examples/reviewer_response_round)
+- [examples/submission_packaging](examples/submission_packaging)
+- [examples/manuscript_ci](examples/manuscript_ci)
 - [examples/multi_paper_split](examples/multi_paper_split)
 
 Generate the Python example artifacts:

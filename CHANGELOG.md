@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.8.0
+
+- Added `add-manuscript-ci` for dependency-free manuscript repository hygiene workflows.
+- Added `package-submission` for clean manuscript source and artifact packages.
+- Added `compare-lock` for artifact lock drift reports.
+- Added `reviewer-binder` for response-round checklists, provenance snapshots, and release snapshots.
+- Added workflow docs, examples, diagnostics, and tests for CI, submission packages, artifact locks, and reviewer binders.
+
 ## v0.7.0
 
 - Added generated artifact provenance ledgers for manuscript figures and tables.

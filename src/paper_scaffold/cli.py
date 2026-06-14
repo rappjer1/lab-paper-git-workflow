@@ -54,6 +54,14 @@ from .validation import (
     validation_markdown_report,
 )
 from .word import WORD_REVIEW_MESSAGE, import_word
+from .workflows import (
+    add_manuscript_ci,
+    compare_artifact_lock,
+    comparison_has_drift,
+    lock_comparison_markdown,
+    package_submission,
+    reviewer_binder,
+)
 
 
 def prompt_text(label: str, default: str = "") -> str:
@@ -644,6 +652,51 @@ def command_freeze_artifacts(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_add_manuscript_ci(args: argparse.Namespace) -> int:
+    result = add_manuscript_ci(Path(args.manuscript_repo), overwrite=args.overwrite)
+    print(result.message)
+    return 0 if result.ok else 2
+
+
+def command_package_submission(args: argparse.Namespace) -> int:
+    result = package_submission(
+        Path(args.manuscript_repo),
+        Path(args.output),
+        overwrite=args.overwrite,
+        include_unreferenced=args.include_unreferenced,
+    )
+    print(result.message)
+    return 0 if result.ok else 2
+
+
+def command_compare_lock(args: argparse.Namespace) -> int:
+    try:
+        comparison = compare_artifact_lock(Path(args.manuscript_repo), Path(args.lock))
+    except FileNotFoundError as exc:
+        print(f"E032 Lock file does not exist: {exc.filename or exc}")
+        return 2
+    output = lock_comparison_markdown(comparison)
+    print(output)
+    if args.write_report:
+        report_path = Path(args.write_report)
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text(output, encoding="utf-8")
+        print(f"I044 Wrote lock comparison report: {report_path}")
+    if args.write_json:
+        write_provenance_json(args.write_json, comparison)
+        print(f"I044 Wrote lock comparison JSON: {args.write_json}")
+    if not comparison_has_drift(comparison):
+        print("I042 Artifact lock comparison passed.")
+        return 0
+    return 1
+
+
+def command_reviewer_binder(args: argparse.Namespace) -> int:
+    result = reviewer_binder(Path(args.manuscript_repo), args.round, Path(args.output), overwrite=args.overwrite)
+    print(result.message)
+    return 0 if result.ok else 2
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="paper-scaffold", description="Create and validate clean manuscript Git repositories.")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -777,6 +830,32 @@ def build_parser() -> argparse.ArgumentParser:
     freeze_artifacts.add_argument("--manuscript-repo", required=True)
     freeze_artifacts.add_argument("--write-lock", required=True, help="Write JSON artifact lock file")
     freeze_artifacts.set_defaults(func=command_freeze_artifacts)
+
+    manuscript_ci = subparsers.add_parser("add-manuscript-ci", help="Add a dependency-free manuscript CI workflow")
+    manuscript_ci.add_argument("--manuscript-repo", required=True)
+    manuscript_ci.add_argument("--overwrite", action="store_true")
+    manuscript_ci.set_defaults(func=command_add_manuscript_ci)
+
+    submission = subparsers.add_parser("package-submission", help="Create a clean submission package from a manuscript repo")
+    submission.add_argument("--manuscript-repo", required=True)
+    submission.add_argument("--output", required=True)
+    submission.add_argument("--overwrite", action="store_true")
+    submission.add_argument("--include-unreferenced", action="store_true", help="Include manifest artifacts even when not referenced by TeX")
+    submission.set_defaults(func=command_package_submission)
+
+    compare_lock = subparsers.add_parser("compare-lock", help="Compare current manuscript artifact hashes to an artifact lock")
+    compare_lock.add_argument("--manuscript-repo", required=True)
+    compare_lock.add_argument("--lock", required=True)
+    compare_lock.add_argument("--write-report")
+    compare_lock.add_argument("--write-json")
+    compare_lock.set_defaults(func=command_compare_lock)
+
+    binder = subparsers.add_parser("reviewer-binder", help="Create a lightweight reviewer-response binder")
+    binder.add_argument("--manuscript-repo", required=True)
+    binder.add_argument("--round", required=True)
+    binder.add_argument("--output", required=True)
+    binder.add_argument("--overwrite", action="store_true")
+    binder.set_defaults(func=command_reviewer_binder)
 
     explain = subparsers.add_parser("explain", help="Explain a diagnostic code")
     explain.add_argument("code", nargs="?", help="Diagnostic code such as E003")
