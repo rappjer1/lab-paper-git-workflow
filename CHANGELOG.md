@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.9.5
+
+- Added example artifact integrity checks for synthetic public examples and templates.
+- Replaced fake example PDF/PNG placeholders with tiny valid synthetic artifacts.
+- Added clean-clone dogfood audit tooling for public-polish validation.
+- Linked example integrity guidance from public docs and release-process docs.
+- Bumped Paper Scaffold to `0.9.5`.
+
 ## v0.9.4
 
 - Polished the README first-run path, Quick Start, and Getting Started guide for public users.

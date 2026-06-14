@@ -2,6 +2,8 @@
 
 Use this guide when you know what material you have but not which Paper Scaffold path to start with.
 
+Examples are synthetic and intentionally small. See [example_integrity.md](example_integrity.md) for how example artifacts are checked.
+
 ## Decision Table
 
 | Situation | Start here | Commands | Output |

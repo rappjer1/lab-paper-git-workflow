@@ -9,6 +9,7 @@ Use this checklist before tagging v1.0.
 - Text blob guard passes.
 - Contract audit passes with `scripts/dev/check_contracts.py`.
 - Docs/examples check passes with `scripts/dev/check_docs_examples.py`.
+- Example integrity check passes with `scripts/dev/check_example_integrity.py`.
 - Dogfood scenarios pass with `scripts/dev/run_dogfood.py`.
 - CLI reference matches argparse command names and documented flags.
 - Schema reference matches `paper-scaffold schema list`.

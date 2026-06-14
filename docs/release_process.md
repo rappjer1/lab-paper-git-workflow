@@ -11,6 +11,10 @@ python scripts/dev/check_text_blobs.py
 python scripts/paper-scaffold.py --help
 python scripts/paper-scaffold.py --version
 python -m paper_scaffold --help
+python scripts/dev/check_contracts.py
+python scripts/dev/check_docs_examples.py
+python scripts/dev/check_example_integrity.py
+python scripts/dev/run_dogfood.py --output scratch/dogfood --keep-output
 python scripts/paper-scaffold.py self-test --output scratch/self_test --keep-output
 python scripts/paper-scaffold.py schema list
 python scripts/paper-scaffold.py schema show artifact-manifest

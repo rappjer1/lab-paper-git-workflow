@@ -312,3 +312,13 @@ These files should usually be ignored:
 ```
 
 Check `.gitignore`, unstage build outputs, and commit only source files.
+
+## Example Artifact Looks Fake
+
+Example artifacts are synthetic, but files with publication-artifact extensions should still have valid file signatures. Run:
+
+```bash
+python scripts/dev/check_example_integrity.py
+```
+
+If you add a placeholder that is not a real artifact, use a `.placeholder` suffix and document it in the example README. See [example_integrity.md](example_integrity.md).

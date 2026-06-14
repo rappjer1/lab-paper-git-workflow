@@ -94,10 +94,11 @@ def test_examples_do_not_contain_private_paths_or_emails():
         REPO_ROOT / "examples" / "reviewer_response_binder",
         REPO_ROOT / "examples" / "multi_paper_split",
     ]
+    text_suffixes = {".bib", ".csv", ".md", ".tex", ".txt", ".yaml", ".yml"}
     private_pattern = re.compile(r"([A-Za-z]:\\|/Users/|/home/|\\\\[^\\/\s]+\\[^\\/\s]+|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})")
     for example_root in examples:
         for path in example_root.rglob("*"):
-            if path.is_dir():
+            if path.is_dir() or path.suffix.lower() not in text_suffixes:
                 continue
             text = path.read_text(encoding="utf-8")
             assert not private_pattern.search(text), path

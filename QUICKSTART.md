@@ -92,6 +92,7 @@ Expected result: a response-round checklist and evidence folder. Keep confidenti
 - [docs/install.md](docs/install.md)
 - [docs/cli_reference.md](docs/cli_reference.md)
 - [docs/schema_reference.md](docs/schema_reference.md)
+- [docs/example_integrity.md](docs/example_integrity.md)
 - [docs/word_to_overleaf.md](docs/word_to_overleaf.md)
 - [docs/python_outputs_to_overleaf.md](docs/python_outputs_to_overleaf.md)
 - [docs/existing_latex_project.md](docs/existing_latex_project.md)
