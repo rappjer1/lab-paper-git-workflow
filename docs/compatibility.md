@@ -27,11 +27,7 @@ For local test runs, use the shell-independent runner:
 python scripts/dev/run_tests.py
 ```
 
-In the lab Windows environment:
-
-```powershell
-R:\Code\Envs\nh_quantum\python.exe scripts\dev\run_tests.py
-```
+Use the Python executable for the environment you want to test.
 
 The runner creates unique `scratch/test-runs/pytest-*` and `scratch/test-runs/tmp-*` directories for every run and sets `TMP` and `TEMP` inside the pytest subprocess.
 

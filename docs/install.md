@@ -85,11 +85,7 @@ Preferred test command on Windows:
 python scripts/dev/run_tests.py
 ```
 
-In the lab Windows environment:
-
-```powershell
-R:\Code\Envs\nh_quantum\python.exe scripts\dev\run_tests.py
-```
+Use the Python executable for the environment you want to test.
 
 ## Git Bash
 

@@ -1,0 +1,109 @@
+"""Lightweight docs and examples drift checks."""
+
+from __future__ import annotations
+
+import re
+import sys
+from pathlib import Path
+
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+SRC_ROOT = REPO_ROOT / "src"
+sys.path.insert(0, str(SRC_ROOT))
+
+from paper_scaffold.cli import build_parser  # noqa: E402
+
+
+DOGFOOD_SCENARIOS = [
+    "python_outputs_to_manuscript",
+    "existing_latex_cleanup",
+    "reviewer_response_round",
+    "submission_package",
+    "messy_project_audit",
+]
+
+
+REQUIRED_DOCS = [
+    "README.md",
+    "QUICKSTART.md",
+    "docs/getting_started.md",
+    "docs/which_workflow.md",
+    "docs/cli_reference.md",
+    "docs/schema_reference.md",
+    "docs/contract.md",
+    "docs/v1_0_readiness.md",
+    "examples/README.md",
+]
+
+
+README_LINKS = [
+    "docs/which_workflow.md",
+    "docs/cli_reference.md",
+    "docs/schema_reference.md",
+    "docs/contract.md",
+    "docs/v1_0_readiness.md",
+]
+
+
+def cli_commands() -> set[str]:
+    parser = build_parser()
+    for action in parser._actions:
+        choices = getattr(action, "choices", None)
+        if choices:
+            return set(choices)
+    raise RuntimeError("argparse subcommands not found")
+
+
+def main() -> int:
+    problems: list[str] = []
+    for rel in REQUIRED_DOCS:
+        if not (REPO_ROOT / rel).exists():
+            problems.append(f"missing required doc: {rel}")
+
+    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    for link in README_LINKS:
+        if link not in readme:
+            problems.append(f"README missing link: {link}")
+
+    for scenario in DOGFOOD_SCENARIOS:
+        folder = REPO_ROOT / "examples" / "dogfood" / scenario
+        readme_path = folder / "README.md"
+        if not folder.exists():
+            problems.append(f"missing dogfood folder: {folder.relative_to(REPO_ROOT).as_posix()}")
+            continue
+        if not readme_path.exists():
+            problems.append(f"missing dogfood README: {readme_path.relative_to(REPO_ROOT).as_posix()}")
+            continue
+        text = readme_path.read_text(encoding="utf-8")
+        if "```" not in text or "paper-scaffold.py" not in text:
+            problems.append(f"dogfood README lacks command snippet: {readme_path.relative_to(REPO_ROOT).as_posix()}")
+        if not ((folder / "input").exists() or (folder / "project").exists()):
+            problems.append(f"dogfood scenario lacks input/ or project/: {folder.relative_to(REPO_ROOT).as_posix()}")
+        for required in ["expected_commands.md", "expected_outputs.md"]:
+            if not (folder / required).exists():
+                problems.append(f"missing dogfood file: {(folder / required).relative_to(REPO_ROOT).as_posix()}")
+
+    cli_doc = (REPO_ROOT / "docs" / "cli_reference.md").read_text(encoding="utf-8")
+    headings = set(re.findall(r"^### `([^`]+)`", cli_doc, flags=re.MULTILINE))
+    commands = cli_commands()
+    missing = sorted(commands - headings)
+    extra = sorted(headings - commands)
+    if missing:
+        problems.append("CLI reference missing commands: " + ", ".join(missing))
+    if extra:
+        problems.append("CLI reference has unknown commands: " + ", ".join(extra))
+
+    print("Docs/examples check")
+    if problems:
+        for problem in problems:
+            print(f"- {problem}")
+        return 1
+    print("- required docs: ok")
+    print("- README links: ok")
+    print("- dogfood examples: ok")
+    print("- CLI reference command headings: ok")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

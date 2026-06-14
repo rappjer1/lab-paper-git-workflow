@@ -6,6 +6,35 @@
 
 Paper Scaffold is a lightweight workflow and CLI for turning research outputs into clean GitHub/Overleaf manuscript repositories.
 
+## Start Here
+
+Paper Scaffold does not write papers automatically. It helps you create and check a clean manuscript repository, copy only selected paper-ready artifacts, and keep provenance records for figures and tables.
+
+Run from a checkout with `python scripts/paper-scaffold.py ...`. After install, use `paper-scaffold ...`. If the console script is not on `PATH`, use `python -m paper_scaffold ...`.
+
+### I Just Want To Try It
+
+```bash
+python scripts/paper-scaffold.py self-test
+python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwrite
+```
+
+### I Have Python Figures Or Tables
+
+```bash
+python scripts/paper-scaffold.py discover-artifacts --source <output-folder> --suggest-only
+python scripts/paper-scaffold.py validate --manuscript-repo <repo>
+```
+
+### I Have A Manuscript Repo
+
+```bash
+python scripts/paper-scaffold.py release-check --manuscript-repo <repo>
+python scripts/paper-scaffold.py provenance-report --manuscript-repo <repo>
+```
+
+Not sure which path fits? Use the workflow guide: [docs/which_workflow.md](docs/which_workflow.md).
+
 ## What This Is
 
 Paper Scaffold helps researchers create a separate manuscript repository from a research/code repository. It gives you docs, templates, and a small Python CLI for moving Word drafts, Python-generated figures/tables, and existing LaTeX projects into a clean manuscript repo that can be pushed to GitHub and imported into Overleaf.
@@ -25,6 +54,8 @@ Use this if you are a researcher, graduate student, analyst, or research softwar
 - A messy inherited project, Overleaf ZIP export, revision binder, or multi-paper output folder that needs triage before copying files.
 
 You do not need Overleaf, Pandoc, LaTeX, GitHub CLI, or GitHub Actions to read the workflow docs or use the basic scaffold.
+
+Paper Scaffold does not create GitHub repositories, upload to Overleaf, compile LaTeX, replace scientific review, or decide which artifacts belong in a paper.
 
 ## Stability Status
 
@@ -279,9 +310,12 @@ Reference: [docs/error_codes.md](docs/error_codes.md)
 Provenance guide: [docs/provenance_ledger.md](docs/provenance_ledger.md)
 Artifact lock guide: [docs/artifact_locks.md](docs/artifact_locks.md)
 Submission package guide: [docs/submission_packaging.md](docs/submission_packaging.md)
+Workflow guide: [docs/which_workflow.md](docs/which_workflow.md)
 Install guide: [docs/install.md](docs/install.md)
 CLI reference: [docs/cli_reference.md](docs/cli_reference.md)
 Schema reference: [docs/schema_reference.md](docs/schema_reference.md)
+Contract: [docs/contract.md](docs/contract.md)
+v1.0 readiness: [docs/v1_0_readiness.md](docs/v1_0_readiness.md)
 Release process: [docs/release_process.md](docs/release_process.md)
 Exit codes: [docs/exit_codes.md](docs/exit_codes.md)
 Compatibility: [docs/compatibility.md](docs/compatibility.md)
@@ -334,6 +368,7 @@ Guide: [docs/github_overleaf_sync.md](docs/github_overleaf_sync.md)
 
 ## Examples
 
+- [examples/README.md](examples/README.md)
 - [examples/minimal_word_workflow](examples/minimal_word_workflow)
 - [examples/minimal_python_artifacts](examples/minimal_python_artifacts)
 - [examples/existing_latex_cleanup](examples/existing_latex_cleanup)

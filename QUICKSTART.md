@@ -1,81 +1,77 @@
 # Quick Start
 
-Paper Scaffold helps you create a clean manuscript repository from research outputs.
+Paper Scaffold helps you create and check a clean manuscript repository from selected research outputs. It does not write the paper, create GitHub repositories, upload to Overleaf, or decide which artifacts belong in the manuscript.
 
-Use it from a checkout:
+From a checkout, examples use:
 
 ```bash
-python scripts/paper-scaffold.py doctor
+python scripts/paper-scaffold.py <command>
+```
+
+After install, use:
+
+```bash
+paper-scaffold <command>
+python -m paper_scaffold <command>
+```
+
+## Choose Your Starting Point
+
+### Try The Tool
+
+```bash
 python scripts/paper-scaffold.py self-test
-python scripts/paper-scaffold.py quickstart
-```
-
-Or after editable install:
-
-```bash
-python -m paper_scaffold self-test
-paper-scaffold doctor
-paper-scaffold quickstart
-```
-
-Use any of these invocation modes:
-
-```bash
-python scripts/paper-scaffold.py --help
-paper-scaffold --help
-python -m paper_scaffold --help
-```
-
-## Word + Python To Overleaf In 20 Minutes
-
-1. Create or clone a manuscript repo.
-2. Run doctor.
-3. Convert a Word draft or start from the LaTeX template.
-4. Discover Python artifacts.
-5. Copy selected artifacts.
-6. Validate.
-7. Commit and push.
-8. Import the GitHub repo into Overleaf if you use Overleaf.
-
-```bash
-paper-scaffold doctor
-paper-scaffold init --manuscript-repo ./paper
-paper-scaffold import-word --input draft.docx --output ./paper/converted.tex
-paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml
-paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml --write --copy --manuscript-repo ./paper
-paper-scaffold validate --manuscript-repo ./paper --write-report ./paper/validation_report.md
-paper-scaffold release-check --manuscript-repo ./paper --write-report ./paper/release_check.md
-paper-scaffold freeze-artifacts --manuscript-repo ./paper --write-lock ./paper/metadata/artifact_lock.json
-paper-scaffold package-submission --manuscript-repo ./paper --output ./submission_package
-```
-
-If Pandoc is not installed, skip `import-word` and paste/split text manually using [docs/word_to_overleaf.md](docs/word_to_overleaf.md).
-
-## Run The Demo
-
-```bash
-python -m paper_scaffold self-test
-paper-scaffold demo --output scratch/demo_manuscript --overwrite
-paper-scaffold validate --manuscript-repo scratch/demo_manuscript
-paper-scaffold freeze-artifacts --manuscript-repo scratch/demo_manuscript --write-lock scratch/demo_manuscript/metadata/artifact_lock.json
-paper-scaffold compare-lock --manuscript-repo scratch/demo_manuscript --lock scratch/demo_manuscript/metadata/artifact_lock.json
-paper-scaffold package-submission --manuscript-repo scratch/demo_manuscript --output scratch/submission_package --overwrite
-```
-
-From a checkout:
-
-```bash
 python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwrite
+python scripts/paper-scaffold.py validate --manuscript-repo scratch/demo_manuscript
 ```
 
-## Optional v0.8 Handoff Commands
+Expected result: a synthetic manuscript repo in `scratch/demo_manuscript` and validation output with no errors.
+
+### Start A Manuscript Repo
 
 ```bash
-paper-scaffold add-manuscript-ci --manuscript-repo ./paper
-paper-scaffold compare-lock --manuscript-repo ./paper --lock metadata/artifact_lock.json --write-report ./paper/lock_comparison.md
-paper-scaffold package-submission --manuscript-repo ./paper --output ./submission_package
-paper-scaffold reviewer-binder --manuscript-repo ./paper --round 1 --output ./reviewer_response_round_1
+python scripts/paper-scaffold.py init --manuscript-repo ./paper --non-interactive
+python scripts/paper-scaffold.py validate --manuscript-repo ./paper
 ```
+
+Expected result: a clean manuscript scaffold with `main.tex`, `references.bib`, `sections/`, `figures/`, `tables/`, and `metadata/`.
+
+### Validate An Existing Manuscript Repo
+
+```bash
+python scripts/paper-scaffold.py release-check --manuscript-repo <repo> --write-report <repo>/release_check.md
+python scripts/paper-scaffold.py overleaf-check --manuscript-repo <repo>
+```
+
+Expected result: focused diagnostics before GitHub/Overleaf sync or submission.
+
+### Discover Python Artifacts
+
+```bash
+python scripts/paper-scaffold.py discover-artifacts --source <output-folder> --manifest <repo>/metadata/artifact_manifest.yaml --suggest-only
+python scripts/paper-scaffold.py validate --manuscript-repo <repo>
+```
+
+Expected result: a candidate list of paper-ready figures and tables. Add `--write --copy --manuscript-repo <repo>` only after reviewing the suggestions.
+
+### Package For Submission
+
+```bash
+python scripts/paper-scaffold.py release-check --manuscript-repo <repo>
+python scripts/paper-scaffold.py freeze-artifacts --manuscript-repo <repo> --write-lock <repo>/metadata/artifact_lock.json
+python scripts/paper-scaffold.py package-submission --manuscript-repo <repo> --output <submission-folder>
+```
+
+Expected result: a clean source/artifact folder for manual journal upload review.
+
+### Create A Reviewer Binder
+
+```bash
+python scripts/paper-scaffold.py provenance-report --manuscript-repo <repo> --write-md <repo>/provenance_report.md
+python scripts/paper-scaffold.py reviewer-binder --manuscript-repo <repo> --round 1 --output <response-folder>
+```
+
+Expected result: a response-round checklist and evidence folder. Keep confidential reviewer text out of public repositories.
 
 ## Manual Fallback Without The CLI
 
@@ -86,11 +82,12 @@ paper-scaffold reviewer-binder --manuscript-repo ./paper --round 1 --output ./re
 5. Create `metadata/terminology_map.yaml` if implementation labels need cleanup.
 6. Add a `.gitignore` for LaTeX build files and raw/model/cache outputs.
 7. Run `git status` and inspect every staged file.
-8. Commit and push to GitHub.
+8. Commit and push to GitHub if you use GitHub.
 9. Import the GitHub repo into Overleaf if desired.
 
 ## Next Reading
 
+- [docs/which_workflow.md](docs/which_workflow.md)
 - [docs/getting_started.md](docs/getting_started.md)
 - [docs/install.md](docs/install.md)
 - [docs/cli_reference.md](docs/cli_reference.md)
@@ -98,8 +95,5 @@ paper-scaffold reviewer-binder --manuscript-repo ./paper --round 1 --output ./re
 - [docs/word_to_overleaf.md](docs/word_to_overleaf.md)
 - [docs/python_outputs_to_overleaf.md](docs/python_outputs_to_overleaf.md)
 - [docs/existing_latex_project.md](docs/existing_latex_project.md)
-- [docs/github_overleaf_sync.md](docs/github_overleaf_sync.md)
-- [docs/manuscript_ci.md](docs/manuscript_ci.md)
 - [docs/submission_packaging.md](docs/submission_packaging.md)
-- [docs/artifact_locks.md](docs/artifact_locks.md)
 - [docs/reviewer_response_binder.md](docs/reviewer_response_binder.md)

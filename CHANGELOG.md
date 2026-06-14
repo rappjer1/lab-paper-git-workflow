@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.9.4
+
+- Polished the README first-run path, Quick Start, and Getting Started guide for public users.
+- Added a workflow decision guide and public examples index.
+- Added synthetic dogfood scenarios plus a dogfood runner and docs/examples drift checker.
+- Updated v1.0 preparation notes and readiness checklist.
+- Bumped Paper Scaffold to `0.9.4`.
+
 ## v0.9.3
 
 - Added public contract documentation for CLI commands, diagnostics, schemas, exit codes, deprecation policy, versioning policy, and v1.0 readiness.
