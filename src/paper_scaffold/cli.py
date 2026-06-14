@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
+import tempfile
 from dataclasses import replace
 from datetime import date
 from pathlib import Path
 from typing import Any
 
+from . import __version__
 from .artifact_manifest import SUPPORTED_ARTIFACT_TYPES, append_artifact, copy_artifacts
 from .checks import (
     check_citations,
@@ -45,6 +48,7 @@ from .provenance import (
 from .recipes import RECIPES, format_recipe, get_recipe, list_recipes
 from .release import format_release_check, run_release_check
 from .scaffold import InitOptions, init_manuscript, project_config_from_options
+from .schema_reference import format_schema, format_schema_json, get_schema, schema_names
 from .terminology import find_banned_terms, format_terminology_hits
 from .validation import (
     forbidden_file_matches,
@@ -697,8 +701,97 @@ def command_reviewer_binder(args: argparse.Namespace) -> int:
     return 0 if result.ok else 2
 
 
+def _self_test_steps(root: Path) -> list[tuple[str, list[str]]]:
+    manuscript = root / "demo_manuscript"
+    package = root / "submission_package"
+    binder = root / "reviewer_response_round_1"
+    reports = root / "reports"
+    lock = manuscript / "metadata" / "artifact_lock.json"
+    return [
+        ("demo creation", ["demo", "--output", str(manuscript), "--overwrite"]),
+        ("validate", ["validate", "--manuscript-repo", str(manuscript)]),
+        ("overleaf-check", ["overleaf-check", "--manuscript-repo", str(manuscript)]),
+        ("provenance-report", ["provenance-report", "--manuscript-repo", str(manuscript), "--write-md", str(reports / "provenance_report.md"), "--write-json", str(reports / "provenance_ledger.json")]),
+        ("freeze-artifacts", ["freeze-artifacts", "--manuscript-repo", str(manuscript), "--write-lock", str(lock)]),
+        ("artifact-status", ["artifact-status", "--manuscript-repo", str(manuscript)]),
+        ("compare-lock", ["compare-lock", "--manuscript-repo", str(manuscript), "--lock", str(lock), "--write-report", str(reports / "lock_comparison.md"), "--write-json", str(reports / "lock_comparison.json")]),
+        ("package-submission", ["package-submission", "--manuscript-repo", str(manuscript), "--output", str(package), "--overwrite"]),
+        ("reviewer-binder", ["reviewer-binder", "--manuscript-repo", str(manuscript), "--round", "1", "--output", str(binder), "--overwrite"]),
+        ("release-check", ["release-check", "--manuscript-repo", str(manuscript), "--write-report", str(manuscript / "release_check.md")]),
+    ]
+
+
+def command_self_test(args: argparse.Namespace) -> int:
+    output_arg = Path(args.output) if args.output else None
+    if output_arg is None:
+        root = Path(tempfile.mkdtemp(prefix="paper-scaffold-self-test-"))
+        created_root = True
+    else:
+        root = output_arg
+        created_root = not root.exists()
+        root.mkdir(parents=True, exist_ok=True)
+
+    print("Paper Scaffold self-test")
+    print(f"- version: {__version__}")
+    print(f"- output: {root}")
+    results: list[tuple[str, int]] = []
+    try:
+        for name, argv in _self_test_steps(root):
+            print(f"\n== {name} ==")
+            try:
+                exit_code = int(main(argv))
+            except Exception as exc:  # pragma: no cover - defensive CLI boundary
+                print(f"FAILED {name}: {exc}")
+                exit_code = 1
+            results.append((name, exit_code))
+            print(f"self-test step result: {name}: exit {exit_code}")
+        failures = [(name, code) for name, code in results if code != 0]
+        print("\nSelf-test summary")
+        print(f"- steps: {len(results)}")
+        print(f"- passed: {len(results) - len(failures)}")
+        print(f"- failed: {len(failures)}")
+        if failures:
+            for name, code in failures:
+                print(f"- FAIL {name}: exit {code}")
+            return 1
+        print("Self-test passed.")
+        return 0
+    finally:
+        if not args.keep_output:
+            generated = [root / "demo_manuscript", root / "submission_package", root / "reviewer_response_round_1", root / "reports"]
+            if created_root:
+                shutil.rmtree(root, ignore_errors=True)
+                print(f"Cleaned self-test output: {root}")
+            else:
+                for path in generated:
+                    if path.exists():
+                        shutil.rmtree(path, ignore_errors=True)
+                print(f"Cleaned generated self-test children under: {root}")
+
+
+def command_schema_list(args: argparse.Namespace) -> int:
+    print("Available schemas:")
+    for name in schema_names():
+        print(f"- {name}")
+    return 0
+
+
+def command_schema_show(args: argparse.Namespace) -> int:
+    try:
+        schema = get_schema(args.schema_name)
+    except KeyError:
+        print(f"Unknown schema: {args.schema_name}")
+        print("Available schemas:")
+        for name in schema_names():
+            print(f"- {name}")
+        return 2
+    print(format_schema_json(schema) if args.json else format_schema(schema))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="paper-scaffold", description="Create and validate clean manuscript Git repositories.")
+    parser.add_argument("--version", action="version", version=f"paper-scaffold {__version__}")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     init = subparsers.add_parser("init", help="Create a manuscript repository scaffold")
@@ -790,6 +883,20 @@ def build_parser() -> argparse.ArgumentParser:
 
     quickstart = subparsers.add_parser("quickstart", help="Print the three common Paper Scaffold workflows")
     quickstart.set_defaults(func=command_quickstart)
+
+    self_test = subparsers.add_parser("self-test", help="Run a no-network installed-use smoke test")
+    self_test.add_argument("--output", help="Scratch output folder for generated self-test files")
+    self_test.add_argument("--keep-output", action="store_true", help="Keep generated self-test files for inspection")
+    self_test.set_defaults(func=command_self_test)
+
+    schema = subparsers.add_parser("schema", help="List or show Paper Scaffold metadata schemas")
+    schema_subparsers = schema.add_subparsers(dest="schema_command", required=True)
+    schema_list = schema_subparsers.add_parser("list", help="List available schema summaries")
+    schema_list.set_defaults(func=command_schema_list)
+    schema_show = schema_subparsers.add_parser("show", help="Show one schema summary")
+    schema_show.add_argument("schema_name")
+    schema_show.add_argument("--json", action="store_true", help="Print a JSON representation of the schema summary")
+    schema_show.set_defaults(func=command_schema_show)
 
     recipes = subparsers.add_parser("recipes", help="List or show use-case recipes")
     recipes_subparsers = recipes.add_subparsers(dest="recipe_command")

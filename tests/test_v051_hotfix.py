@@ -41,5 +41,5 @@ def test_windows_clean_clone_notes_are_documented():
         + (REPO_ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
     )
     assert "paper-scaffold.exe --help" in docs
-    assert 'export PATH="/r/Code/Envs/<env>/Scripts:$PATH"' in docs
+    assert 'export PATH="/path/to/env/Scripts:$PATH"' in docs
     assert "TMP=\"$PWD/scratch/tmp\" TEMP=\"$PWD/scratch/tmp\" python -m pytest tests --basetemp=scratch/pytest-tmp -p no:cacheprovider" in docs

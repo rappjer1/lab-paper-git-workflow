@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.9.0
+
+- Added `python -m paper_scaffold` as an installed-use fallback when the console script is not on `PATH`.
+- Added global `--version`.
+- Added `self-test` for no-network installed-use smoke testing.
+- Added `schema list` and `schema show` for metadata and generated-report schema summaries.
+- Added install, CLI reference, schema reference, release process, exit-code, and compatibility docs.
+- Hardened GitHub Actions for multi-OS, multi-Python checks, module fallback, self-test, text blob guard, and package build.
+- Added clean-install notes and stability audit for the v1.0 release-candidate path.
+
 ## v0.8.0
 
 - Added `add-manuscript-ci` for dependency-free manuscript repository hygiene workflows.

@@ -13,23 +13,32 @@ python -m pip install -e ".[dev]"
 pytest tests
 ruff check .
 python scripts/paper-scaffold.py --help
+python -m paper_scaffold --help
 python scripts/paper-scaffold.py doctor
 python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwrite
 python scripts/paper-scaffold.py validate --manuscript-repo scratch/demo_manuscript --write-report scratch/demo_manuscript/validation_report.md --write-json scratch/demo_manuscript/validation_report.json
+python scripts/paper-scaffold.py self-test --output scratch/self_test --keep-output
 python scripts/dev/check_text_blobs.py
 ```
 
 On Git Bash for Windows, editable install can succeed while `paper-scaffold` is still not on `PATH`. Either call the installed executable directly:
 
 ```bash
-R:/Code/Envs/<env>/Scripts/paper-scaffold.exe --help
+<env-root>/Scripts/paper-scaffold.exe --help
 ```
 
 or add the environment Scripts directory:
 
 ```bash
-export PATH="/r/Code/Envs/<env>/Scripts:$PATH"
+export PATH="/path/to/env/Scripts:$PATH"
 paper-scaffold --help
+```
+
+The install-safe fallback is:
+
+```bash
+python -m paper_scaffold --help
+python -m paper_scaffold self-test
 ```
 
 If pytest cannot access the default Windows temp directory, use repo-local temp folders:
