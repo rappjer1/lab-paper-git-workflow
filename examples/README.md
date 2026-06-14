@@ -2,6 +2,12 @@
 
 All examples are synthetic and intentionally small. They are meant to show workflow shape, not scientific claims.
 
+Files with artifact extensions are real tiny synthetic files, not mislabeled text placeholders. Run:
+
+```bash
+python scripts/dev/check_example_integrity.py
+```
+
 | Example | Demonstrates | Command to try | Modifies files |
 | --- | --- | --- | --- |
 | `minimal_python_artifacts` | Small Python-generated figure/table outputs and an artifact manifest. | `python examples/minimal_python_artifacts/make_example_figure.py` | yes, regenerates example outputs |

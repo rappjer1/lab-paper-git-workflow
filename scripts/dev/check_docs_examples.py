@@ -32,6 +32,7 @@ REQUIRED_DOCS = [
     "docs/schema_reference.md",
     "docs/contract.md",
     "docs/v1_0_readiness.md",
+    "docs/example_integrity.md",
     "examples/README.md",
 ]
 
@@ -42,6 +43,7 @@ README_LINKS = [
     "docs/schema_reference.md",
     "docs/contract.md",
     "docs/v1_0_readiness.md",
+    "docs/example_integrity.md",
 ]
 
 

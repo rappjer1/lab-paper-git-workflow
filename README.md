@@ -314,6 +314,7 @@ Workflow guide: [docs/which_workflow.md](docs/which_workflow.md)
 Install guide: [docs/install.md](docs/install.md)
 CLI reference: [docs/cli_reference.md](docs/cli_reference.md)
 Schema reference: [docs/schema_reference.md](docs/schema_reference.md)
+Example integrity: [docs/example_integrity.md](docs/example_integrity.md)
 Contract: [docs/contract.md](docs/contract.md)
 v1.0 readiness: [docs/v1_0_readiness.md](docs/v1_0_readiness.md)
 Release process: [docs/release_process.md](docs/release_process.md)
@@ -384,6 +385,8 @@ Generate the Python example artifacts:
 ```bash
 python examples/minimal_python_artifacts/make_example_figure.py
 ```
+
+Example artifacts are synthetic and intentionally small. Run `python scripts/dev/check_example_integrity.py` to verify that example PDFs and images have valid file signatures and that text examples do not contain local/private paths.
 
 ## Roadmap And Architecture
 
