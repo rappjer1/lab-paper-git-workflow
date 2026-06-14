@@ -32,11 +32,11 @@ Local validation used shell-specific pytest commands. Git Bash can use `TMP="$PW
 
 Passed:
 
-- `R:\Code\Envs\nh_quantum\python.exe scripts\dev\check_text_blobs.py`
-- `R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py --version`
-- `R:\Code\Envs\nh_quantum\python.exe -m paper_scaffold --help`
-- `R:\Code\Envs\nh_quantum\python.exe scripts\dev\run_tests.py`
-- `R:\Code\Envs\nh_quantum\python.exe -m ruff check .`
+- `<python> scripts/dev/check_text_blobs.py`
+- `<python> scripts/paper-scaffold.py --version`
+- `<python> -m paper_scaffold --help`
+- `<python> scripts/dev/run_tests.py`
+- `<python> -m ruff check .`
 
 Test result:
 
@@ -44,7 +44,7 @@ Test result:
 
 Focused runner check:
 
-- `R:\Code\Envs\nh_quantum\python.exe scripts\dev\run_tests.py --pytest-args "-q -k run_tests"`
+- `<python> scripts/dev/run_tests.py --pytest-args "-q -k run_tests"`
 - `5 passed, 80 deselected`
 
 ## Known Limitations

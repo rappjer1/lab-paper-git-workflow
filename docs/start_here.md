@@ -2,6 +2,8 @@
 
 Paper Scaffold helps you keep a manuscript repository separate from the code and outputs that produced the paper. It does not write the manuscript, create remote repositories, upload to Overleaf, or decide which figures and tables are publication-ready.
 
+It also does not guarantee LaTeX compilation, manage raw data, or replace manual review.
+
 Use this page when you are new to the project or when you need the shortest route to the right workflow.
 
 ## First Command
@@ -73,6 +75,7 @@ Do not commit:
 - [Walkthroughs](walkthroughs/README.md)
 - [Install](install.md)
 - [CLI Reference](cli_reference.md)
+- [Privacy And Data Safety](privacy_and_data_safety.md)
 - [Glossary](glossary.md)
 - [Troubleshooting](troubleshooting.md)
 - [Project README](../README.md)

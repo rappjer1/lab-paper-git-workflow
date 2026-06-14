@@ -31,6 +31,8 @@ jobs:
         run: python scripts/dev/check_docs_links.py
       - name: Example integrity
         run: python scripts/dev/check_example_integrity.py
+      - name: Public safety audit
+        run: python scripts/dev/check_public_safety.py
       - name: Dogfood scenarios
         run: python scripts/dev/run_dogfood.py --output scratch/dogfood
       - name: Run tests

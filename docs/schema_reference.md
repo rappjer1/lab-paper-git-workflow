@@ -143,7 +143,7 @@ Minimal example:
 ```json
 {
   "tool": "Paper Scaffold",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "timestamp": "2026-01-01T00:00:00+00:00",
   "path": "./paper",
   "summary": {
@@ -186,7 +186,7 @@ Minimal example:
 ```json
 {
   "tool": "Paper Scaffold",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "generated_at": "2026-01-01T00:00:00+00:00",
   "manuscript_repo": "./paper",
   "summary": {
@@ -228,7 +228,7 @@ Minimal example:
 ```json
 {
   "tool": "Paper Scaffold",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "generated_at": "2026-01-01T00:00:00+00:00",
   "manuscript_repo": "./paper",
   "artifacts": [
@@ -310,4 +310,4 @@ Compatibility notes:
 
 ## Stability
 
-These schemas are pre-1.0 stable in v0.9.7. The v1.0 release should freeze required field names, diagnostic code names, and generated JSON shapes for normal manuscript workflows.
+These schemas are pre-1.0 stable in v0.9.8. The v1.0 release should freeze required field names, diagnostic code names, and generated JSON shapes for normal manuscript workflows.

@@ -15,6 +15,7 @@ python scripts/dev/check_contracts.py
 python scripts/dev/check_docs_examples.py
 python scripts/dev/check_docs_links.py
 python scripts/dev/check_example_integrity.py
+python scripts/dev/check_public_safety.py
 python scripts/dev/build_package.py
 python scripts/dev/install_matrix_audit.py
 python scripts/dev/run_dogfood.py --output scratch/dogfood --keep-output
@@ -69,6 +70,8 @@ paper-scaffold self-test
 
 Before tagging, confirm Actions pass for supported operating systems and Python versions. CI should not require secrets, Overleaf, GitHub CLI, Pandoc, LaTeX, or network services beyond package installation and normal GitHub Actions setup.
 
+Review [github_repo_settings.md](github_repo_settings.md) before changing repository settings. Paper Scaffold does not change GitHub settings automatically.
+
 ## Tag Process
 
 After review and merge:
@@ -87,3 +90,5 @@ git push origin v<version>
 - Do not upload generated demo manuscript outputs.
 - Do not commit private manuscript text, credentials, local paths, raw data, or model outputs.
 - Do not tag until tests and Actions pass.
+
+Historical release reports are listed in [release_reports.md](release_reports.md).

@@ -35,7 +35,7 @@ v0.4 adds a structured diagnostics layer to Paper Scaffold. The release keeps th
 
 ## Public-Readiness Notes
 
-- The diagnostics are generic and do not depend on any manuscript, research repo, hydrology project, model output, or external service.
+- The diagnostics are generic and do not depend on any manuscript, research repo, field-specific project, model output, or external service.
 - No commands create GitHub repositories, upload to Overleaf, call external APIs, or modify outside the selected manuscript path.
 - Large/raw/model/cache outputs remain blocked by validation and discovery filters.
 - Privacy previews redact local paths, emails, and secret-like values.

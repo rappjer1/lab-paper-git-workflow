@@ -6,7 +6,7 @@ This audit checked the public-facing documentation and examples that prepare Pap
 
 ## Terms Checked
 
-The release audit searched public docs, examples, scripts, tests, and reports for private or project-specific language, including local paths, person names, unpublished project labels, domain-specific research terms, lab-internal wording, chat/tool tokens, and secret-like terms.
+The release audit searched public docs, examples, scripts, tests, and reports for private or project-specific language, including local paths, person names, nonpublic project labels, domain-specific research terms, internal-team wording, chat/tool tokens, and secret-like terms.
 
 Security and privacy words may still appear where they are the subject of user-facing checks, troubleshooting guidance, or this audit report.
 

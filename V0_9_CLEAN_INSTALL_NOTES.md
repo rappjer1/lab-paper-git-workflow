@@ -58,10 +58,10 @@ Preferred for v0.9.1 and later:
 python scripts/dev/run_tests.py
 ```
 
-In the lab Windows environment:
+With an explicit Windows environment interpreter:
 
 ```powershell
-R:\Code\Envs\nh_quantum\python.exe scripts\dev\run_tests.py
+<python> scripts\dev\run_tests.py
 ```
 
 This runner creates a unique pytest basetemp and `TMP`/`TEMP` directory under `scratch/test-runs/` on every run. Reusing `scratch\pytest-tmp` can fail on Windows if the directory remains locked after a failed or interrupted run.

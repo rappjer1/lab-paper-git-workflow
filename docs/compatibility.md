@@ -50,6 +50,14 @@ python scripts/dev/install_matrix_audit.py
 
 `build_package.py` skips cleanly when the optional `build` frontend is not installed. `install_matrix_audit.py` uses temporary virtual environments under `scratch/install-matrix/` and defaults to network-free `--no-deps --no-build-isolation` installs. Wheel and sdist checks run only when local artifacts already exist in `dist/`.
 
+For public trust hardening, use:
+
+```bash
+python scripts/dev/check_public_safety.py
+```
+
+The public-safety audit is dependency-free and network-free.
+
 ## Optional Tools
 
 These are optional and not required for normal validation, self-test, packaging, or provenance workflows:

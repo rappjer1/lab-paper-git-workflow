@@ -1,0 +1,104 @@
+allowlist:
+  - term: secret
+    allowed_paths:
+      - .github/**
+      - README.md
+      - SECURITY.md
+      - PUBLIC_RELEASE_CHECKLIST.md
+      - docs/**
+      - contracts/**
+      - scripts/dev/check_public_safety.py
+      - V0_*
+    reason: Safety and release docs discuss how to avoid committing secrets.
+  - term: credential
+    allowed_paths:
+      - .github/**
+      - README.md
+      - SECURITY.md
+      - PUBLIC_RELEASE_CHECKLIST.md
+      - docs/**
+      - scripts/dev/check_public_safety.py
+      - V0_*
+    reason: Safety and security docs discuss credential handling.
+  - term: token
+    allowed_paths:
+      - SECURITY.md
+      - PUBLIC_RELEASE_CHECKLIST.md
+      - docs/**
+      - scripts/dev/check_public_safety.py
+      - V0_*
+    reason: Security and release docs mention token handling without storing values.
+  - term: unpublished
+    allowed_paths:
+      - .github/**
+      - SECURITY.md
+      - PUBLIC_RELEASE_CHECKLIST.md
+      - docs/**
+      - contracts/public_safety_allowlist.yaml
+      - V0_*
+    reason: Public safety docs warn users not to post unpublished content.
+  - term: password
+    allowed_paths:
+      - SECURITY.md
+      - PUBLIC_RELEASE_CHECKLIST.md
+      - docs/**
+      - scripts/dev/check_public_safety.py
+      - V0_*
+    reason: Privacy guidance lists passwords as content to avoid.
+  - term: api_key
+    allowed_paths:
+      - docs/**
+      - scripts/dev/check_public_safety.py
+      - V0_*
+    reason: Privacy guidance gives generic examples of risky key names.
+  - term: .env
+    allowed_paths:
+      - docs/**
+      - scripts/dev/check_public_safety.py
+      - V0_*
+    reason: Privacy guidance warns against committing environment files.
+  - term: OAuth
+    allowed_paths:
+      - docs/**
+      - scripts/dev/check_public_safety.py
+      - V0_*
+    reason: Privacy guidance may mention OAuth generically.
+  - term: PAT
+    allowed_paths:
+      - docs/**
+      - scripts/dev/check_public_safety.py
+      - V0_*
+    reason: Privacy guidance may mention personal access tokens generically.
+  - term: GitHub token
+    allowed_paths:
+      - docs/**
+      - scripts/dev/check_public_safety.py
+      - V0_*
+    reason: Privacy guidance may mention GitHub tokens generically.
+  - term: AWS
+    allowed_paths:
+      - docs/**
+      - scripts/dev/check_public_safety.py
+      - V0_*
+    reason: Privacy guidance may mention cloud keys generically.
+  - term: private
+    allowed_paths:
+      - .github/**
+      - README.md
+      - SECURITY.md
+      - PUBLIC_RELEASE_CHECKLIST.md
+      - docs/**
+      - scripts/dev/check_public_safety.py
+      - V0_*
+    reason: Public safety docs and diagnostics discuss private content in generic terms.
+  - term: Slack
+    allowed_paths:
+      - docs/cli_reference.md
+      - docs/slack_launch.md
+      - docs/lab_slack_launch.md
+      - CHANGELOG.md
+      - contracts/cli_commands.yaml
+      - contracts/public_safety_allowlist.yaml
+      - scripts/dev/check_public_safety.py
+      - V0_*
+    reason: Existing pre-v1 command and historical launch-copy docs retain this name for compatibility.

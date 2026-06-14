@@ -1,64 +1,48 @@
 # Public Release Checklist
 
-Use this before changing repository visibility or announcing a public release.
+Use this before tagging v1.0 or announcing a public release. It is a maintainer checklist, not an automated publishing workflow.
 
-## Required
+## Required Local Checks
 
-- [ ] Docs complete.
-- [ ] README explains value in under one minute.
-- [ ] Examples run.
-- [ ] Demo command works.
-- [ ] `paper-scaffold explain E003` works.
-- [ ] `paper-scaffold validate --write-report --write-json` works.
-- [ ] Focused diagnostics pass or produce only reviewed warnings.
-- [ ] `paper-scaffold stale-artifacts` works.
-- [ ] `paper-scaffold unused-artifacts` works.
-- [ ] Tests pass locally.
-- [ ] GitHub Actions passes after push.
-- [ ] No private paths.
-- [ ] No unpublished manuscript content.
-- [ ] No project-specific manuscript details.
-- [ ] No raw data.
-- [ ] No secrets.
-- [ ] No large files.
-- [ ] License present.
-- [ ] Contributing docs present.
-- [ ] Code of conduct present.
-- [ ] Security policy present.
-- [ ] Citation file present.
-- [ ] Public-readiness audit reviewed.
+- [ ] Clean clone audit passes with `python scripts/dev/clean_install_audit.py`.
+- [ ] Install matrix passes with `python scripts/dev/install_matrix_audit.py`.
+- [ ] Dogfood scenarios pass with `python scripts/dev/run_dogfood.py --output scratch/dogfood --keep-output`.
+- [ ] Public safety audit passes with `python scripts/dev/check_public_safety.py`.
+- [ ] Contract audit passes with `python scripts/dev/check_contracts.py`.
+- [ ] Text blob guard passes with `python scripts/dev/check_text_blobs.py`.
+- [ ] Docs/examples check passes with `python scripts/dev/check_docs_examples.py`.
+- [ ] Docs link check passes with `python scripts/dev/check_docs_links.py`.
+- [ ] Example integrity check passes with `python scripts/dev/check_example_integrity.py`.
+- [ ] Test runner passes with `python scripts/dev/run_tests.py`.
 
-## Version Tag Instructions
+## Required Manual Review
 
-After merge to `main` and after CI passes:
+- [ ] GitHub Actions is green on supported operating systems and Python versions.
+- [ ] README first-run path is clear.
+- [ ] `docs/start_here.md`, `docs/common_paths.md`, and walkthroughs are current.
+- [ ] No private paths are present.
+- [ ] No secrets or credential values are present.
+- [ ] No invalid fake PDFs, PNGs, or other mislabeled artifact files are present.
+- [ ] No generated `scratch/` outputs are tracked.
+- [ ] No raw data, model checkpoints, prediction caches, or broad output folders are tracked.
+- [ ] No unpublished manuscript text or sensitive research material is present.
+- [ ] No claims imply that Paper Scaffold writes the science, guarantees compilation, creates remote repositories, uploads to Overleaf, or publishes packages.
+- [ ] Historical release reports are listed in `docs/release_reports.md`.
+- [ ] Security policy, code of conduct, citation file, license, and contributing docs are present.
+- [ ] Release notes are drafted.
 
-```bash
-git tag v0.5.0
-git push origin v0.5.0
-```
+## Tag Instructions
 
-## Manual Review Before Public Visibility
-
-Before changing visibility to public, inspect:
+After review, merge to `main`, confirm CI passes, and tag intentionally:
 
 ```bash
-git status --short
-git diff --stat
-git ls-files
+git checkout main
+git pull --ff-only origin main
+git tag -a v<version> -m "Paper Scaffold v<version>"
+git push origin main
+git push origin v<version>
 ```
 
-Then search for private material:
+## Public Visibility Reminder
 
-```bash
-rg -n -i "R:/Code|R:\\Code|secret|token|password|private data|unpublished"
-```
-
-Confirm that example artifacts are small and synthetic.
-
-Run diagnostics:
-
-```bash
-paper-scaffold explain --list
-paper-scaffold privacy-check --path .
-paper-scaffold github-check --repo .
-```
+Do not change repository visibility, create remote repositories, upload to Overleaf, publish to PyPI, or push tags as part of a local audit. Those actions require explicit maintainer approval.

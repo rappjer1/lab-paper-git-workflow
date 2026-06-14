@@ -42,13 +42,13 @@ The audit script checks:
 
 Passed:
 
-- `R:\Code\Envs\nh_quantum\python.exe scripts\dev\check_text_blobs.py`
-- `R:\Code\Envs\nh_quantum\python.exe scripts\dev\run_tests.py`
-- `R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py --version`
-- `R:\Code\Envs\nh_quantum\python.exe -m paper_scaffold --help`
-- `R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py self-test --output scratch\self_test --keep-output`
-- `R:\Code\Envs\nh_quantum\python.exe scripts\dev\clean_install_audit.py --help`
-- `R:\Code\Envs\nh_quantum\python.exe -m ruff check .`
+- `<python> scripts/dev/check_text_blobs.py`
+- `<python> scripts/dev/run_tests.py`
+- `<python> scripts/paper-scaffold.py --version`
+- `<python> -m paper_scaffold --help`
+- `<python> scripts/paper-scaffold.py self-test --output scratch/self_test --keep-output`
+- `<python> scripts/dev/clean_install_audit.py --help`
+- `<python> -m ruff check .`
 
 Observed results:
 

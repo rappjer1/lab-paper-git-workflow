@@ -10,7 +10,7 @@ v0.5.1 is a public-readiness hotfix based on a clean-clone test of the v0.5 rele
 - Editable install succeeded.
 - Pytest passed with `36 passed` in the original clean-clone check.
 - Hotfix test suite passed with `39 passed`.
-- Installed CLI worked when called directly as `R:/Code/Envs/nh_quantum/Scripts/paper-scaffold.exe`.
+- Installed CLI worked when called directly as `<env-root>/Scripts/paper-scaffold.exe`.
 - Git Bash did not find `paper-scaffold` until the environment `Scripts` directory was added to `PATH`.
 - Windows pytest initially hit a temp-directory `PermissionError`; repo-local `TMP`, `TEMP`, and `--basetemp` fixed it.
 
@@ -34,10 +34,10 @@ v0.5.1 addresses those warnings by referencing the included PDF figure and citat
 ## Validation Commands
 
 ```text
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py demo --output scratch\demo_manuscript --overwrite
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py validate --manuscript-repo scratch\demo_manuscript --write-report scratch\demo_manuscript\validation_report.md --write-json scratch\demo_manuscript\validation_report.json
-R:\Code\Envs\nh_quantum\python.exe scripts\paper-scaffold.py overleaf-check --manuscript-repo scratch\demo_manuscript
-R:\Code\Envs\nh_quantum\python.exe -m pytest tests
+<python> scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwrite
+<python> scripts/paper-scaffold.py validate --manuscript-repo scratch/demo_manuscript --write-report scratch/demo_manuscript/validation_report.md --write-json scratch/demo_manuscript/validation_report.json
+<python> scripts/paper-scaffold.py overleaf-check --manuscript-repo scratch/demo_manuscript
+<python> -m pytest tests
 ```
 
 ## Hotfix Validation Results

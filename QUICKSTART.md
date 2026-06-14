@@ -95,4 +95,5 @@ Expected result: docs, examples, contracts, and tests pass in a source checkout.
 - [docs/install.md](docs/install.md)
 - [docs/cli_reference.md](docs/cli_reference.md)
 - [docs/schema_reference.md](docs/schema_reference.md)
+- [docs/privacy_and_data_safety.md](docs/privacy_and_data_safety.md)
 - [docs/troubleshooting.md](docs/troubleshooting.md)

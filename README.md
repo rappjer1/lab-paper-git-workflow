@@ -21,6 +21,7 @@ It does not write the paper, create remote repositories, compile LaTeX, upload t
 - Command cheat sheet: [docs/one_page_reference.md](docs/one_page_reference.md)
 - Full CLI reference: [docs/cli_reference.md](docs/cli_reference.md)
 - Terms used in the docs: [docs/glossary.md](docs/glossary.md)
+- Privacy and data safety: [docs/privacy_and_data_safety.md](docs/privacy_and_data_safety.md)
 
 Try the tool from a checkout:
 
@@ -96,6 +97,12 @@ Install details and platform notes: [docs/install.md](docs/install.md), [docs/co
 
 Complete list: [docs/cli_reference.md](docs/cli_reference.md). Diagnostic codes: [docs/error_codes.md](docs/error_codes.md).
 
+Public safety and release hygiene:
+
+- Privacy and data safety: [docs/privacy_and_data_safety.md](docs/privacy_and_data_safety.md)
+- GitHub repository settings: [docs/github_repo_settings.md](docs/github_repo_settings.md)
+- Historical release reports: [docs/release_reports.md](docs/release_reports.md)
+
 ## What Not To Commit
 
 Keep manuscript repositories small and reviewable. Do not commit:
@@ -125,6 +132,7 @@ Paper Scaffold records what was copied, where it came from, whether manuscript f
 - Submission packaging: [docs/submission_packaging.md](docs/submission_packaging.md)
 - Schema reference: [docs/schema_reference.md](docs/schema_reference.md)
 - Exit codes: [docs/exit_codes.md](docs/exit_codes.md)
+- Privacy and data safety: [docs/privacy_and_data_safety.md](docs/privacy_and_data_safety.md)
 
 ## Stability
 
@@ -134,6 +142,7 @@ The v0.9 series is the release-candidate hardening series for v1.0. Command name
 - Versioning policy: [docs/versioning_policy.md](docs/versioning_policy.md)
 - v1.0 readiness: [docs/v1_0_readiness.md](docs/v1_0_readiness.md)
 - Release process: [docs/release_process.md](docs/release_process.md)
+- Public release checklist: [PUBLIC_RELEASE_CHECKLIST.md](PUBLIC_RELEASE_CHECKLIST.md)
 - Roadmap: [ROADMAP.md](ROADMAP.md)
 
 ## Contributing

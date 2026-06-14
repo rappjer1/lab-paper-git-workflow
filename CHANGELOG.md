@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.9.8
+
+- Added `scripts/dev/check_public_safety.py` and `contracts/public_safety_allowlist.yaml` for public trust, privacy, and release-hygiene audits.
+- Added privacy/data-safety, GitHub repository settings, and historical release report docs.
+- Hardened `SECURITY.md` and `PUBLIC_RELEASE_CHECKLIST.md` for v1.0 public release review.
+- Generalized stale local interpreter paths in historical reports.
+- Added CI coverage for the public-safety audit.
+- Bumped Paper Scaffold to `0.9.8`.
+
 ## v0.9.7
 
 - Added public entry-point docs: `docs/start_here.md`, `docs/common_paths.md`, `docs/one_page_reference.md`, and `docs/glossary.md`.

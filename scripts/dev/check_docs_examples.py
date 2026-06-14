@@ -30,6 +30,9 @@ REQUIRED_DOCS = [
     "docs/common_paths.md",
     "docs/one_page_reference.md",
     "docs/glossary.md",
+    "docs/privacy_and_data_safety.md",
+    "docs/github_repo_settings.md",
+    "docs/release_reports.md",
     "docs/getting_started.md",
     "docs/which_workflow.md",
     "docs/cli_reference.md",
@@ -37,6 +40,7 @@ REQUIRED_DOCS = [
     "docs/contract.md",
     "docs/v1_0_readiness.md",
     "docs/example_integrity.md",
+    "PUBLIC_RELEASE_CHECKLIST.md",
     "docs/walkthroughs/README.md",
     "docs/walkthroughs/five_minute_demo.md",
     "docs/walkthroughs/python_outputs_to_manuscript.md",
@@ -57,6 +61,9 @@ README_LINKS = [
     "docs/schema_reference.md",
     "docs/contract.md",
     "docs/glossary.md",
+    "docs/privacy_and_data_safety.md",
+    "docs/github_repo_settings.md",
+    "docs/release_reports.md",
     "docs/v1_0_readiness.md",
     "docs/example_integrity.md",
 ]
@@ -67,6 +74,7 @@ QUICKSTART_LINKS = [
     "docs/one_page_reference.md",
     "docs/walkthroughs/README.md",
     "docs/cli_reference.md",
+    "docs/privacy_and_data_safety.md",
 ]
 
 

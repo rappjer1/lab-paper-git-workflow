@@ -11,6 +11,7 @@ Use this checklist before tagging v1.0.
 - Docs/examples check passes with `scripts/dev/check_docs_examples.py`.
 - Docs link check passes with `scripts/dev/check_docs_links.py`.
 - Example integrity check passes with `scripts/dev/check_example_integrity.py`.
+- Public safety audit passes with `scripts/dev/check_public_safety.py`.
 - Dogfood scenarios pass with `scripts/dev/run_dogfood.py`.
 - CLI reference matches argparse command names and documented flags.
 - Schema reference matches `paper-scaffold schema list`.
@@ -22,6 +23,7 @@ Use this checklist before tagging v1.0.
 - README first-run path has been reviewed by someone new to the project or from that perspective.
 - Public docs contain no private paths, credentials, nonpublic research content, or project-specific research terms.
 - User-facing docs contain no machine-specific local paths.
+- `docs/privacy_and_data_safety.md`, `docs/github_repo_settings.md`, and `docs/release_reports.md` are current.
 - Repository contains no large/generated raw outputs.
 - Synthetic examples validate.
 - Release process is documented.

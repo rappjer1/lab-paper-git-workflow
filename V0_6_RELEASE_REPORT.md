@@ -83,7 +83,7 @@ The exact requested pytest command reproduced the known Windows temp-directory i
 
 Failure mode:
 
-- `PermissionError: [WinError 5] Access is denied: 'C:\Users\<user>\AppData\Local\Temp\pytest-of-<user>'`
+- `PermissionError: [WinError 5] Access is denied: '<user-temp>/pytest-of-<user>'`
 
 The documented Windows workaround passed:
 

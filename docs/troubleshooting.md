@@ -2,6 +2,8 @@
 
 For first-run commands, see [start_here.md](start_here.md). For workflow selection, see [common_paths.md](common_paths.md). For command syntax, see [one_page_reference.md](one_page_reference.md).
 
+For public safety review, see [privacy_and_data_safety.md](privacy_and_data_safety.md).
+
 ## `python` Is Not Found
 
 Use whichever Python launcher is available on the machine. From a source checkout, the wrapper is:
@@ -324,3 +326,13 @@ python scripts/dev/check_example_integrity.py
 ```
 
 If you add a placeholder that is not a real artifact, use a `.placeholder` suffix and document it in the example README. See [example_integrity.md](example_integrity.md).
+
+## Public Safety Audit Fails
+
+Run:
+
+```bash
+python scripts/dev/check_public_safety.py
+```
+
+The checker reports blocked high-risk findings for local paths, secret-like values, project-specific leakage, misleading automation claims, generated scratch outputs, oversized tracked files, or invalid example artifacts. Fix the underlying file when possible. If a generic safety term is intentionally present in documentation, document the allowance in `contracts/public_safety_allowlist.yaml`.

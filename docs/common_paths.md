@@ -112,7 +112,7 @@ Expected result: source, editable, module fallback, and test-runner paths are do
 
 ## 10. I Am Maintaining A Release
 
-Read first: [release_process.md](release_process.md), [contract.md](contract.md), [v1_0_readiness.md](v1_0_readiness.md)
+Read first: [release_process.md](release_process.md), [contract.md](contract.md), [v1_0_readiness.md](v1_0_readiness.md), [privacy_and_data_safety.md](privacy_and_data_safety.md)
 
 ```bash
 python scripts/dev/check_text_blobs.py
@@ -120,7 +120,14 @@ python scripts/dev/check_contracts.py
 python scripts/dev/check_docs_examples.py
 python scripts/dev/check_docs_links.py
 python scripts/dev/check_example_integrity.py
+python scripts/dev/check_public_safety.py
 python scripts/dev/run_tests.py
 ```
 
 Expected result: docs, examples, contracts, and tests pass before a release tag is proposed.
+
+## 11. I Need To Review Public Repository Settings
+
+Read first: [github_repo_settings.md](github_repo_settings.md), [release_reports.md](release_reports.md)
+
+Expected result: maintainers can review repository description, topics, branch protection, Actions, issue settings, security policy, and release/tagging approach without Paper Scaffold changing remote settings automatically.
