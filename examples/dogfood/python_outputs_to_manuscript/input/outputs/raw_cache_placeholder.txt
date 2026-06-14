@@ -1,0 +1,1 @@
+Synthetic placeholder representing a raw/cache output that should not be copied.

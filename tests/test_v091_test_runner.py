@@ -90,7 +90,7 @@ def test_docs_and_ci_prefer_run_tests_runner():
     workflow = (REPO_ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")
 
     assert "scripts/dev/run_tests.py" in docs
-    assert "R:\\Code\\Envs\\nh_quantum\\python.exe scripts\\dev\\run_tests.py" in docs
+    assert "Use the Python executable for the environment you want to test." in docs
     assert "scratch/test-runs" in docs
     assert "TMP=\"$PWD/scratch/tmp\" TEMP=\"$PWD/scratch/tmp\"" in docs
     assert "python scripts/dev/run_tests.py" in workflow

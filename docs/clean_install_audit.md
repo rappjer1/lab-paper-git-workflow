@@ -31,9 +31,7 @@ python scripts/dev/clean_install_audit.py
 
 In the lab Windows environment:
 
-```powershell
-R:\Code\Envs\nh_quantum\python.exe scripts\dev\clean_install_audit.py
-```
+Use the Python executable for the environment you want to audit.
 
 By default, the audit clones from `origin` when available and otherwise clones from the current checkout path. Generated clone folders are placed under:
 

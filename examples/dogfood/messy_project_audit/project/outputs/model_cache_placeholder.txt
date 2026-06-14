@@ -1,0 +1,1 @@
+Synthetic placeholder representing a cache output that should stay out of manuscript repos.

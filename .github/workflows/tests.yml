@@ -25,6 +25,10 @@ jobs:
         run: python scripts/dev/check_text_blobs.py
       - name: Contract audit
         run: python scripts/dev/check_contracts.py
+      - name: Docs and examples check
+        run: python scripts/dev/check_docs_examples.py
+      - name: Dogfood scenarios
+        run: python scripts/dev/run_dogfood.py --output scratch/dogfood
       - name: Run tests
         run: python scripts/dev/run_tests.py
       - name: CLI help

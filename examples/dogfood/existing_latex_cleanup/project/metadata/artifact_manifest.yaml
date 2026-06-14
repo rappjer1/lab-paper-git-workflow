@@ -1,0 +1,6 @@
+artifacts:
+  - id: summary_plot
+    type: figure
+    manuscript_path: figures/summary_plot.pdf
+    source_path: figures/summary_plot.pdf
+    status: final

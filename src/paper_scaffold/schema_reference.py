@@ -116,7 +116,7 @@ SCHEMAS: dict[str, SchemaReference] = {
             SchemaField("artifacts", "list[artifact]", True, "Generated provenance entries."),
             SchemaField("untracked_artifacts", "list[artifact]", False, "Artifact-like files not in the manifest."),
         ),
-        minimal_example='{"tool": "Paper Scaffold", "version": "0.9.3", "summary": {"current": 1}, "artifacts": []}',
+        minimal_example='{"tool": "Paper Scaffold", "version": "0.9.4", "summary": {"current": 1}, "artifacts": []}',
     ),
     "artifact-lock": SchemaReference(
         name="artifact-lock",
@@ -131,7 +131,7 @@ SCHEMAS: dict[str, SchemaReference] = {
             SchemaField("manuscript_repo", "string", True, "Repository path used for the lock."),
             SchemaField("artifacts", "list[locked artifact]", True, "Artifact ids, paths, hashes, mtimes, and statuses."),
         ),
-        minimal_example='{"tool": "Paper Scaffold", "version": "0.9.3", "artifacts": [{"artifact_id": "fig1", "manuscript_path": "figures/fig1.pdf", "manuscript_sha256": "..."}]}',
+        minimal_example='{"tool": "Paper Scaffold", "version": "0.9.4", "artifacts": [{"artifact_id": "fig1", "manuscript_path": "figures/fig1.pdf", "manuscript_sha256": "..."}]}',
     ),
     "validation-report": SchemaReference(
         name="validation-report",
@@ -147,7 +147,7 @@ SCHEMAS: dict[str, SchemaReference] = {
             SchemaField("summary", "mapping", True, "Error/warning/info counts."),
             SchemaField("diagnostics", "list[diagnostic]", True, "Structured diagnostic entries."),
         ),
-        minimal_example='{"tool": "Paper Scaffold", "version": "0.9.3", "summary": {"errors": 0, "warnings": 0, "info": 1}, "diagnostics": []}',
+        minimal_example='{"tool": "Paper Scaffold", "version": "0.9.4", "summary": {"errors": 0, "warnings": 0, "info": 1}, "diagnostics": []}',
     ),
     "lock-comparison": SchemaReference(
         name="lock-comparison",
