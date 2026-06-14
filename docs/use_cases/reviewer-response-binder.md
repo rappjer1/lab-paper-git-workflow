@@ -10,15 +10,17 @@ Response-only outputs can drift from the manuscript or get copied into the wrong
 
 ## How Paper Scaffold Helps
 
-The manuscript repo remains clean while a small response manifest and checklist document response artifacts. Release checks then catch stale, unused, or private files before resubmission.
+The manuscript repo remains clean while a small response manifest and checklist document response artifacts. `reviewer-binder` creates a lightweight round folder with provenance and release snapshots, and release checks catch stale, unused, or private files before resubmission.
 
 ## Commands
 
 ```bash
+paper-scaffold reviewer-binder --manuscript-repo ./paper --round 1 --output ./reviewer_response_round_1
 paper-scaffold validate --manuscript-repo ./paper
 paper-scaffold stale-artifacts --manuscript-repo ./paper
 paper-scaffold provenance-report --manuscript-repo ./paper --write-md ./paper/provenance_report.md
 paper-scaffold freeze-artifacts --manuscript-repo ./paper --write-lock ./paper/metadata/artifact_lock.json
+paper-scaffold compare-lock --manuscript-repo ./paper --lock metadata/artifact_lock.json --write-report ./paper/lock_comparison.md
 paper-scaffold release-check --manuscript-repo ./paper --write-report ./paper/release_check.md
 ```
 
@@ -36,6 +38,8 @@ paper-scaffold release-check --manuscript-repo ./paper --write-report ./paper/re
 Paper Scaffold does not manage journal response formatting. It only helps keep supporting artifacts organized and checked.
 
 Provenance reports do not prove the response analysis is correct. They show whether the manuscript artifacts are present, traceable to declared sources, and referenced from TeX.
+
+The generated binder is a starting folder. Review confidential response text and journal formatting manually.
 
 ## Folder Structure
 

@@ -1,0 +1,11 @@
+submission_package/
+  README_SUBMISSION.md
+  main.tex
+  references.bib
+  figures/
+    example_metric_plot.pdf
+  tables/
+    example_table.tex
+  supplement/
+    supplement.tex
+  submission_package_manifest.json

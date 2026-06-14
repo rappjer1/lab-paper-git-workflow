@@ -1,0 +1,4 @@
+name: manuscript-checks
+requires: GitHub Actions runner with Python
+does_not_require: LaTeX, Pandoc, GitHub CLI, Overleaf, PyPI publishing
+checks: main.tex, references.bib warning, forbidden outputs, LaTeX build artifacts, large files

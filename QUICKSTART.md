@@ -34,6 +34,9 @@ paper-scaffold import-word --input draft.docx --output ./paper/converted.tex
 paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml
 paper-scaffold discover-artifacts --source ./outputs/final --manifest ./paper/metadata/artifact_manifest.yaml --write --copy --manuscript-repo ./paper
 paper-scaffold validate --manuscript-repo ./paper --write-report ./paper/validation_report.md
+paper-scaffold release-check --manuscript-repo ./paper --write-report ./paper/release_check.md
+paper-scaffold freeze-artifacts --manuscript-repo ./paper --write-lock ./paper/metadata/artifact_lock.json
+paper-scaffold package-submission --manuscript-repo ./paper --output ./submission_package
 ```
 
 If Pandoc is not installed, skip `import-word` and paste/split text manually using [docs/word_to_overleaf.md](docs/word_to_overleaf.md).
@@ -43,12 +46,24 @@ If Pandoc is not installed, skip `import-word` and paste/split text manually usi
 ```bash
 paper-scaffold demo --output scratch/demo_manuscript --overwrite
 paper-scaffold validate --manuscript-repo scratch/demo_manuscript
+paper-scaffold freeze-artifacts --manuscript-repo scratch/demo_manuscript --write-lock scratch/demo_manuscript/metadata/artifact_lock.json
+paper-scaffold compare-lock --manuscript-repo scratch/demo_manuscript --lock scratch/demo_manuscript/metadata/artifact_lock.json
+paper-scaffold package-submission --manuscript-repo scratch/demo_manuscript --output scratch/submission_package --overwrite
 ```
 
 From a checkout:
 
 ```bash
 python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwrite
+```
+
+## Optional v0.8 Handoff Commands
+
+```bash
+paper-scaffold add-manuscript-ci --manuscript-repo ./paper
+paper-scaffold compare-lock --manuscript-repo ./paper --lock metadata/artifact_lock.json --write-report ./paper/lock_comparison.md
+paper-scaffold package-submission --manuscript-repo ./paper --output ./submission_package
+paper-scaffold reviewer-binder --manuscript-repo ./paper --round 1 --output ./reviewer_response_round_1
 ```
 
 ## Manual Fallback Without The CLI
@@ -70,3 +85,7 @@ python scripts/paper-scaffold.py demo --output scratch/demo_manuscript --overwri
 - [docs/python_outputs_to_overleaf.md](docs/python_outputs_to_overleaf.md)
 - [docs/existing_latex_project.md](docs/existing_latex_project.md)
 - [docs/github_overleaf_sync.md](docs/github_overleaf_sync.md)
+- [docs/manuscript_ci.md](docs/manuscript_ci.md)
+- [docs/submission_packaging.md](docs/submission_packaging.md)
+- [docs/artifact_locks.md](docs/artifact_locks.md)
+- [docs/reviewer_response_binder.md](docs/reviewer_response_binder.md)

@@ -16,17 +16,17 @@ v0.6 added use-case recipes, project archaeology, release checks, and synthetic 
 
 v0.7 adds generated provenance ledgers, artifact status summaries, and artifact hash locks so manuscript figures/tables have a lightweight bill of materials.
 
-## v0.8 Word/Pandoc Conversion Quality
+## v0.8 Manuscript CI And Submission Packaging
+
+v0.8 adds dependency-free manuscript CI workflow generation, submission package folders, artifact lock comparison, and reviewer response binders.
+
+## v0.9 Word/Pandoc Conversion Quality
 
 Improve Word conversion audits, section splitting guidance, equation/citation cleanup checks, and examples for converted drafts.
 
-## v0.9 Manuscript CI Templates And Release Packaging
-
-Add optional manuscript-repo CI templates and prepare PyPI release mechanics. Prefer PyPI Trusted Publishing when packaging is ready.
-
 ## v0.10 Schema Freeze And Cross-Platform Hardening
 
-Stabilize the manifest/config/report schemas, broaden Windows/macOS/Linux path tests, and tighten error messages before v1.0.
+Stabilize the manifest/config/report schemas, prepare PyPI release mechanics, broaden Windows/macOS/Linux path tests, and tighten error messages before v1.0.
 
 ## v1.0 Stable CLI And Manifest Schema
 
