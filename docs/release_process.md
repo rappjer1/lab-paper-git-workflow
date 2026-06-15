@@ -2,6 +2,38 @@
 
 This project is not published to PyPI in v0.9. Releases are GitHub branch, merge, and tag events only.
 
+## v0.9.9 Release-Candidate Dry Run
+
+v0.9.9 adds a maintainer-only release-candidate audit that composes the v1.0 checks without publishing, pushing, tagging, creating remote resources, or uploading anything.
+
+Run it from the release-candidate branch:
+
+```bash
+python scripts/dev/release_candidate_audit.py --output scratch/release-candidate
+```
+
+Use `--allow-dirty` while developing the release branch. Use a clean working tree before relying on the result for a tag:
+
+```bash
+python scripts/dev/release_candidate_audit.py --output scratch/release-candidate --allow-dirty
+```
+
+The audit runs text-blob, contract, docs/examples, docs-link, example-integrity, public-safety, dogfood, self-test, test-runner, install-matrix, clean-clone dogfood, version consistency, and Git-status checks. It runs the package build script when available; if the Python build frontend is not installed, the package build is recorded as a skip rather than a release failure.
+
+Interpret skips explicitly:
+
+- Package build skipped: install the optional build extra and rerun if local wheel/sdist artifacts are part of the release decision.
+- Clean install skipped on a dirty tree: commit or stash local changes, then rerun from a clean branch.
+- Clean clone dogfood skipped by flag: rerun without `--skip-clean-clone` before tagging v1.0.
+
+For a command plan without expensive checks:
+
+```bash
+python scripts/dev/release_candidate_audit.py --plan
+```
+
+Do not use this audit to publish to PyPI, create GitHub releases, push branches, create tags, upload to Overleaf, or introduce credentials. It is a local readiness dry run.
+
 ## Local Validation
 
 Run from a clean working tree:
@@ -16,6 +48,7 @@ python scripts/dev/check_docs_examples.py
 python scripts/dev/check_docs_links.py
 python scripts/dev/check_example_integrity.py
 python scripts/dev/check_public_safety.py
+python scripts/dev/release_candidate_audit.py --plan
 python scripts/dev/build_package.py
 python scripts/dev/install_matrix_audit.py
 python scripts/dev/run_dogfood.py --output scratch/dogfood --keep-output
@@ -82,6 +115,16 @@ git pull --ff-only
 git tag -a v<version> -m "Paper Scaffold v<version>"
 git push origin main
 git push origin v<version>
+```
+
+For v1.0, prepare `V1_0_RELEASE_NOTES_DRAFT.md`, complete `V1_0_FINAL_CHECKLIST.md`, confirm the release-candidate audit report has no required failures, then review tag commands before execution:
+
+```bash
+git checkout main
+git pull --ff-only
+git tag -a v1.0.0 -m "Paper Scaffold v1.0.0"
+git push origin main
+git push origin v1.0.0
 ```
 
 ## What Not To Publish Accidentally

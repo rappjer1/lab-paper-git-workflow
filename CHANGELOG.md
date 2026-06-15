@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.9.9
+
+- Added `scripts/dev/release_candidate_audit.py` for the final v1.0-style dry-run audit.
+- Added a draft v1.0 release notes file and final v1.0 checklist.
+- Updated release-process and readiness docs to explain release-candidate audit skips and no-publish boundaries.
+- Added a lightweight CI plan check for the release-candidate audit.
+- Bumped Paper Scaffold to `0.9.9`.
+
 ## v0.9.8
 
 - Added `scripts/dev/check_public_safety.py` and `contracts/public_safety_allowlist.yaml` for public trust, privacy, and release-hygiene audits.

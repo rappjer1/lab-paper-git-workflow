@@ -20,5 +20,6 @@ These reports are historical release records. They are useful for context, but t
 | [V0_9_6_PACKAGING_INSTALL_REPORT.md](../V0_9_6_PACKAGING_INSTALL_REPORT.md) | v0.9.6 | Packaging and install matrix hardening. | Still relevant for install validation. |
 | [V0_9_7_DOCS_FREEZE_REPORT.md](../V0_9_7_DOCS_FREEZE_REPORT.md) | v0.9.7 | Docs freeze and public walkthroughs. | Current docs-freeze context. |
 | [V0_9_8_PUBLIC_TRUST_AUDIT_REPORT.md](../V0_9_8_PUBLIC_TRUST_AUDIT_REPORT.md) | v0.9.8 | Public trust, privacy, security, and release hygiene. | Current public trust context after v0.9.8 lands. |
+| [V0_9_9_RELEASE_CANDIDATE_REPORT.md](../V0_9_9_RELEASE_CANDIDATE_REPORT.md) | v0.9.9 | Final release-candidate dry run before v1.0. | Current v1.0 readiness context. |
 
 Do not delete historical reports during normal release prep. If a report contains stale local validation commands, prefer generalizing paths while preserving the historical result.

@@ -33,6 +33,8 @@ jobs:
         run: python scripts/dev/check_example_integrity.py
       - name: Public safety audit
         run: python scripts/dev/check_public_safety.py
+      - name: Release candidate audit plan
+        run: python scripts/dev/release_candidate_audit.py --plan
       - name: Dogfood scenarios
         run: python scripts/dev/run_dogfood.py --output scratch/dogfood
       - name: Run tests

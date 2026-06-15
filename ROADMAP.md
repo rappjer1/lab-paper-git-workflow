@@ -22,7 +22,7 @@ v0.8 adds dependency-free manuscript CI workflow generation, submission package 
 
 ## v0.9 Release-Candidate Hardening
 
-v0.9 hardens install paths, module fallback invocation, self-test, schema/reference docs, multi-OS CI, local package build readiness, install-matrix auditing, cross-platform test running, clean-install auditing, public contract metadata, docs/examples usability, dogfood scenarios, example artifact integrity, public docs-freeze walkthroughs, and public trust/privacy audits as the final pre-1.0 release-candidate series.
+v0.9 hardens install paths, module fallback invocation, self-test, schema/reference docs, multi-OS CI, local package build readiness, install-matrix auditing, cross-platform test running, clean-install auditing, public contract metadata, docs/examples usability, dogfood scenarios, example artifact integrity, public docs-freeze walkthroughs, public trust/privacy audits, and the v0.9.9 release-candidate dry run as the final pre-1.0 series.
 
 ## v0.10 Reserved Stabilization Window
 

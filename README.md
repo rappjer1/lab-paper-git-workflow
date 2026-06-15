@@ -138,6 +138,10 @@ Paper Scaffold records what was copied, where it came from, whether manuscript f
 
 The v0.9 series is the release-candidate hardening series for v1.0. Command names, documented flags, schemas, diagnostic codes, and exit-code conventions are being frozen.
 
+### Approaching v1.0
+
+v0.9.9 is the final release-candidate dry-run release before v1.0. It stabilizes the current CLI, schema, diagnostic, test, package-build, install-matrix, and public-safety checks without adding major user workflows.
+
 - Public contract: [docs/contract.md](docs/contract.md)
 - Versioning policy: [docs/versioning_policy.md](docs/versioning_policy.md)
 - v1.0 readiness: [docs/v1_0_readiness.md](docs/v1_0_readiness.md)
