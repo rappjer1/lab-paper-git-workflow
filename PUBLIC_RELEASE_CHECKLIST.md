@@ -10,6 +10,7 @@ Use this before tagging v1.0 or announcing a public release. It is a maintainer 
 - [ ] Public safety audit passes with `python scripts/dev/check_public_safety.py`.
 - [ ] Contract audit passes with `python scripts/dev/check_contracts.py`.
 - [ ] Text blob guard passes with `python scripts/dev/check_text_blobs.py`.
+- [ ] Root layout check passes with `python scripts/dev/check_root_layout.py`.
 - [ ] Docs/examples check passes with `python scripts/dev/check_docs_examples.py`.
 - [ ] Docs link check passes with `python scripts/dev/check_docs_links.py`.
 - [ ] Example integrity check passes with `python scripts/dev/check_example_integrity.py`.
@@ -28,6 +29,7 @@ Use this before tagging v1.0 or announcing a public release. It is a maintainer 
 - [ ] No unpublished manuscript text or sensitive research material is present.
 - [ ] No claims imply that Paper Scaffold writes the science, guarantees compilation, creates remote repositories, uploads to Overleaf, or publishes packages.
 - [ ] Historical release reports are listed in `docs/release_reports.md`.
+- [ ] Historical release reports live under `docs/release_reports/`, not the repository root.
 - [ ] Security policy, code of conduct, citation file, license, and contributing docs are present.
 - [ ] Release notes are drafted.
 

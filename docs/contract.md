@@ -1,6 +1,6 @@
 # Public Contract
 
-Paper Scaffold v0.9.9 documents the public interface that is intended to become stable at v1.0.
+Paper Scaffold v1.0.1 documents the public interface that became stable at v1.0.
 
 ## Command Contract
 

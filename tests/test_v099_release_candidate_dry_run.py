@@ -41,9 +41,9 @@ def test_release_candidate_audit_plan_builds_without_expensive_checks(tmp_path):
 
 def test_v1_release_notes_and_checklist_exist():
     for rel in [
-        "V1_0_RELEASE_NOTES_DRAFT.md",
-        "V1_0_FINAL_CHECKLIST.md",
-        "V0_9_9_RELEASE_CANDIDATE_REPORT.md",
+        "docs/release_reports/V1_0_RELEASE_NOTES_DRAFT.md",
+        "docs/release_reports/V1_0_FINAL_CHECKLIST.md",
+        "docs/release_reports/V0_9_9_RELEASE_CANDIDATE_REPORT.md",
     ]:
         assert (REPO_ROOT / rel).exists(), rel
 
@@ -55,17 +55,17 @@ def test_release_docs_mention_release_candidate_audit():
     assert "release-candidate audit" in readiness
 
 
-def test_readme_mentions_approaching_v1():
+def test_readme_mentions_post_v1_patch_context():
     text = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
-    assert "Approaching v1.0" in text
-    assert "v0.9.9" in text
+    assert "Post v1.0" in text
+    assert "v1.0.1" in text
 
 
-def test_version_is_099():
+def test_version_is_current():
     pyproject = (REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8")
     match = re.search(r'^version = "([^"]+)"', pyproject, re.MULTILINE)
     assert match is not None
-    assert match.group(1) == __version__ == "0.9.9"
+    assert match.group(1) == __version__
 
 
 def test_release_candidate_guard_scripts_still_pass():

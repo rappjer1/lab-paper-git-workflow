@@ -23,6 +23,8 @@ jobs:
         run: ruff check .
       - name: Text blob line-ending guard
         run: python scripts/dev/check_text_blobs.py
+      - name: Root layout check
+        run: python scripts/dev/check_root_layout.py
       - name: Contract audit
         run: python scripts/dev/check_contracts.py
       - name: Docs and examples check

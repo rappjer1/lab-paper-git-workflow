@@ -84,7 +84,7 @@ def test_docs_and_ci_prefer_run_tests_runner():
             (REPO_ROOT / "docs" / "troubleshooting.md").read_text(encoding="utf-8"),
             (REPO_ROOT / "docs" / "install.md").read_text(encoding="utf-8"),
             (REPO_ROOT / "docs" / "compatibility.md").read_text(encoding="utf-8"),
-            (REPO_ROOT / "V0_9_CLEAN_INSTALL_NOTES.md").read_text(encoding="utf-8"),
+            (REPO_ROOT / "docs" / "release_reports" / "V0_9_CLEAN_INSTALL_NOTES.md").read_text(encoding="utf-8"),
         ]
     )
     workflow = (REPO_ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")

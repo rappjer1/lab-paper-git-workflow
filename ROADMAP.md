@@ -32,6 +32,10 @@ Use only if v0.9.x contract audits find remaining command, schema, diagnostic, e
 
 Commit to stable command names, stable JSON report shape, and stable artifact manifest fields for normal manuscript workflows.
 
+## v1.0.1 Post-Release Metadata Patch
+
+v1.0.1 fixes package version metadata after the v1.0.0 tag, restores Ruff Python target metadata, and moves historical release reports out of the repository root into `docs/release_reports/`.
+
 ## Explicit Non-Goals
 
 - Writing the paper.

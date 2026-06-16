@@ -99,6 +99,7 @@ allowlist:
       - CHANGELOG.md
       - contracts/cli_commands.yaml
       - contracts/public_safety_allowlist.yaml
+      - docs/release_reports/**
       - scripts/dev/check_public_safety.py
       - V0_*
     reason: Existing pre-v1 command and historical launch-copy docs retain this name for compatibility.

@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.1
+
+- Fixed package version metadata after `v1.0.0` was tagged from the `v0.9.9` release-candidate commit.
+- Restored Ruff target-version metadata.
+- Moved historical release/audit reports out of the repository root into `docs/release_reports/`.
+- Added/updated root layout checks.
+- No user-facing workflow changes.
+
 ## v0.9.9
 
 - Added `scripts/dev/release_candidate_audit.py` for the final v1.0-style dry-run audit.

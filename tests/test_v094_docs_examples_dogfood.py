@@ -91,7 +91,7 @@ def test_quickstart_includes_core_checkout_commands():
 
 
 def test_v1_0_prep_notes_exist():
-    assert (REPO_ROOT / "V1_0_PREP_NOTES.md").exists()
+    assert (REPO_ROOT / "docs" / "release_reports" / "V1_0_PREP_NOTES.md").exists()
 
 
 def test_check_contracts_still_passes():

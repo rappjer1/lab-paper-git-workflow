@@ -13,6 +13,7 @@ Use this as the authoritative checklist before tagging v1.0.
 ## Core Local Checks
 
 - Text blob guard passes with `scripts/dev/check_text_blobs.py`.
+- Root layout check passes with `scripts/dev/check_root_layout.py`.
 - Contract audit passes with `scripts/dev/check_contracts.py`.
 - Docs/examples check passes with `scripts/dev/check_docs_examples.py`.
 - Docs link check passes with `scripts/dev/check_docs_links.py`.
@@ -50,8 +51,8 @@ Use this as the authoritative checklist before tagging v1.0.
 - Public docs contain no local paths, credentials, nonpublic research content, or project-specific research terms.
 - User-facing docs contain no machine-specific local paths.
 - `docs/privacy_and_data_safety.md`, `docs/github_repo_settings.md`, and `docs/release_reports.md` are current.
-- `V1_0_RELEASE_NOTES_DRAFT.md` has been reviewed.
-- `V1_0_FINAL_CHECKLIST.md` is complete.
+- [V1_0_RELEASE_NOTES_DRAFT.md](release_reports/V1_0_RELEASE_NOTES_DRAFT.md) has been reviewed.
+- [V1_0_FINAL_CHECKLIST.md](release_reports/V1_0_FINAL_CHECKLIST.md) is complete.
 
 ## Repository And CI
 

@@ -43,6 +43,7 @@ python scripts/dev/check_text_blobs.py
 python scripts/paper-scaffold.py --help
 python scripts/paper-scaffold.py --version
 python -m paper_scaffold --help
+python scripts/dev/check_root_layout.py
 python scripts/dev/check_contracts.py
 python scripts/dev/check_docs_examples.py
 python scripts/dev/check_docs_links.py
@@ -117,7 +118,7 @@ git push origin main
 git push origin v<version>
 ```
 
-For v1.0, prepare `V1_0_RELEASE_NOTES_DRAFT.md`, complete `V1_0_FINAL_CHECKLIST.md`, confirm the release-candidate audit report has no required failures, then review tag commands before execution:
+For v1.0, prepare [V1_0_RELEASE_NOTES_DRAFT.md](release_reports/V1_0_RELEASE_NOTES_DRAFT.md), complete [V1_0_FINAL_CHECKLIST.md](release_reports/V1_0_FINAL_CHECKLIST.md), confirm the release-candidate audit report has no required failures, then review tag commands before execution:
 
 ```bash
 git checkout main

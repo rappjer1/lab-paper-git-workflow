@@ -78,8 +78,8 @@ def test_clean_clone_dogfood_audit_builds_expected_steps(tmp_path):
 
 def test_example_integrity_docs_and_reports_exist():
     assert (REPO_ROOT / "docs" / "example_integrity.md").exists()
-    assert (REPO_ROOT / "V0_9_5_PUBLIC_POLISH_AUDIT.md").exists()
-    assert (REPO_ROOT / "V0_9_5_EXAMPLE_INTEGRITY_AND_DOGFOOD_REPORT.md").exists()
+    assert (REPO_ROOT / "docs" / "release_reports" / "V0_9_5_PUBLIC_POLISH_AUDIT.md").exists()
+    assert (REPO_ROOT / "docs" / "release_reports" / "V0_9_5_EXAMPLE_INTEGRITY_AND_DOGFOOD_REPORT.md").exists()
 
 
 def test_examples_index_lists_dogfood_examples_and_integrity_check():
